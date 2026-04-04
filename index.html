@@ -3,49 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>心花 MindBloom · 心理能量测评</title>
+  <title>心花 MindBloom · 心灵花语</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary: #8B5CF6;
-      --primary-light: #A78BFA;
-      --primary-dark: #6D28D9;
-      --accent: #EC4899;
-      --accent-light: #F9A8D4;
-      --bg: #0F0A1A;
-      --bg2: #1A1030;
-      --bg3: #251845;
-      --text: #F3F0FF;
-      --text-muted: #9D8EC8;
-      --card: rgba(139, 92, 246, 0.12);
-      --border: rgba(139, 92, 246, 0.25);
-      --glass: rgba(255,255,255,0.06);
+      --cream: #FDF8F3;
+      --cream-dark: #F5EDE4;
+      --sage: #7A9E7E;
+      --sage-light: #A8C5AB;
+      --sage-dark: #5A7E5E;
+      --rose: #C4908A;
+      --rose-light: #E8B4AE;
+      --lavender: #B5A8C4;
+      --lavender-light: #D4CAE0;
+      --gold: #D4AF6A;
+      --gold-light: #EDD9A3;
+      --text: #4A3F35;
+      --text-light: #7A6E62;
+      --text-muted: #A89E90;
+      --bg: #1A1512;
+      --bg2: #231D18;
+      --bg3: #2E2620;
+      --glass: rgba(253, 248, 243, 0.05);
+      --glass2: rgba(253, 248, 243, 0.08);
+      --border: rgba(253, 248, 243, 0.1);
+      --border2: rgba(253, 248, 243, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
       height: 100%;
-      font-family: -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      font-family: 'Noto Serif SC', 'PingFang SC', serif;
       background: var(--bg);
-      color: var(--text);
+      color: var(--cream);
       overflow-x: hidden;
     }
 
-    /* ---- Animated background ---- */
-    .bg-orbs {
-      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    /* ---- Night sky background ---- */
+    .night-sky {
+      position: fixed; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse at 30% 20%, #1C1430 0%, #0F1A1A 40%, #0A0E0A 100%);
+      overflow: hidden;
     }
-    .orb {
+    .aurora {
       position: absolute; border-radius: 50%;
-      filter: blur(80px); opacity: 0.35;
-      animation: floatOrb 12s ease-in-out infinite alternate;
+      filter: blur(100px); opacity: 0.12;
+      animation: auroraMove 20s ease-in-out infinite alternate;
     }
-    .orb1 { width: 300px; height: 300px; background: #7C3AED; top: -60px; left: -80px; animation-delay: 0s; }
-    .orb2 { width: 250px; height: 250px; background: #EC4899; top: 30%; right: -60px; animation-delay: -4s; }
-    .orb3 { width: 200px; height: 200px; background: #3B82F6; bottom: 10%; left: 20%; animation-delay: -8s; }
-    @keyframes floatOrb {
-      0%   { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(30px, 40px) scale(1.15); }
+    .aurora-1 { width: 500px; height: 300px; background: #5B8A6A; top: -80px; left: -100px; animation-duration: 18s; }
+    .aurora-2 { width: 400px; height: 250px; background: #8A6A8A; top: 10%; right: -80px; animation-duration: 24s; animation-delay: -8s; }
+    .aurora-3 { width: 350px; height: 220px; background: #6A7A9A; bottom: 5%; left: 15%; animation-duration: 22s; animation-delay: -4s; }
+    @keyframes auroraMove {
+      0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+      50%  { transform: translate(40px, 20px) scale(1.1) rotate(5deg); }
+      100% { transform: translate(-20px, 40px) scale(0.95) rotate(-3deg); }
+    }
+    .stars {
+      position: absolute; inset: 0;
+    }
+    .star {
+      position: absolute; border-radius: 50%;
+      background: rgba(255, 248, 235, 0.8);
+      animation: twinkle var(--dur, 3s) ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+    .floating-particle {
+      position: absolute; border-radius: 50%;
+      background: rgba(212, 175, 106, 0.4);
+      animation: floatUp var(--dur, 8s) ease-in-out infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 0.6; }
+      100% { transform: translateY(-20vh) scale(1); opacity: 0; }
     }
 
     /* ---- Layout ---- */
@@ -55,249 +91,323 @@
       display: flex; flex-direction: column; align-items: center;
       padding: 0 0 60px;
     }
-
-    /* ---- Pages ---- */
-    .page { display: none; width: 100%; max-width: 420px; padding: 0 20px; }
+    .page { display: none; width: 100%; max-width: 400px; padding: 0 24px; }
     .page.active { display: flex; flex-direction: column; }
 
-    /* ---- Landing ---- */
-    #page-landing {
+    /* ---- Top nav ---- */
+    .top-nav {
+      position: fixed; top: 16px; right: 16px; z-index: 100;
+    }
+    .admin-btn {
+      background: var(--glass2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 5px 10px;
+      font-size: 10px; color: rgba(253,248,243,0.4); cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* ---- Landing / Verify page ---- */
+    #page-landing, #page-verify {
       align-items: center;
-      padding-top: 80px;
+      padding-top: 60px;
       text-align: center;
       gap: 28px;
     }
-    .logo-wrap { position: relative; }
-    .logo-emoji { font-size: 72px; display: block; animation: pulse 3s ease-in-out infinite; }
-    @keyframes pulse {
+    .brand-mystic {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      animation: fadeInDown 1s ease;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .mystic-symbol {
+      font-size: 64px; line-height: 1;
+      animation: breathe 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(212,175,106,0.3));
+    }
+    @keyframes breathe {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.08); }
     }
-    .logo-glow {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 120px; height: 120px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(139,92,246,0.5) 0%, transparent 70%);
-      animation: glowPulse 3s ease-in-out infinite;
-    }
-    @keyframes glowPulse {
-      0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-      50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.2); }
-    }
-    .brand-name {
-      font-size: 32px; font-weight: 800;
-      background: linear-gradient(135deg, #A78BFA 0%, #EC4899 100%);
+    .brand-title {
+      font-size: 28px; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--cream) 50%, var(--gold-light) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      letter-spacing: 2px;
+      background-clip: text;
+      letter-spacing: 6px;
     }
-    .brand-sub { font-size: 14px; color: var(--text-muted); letter-spacing: 1px; margin-top: -8px; }
-    .landing-desc {
-      font-size: 15px; line-height: 1.8; color: rgba(243,240,255,0.8);
-      padding: 0 8px;
-    }
-    .feature-pills {
-      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
-    }
-    .pill {
-      background: var(--glass); border: 1px solid var(--border);
-      border-radius: 20px; padding: 6px 14px;
+    .brand-sub {
       font-size: 12px; color: var(--text-muted);
-      backdrop-filter: blur(8px);
+      letter-spacing: 4px; margin-top: 4px;
+      font-weight: 400;
     }
-    .pill span { margin-right: 4px; }
-    .btn-start {
-      width: 100%; padding: 16px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-      border: none; border-radius: 16px;
-      font-size: 17px; font-weight: 700; color: #fff;
-      cursor: pointer; letter-spacing: 1px;
-      box-shadow: 0 8px 32px rgba(139,92,246,0.4);
-      transition: transform 0.15s, box-shadow 0.15s;
-      position: relative; overflow: hidden;
+    .brand-tagline {
+      font-size: 13px; color: rgba(253,248,243,0.55);
+      line-height: 1.9; letter-spacing: 1px;
+      padding: 0 10px; font-style: italic;
     }
-    .btn-start::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+    .divider-ornament {
+      display: flex; align-items: center; gap: 12px;
+      color: rgba(212,175,106,0.4); font-size: 12px;
     }
-    .btn-start:active { transform: scale(0.97); }
-    .landing-note { font-size: 11px; color: var(--text-muted); }
+    .divider-line {
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,106,0.4), transparent);
+    }
+    .feature-runes {
+      display: flex; flex-direction: column; gap: 10px; width: 100%;
+    }
+    .rune-item {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: 14px; padding: 12px 16px;
+      text-align: left;
+    }
+    .rune-icon { font-size: 24px; flex-shrink: 0; }
+    .rune-text h4 { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .rune-text p { font-size: 11px; color: rgba(253,248,243,0.45); line-height: 1.5; }
+
+    /* ---- Verify Code ---- */
+    .verify-desc {
+      font-size: 13px; color: rgba(253,248,243,0.5);
+      line-height: 1.7; margin-top: -10px;
+    }
+    .code-input-wrap {
+      display: flex; gap: 10px; justify-content: center;
+    }
+    .code-digit {
+      width: 52px; height: 60px;
+      background: var(--glass2); border: 1px solid var(--border2);
+      border-radius: 12px;
+      font-size: 26px; font-weight: 700; color: var(--cream);
+      text-align: center; font-family: 'Noto Serif SC', serif;
+      outline: none; transition: all 0.2s;
+      caret-color: var(--gold);
+    }
+    .code-digit:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 16px rgba(212,175,106,0.2);
+    }
+    .code-digit.error {
+      border-color: #E87070;
+      animation: shake 0.4s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .btn-verify {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, var(--sage-dark) 0%, var(--sage) 100%);
+      border: none; border-radius: 14px;
+      font-size: 15px; font-weight: 600; color: var(--cream);
+      cursor: pointer; letter-spacing: 2px;
+      box-shadow: 0 4px 20px rgba(90,126,94,0.3);
+      transition: transform 0.15s;
+      font-family: inherit;
+    }
+    .btn-verify:active { transform: scale(0.97); }
+    .btn-verify:disabled { opacity: 0.5; pointer-events: none; }
+    .verify-note {
+      font-size: 11px; color: rgba(253,248,243,0.3);
+    }
+    .code-error-msg {
+      font-size: 12px; color: #E87070; margin-top: -8px;
+      min-height: 18px;
+    }
+    .cooldown-msg {
+      font-size: 13px; color: var(--rose-light);
+      padding: 12px 16px;
+      background: rgba(196,144,138,0.1);
+      border: 1px solid rgba(196,144,138,0.3);
+      border-radius: 12px;
+      line-height: 1.6;
+    }
 
     /* ---- Mode Select ---- */
     #page-mode {
-      padding-top: 60px; gap: 24px;
+      padding-top: 50px; gap: 20px;
     }
     .page-title {
-      font-size: 22px; font-weight: 700; text-align: center;
-      background: linear-gradient(135deg, #A78BFA 0%, #EC4899 100%);
+      font-size: 20px; font-weight: 700; text-align: center;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--cream) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .page-sub { font-size: 13px; color: var(--text-muted); text-align: center; line-height: 1.6; }
-    .mode-cards { display: flex; flex-direction: column; gap: 16px; }
+    .page-sub {
+      font-size: 12px; color: rgba(253,248,243,0.4);
+      text-align: center; line-height: 1.7; letter-spacing: 0.5px;
+    }
+    .mode-cards { display: flex; flex-direction: column; gap: 14px; }
     .mode-card {
-      background: var(--glass); border: 1px solid var(--border);
-      border-radius: 20px; padding: 20px;
+      background: var(--glass2); border: 1px solid var(--border);
+      border-radius: 18px; padding: 18px;
       cursor: pointer; transition: all 0.2s;
-      backdrop-filter: blur(12px);
       display: flex; align-items: center; gap: 16px;
     }
-    .mode-card:hover, .mode-card:active { border-color: var(--primary); background: var(--card); transform: scale(0.99); }
-    .mode-icon { font-size: 36px; flex-shrink: 0; }
-    .mode-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-    .mode-info p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .mode-card:hover, .mode-card:active {
+      border-color: rgba(212,175,106,0.5);
+      background: rgba(212,175,106,0.06);
+      transform: scale(0.99);
+    }
+    .mode-icon { font-size: 32px; flex-shrink: 0; }
+    .mode-info h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--cream); }
+    .mode-info p { font-size: 12px; color: rgba(253,248,243,0.4); line-height: 1.5; }
     .mode-badge {
       margin-left: auto; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 8px; padding: 3px 8px;
-      font-size: 10px; font-weight: 700; color: #fff;
+      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
+      border-radius: 8px; padding: 3px 9px;
+      font-size: 10px; font-weight: 600; color: var(--cream);
     }
+    .back-btn {
+      background: none; border: none; color: rgba(253,248,243,0.4);
+      font-size: 20px; cursor: pointer; padding: 4px 8px;
+      border-radius: 8px; transition: color 0.2s; align-self: flex-start;
+    }
+    .back-btn:active { color: var(--cream); }
 
     /* ---- Questionnaire ---- */
-    #page-quiz {
-      padding-top: 40px; gap: 20px;
-    }
+    #page-quiz { padding-top: 30px; gap: 18px; }
     .progress-header {
       display: flex; align-items: center; justify-content: space-between;
     }
-    .back-btn {
-      background: none; border: none; color: var(--text-muted);
-      font-size: 22px; cursor: pointer; padding: 4px 8px;
-      border-radius: 8px; transition: color 0.2s;
+    .progress-text {
+      font-size: 11px; color: rgba(253,248,243,0.35);
+      letter-spacing: 1px;
     }
-    .back-btn:active { color: var(--text); }
-    .progress-text { font-size: 12px; color: var(--text-muted); }
     .progress-bar-wrap {
-      height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;
+      height: 2px; background: rgba(253,248,243,0.08); border-radius: 1px; overflow: hidden;
     }
     .progress-bar {
-      height: 100%; border-radius: 2px;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+      height: 100%; border-radius: 1px;
+      background: linear-gradient(90deg, var(--sage), var(--gold));
+      transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
     }
     .question-card {
-      background: var(--glass); border: 1px solid var(--border);
-      border-radius: 24px; padding: 24px 20px;
-      backdrop-filter: blur(12px);
-      animation: slideUp 0.35s cubic-bezier(0.4,0,0.2,1);
+      background: var(--glass2); border: 1px solid var(--border);
+      border-radius: 24px; padding: 26px 22px;
+      animation: softSlideUp 0.4s cubic-bezier(0.4,0,0.2,1);
     }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
+    @keyframes softSlideUp {
+      from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     .q-category {
-      font-size: 11px; color: var(--primary-light); font-weight: 600;
-      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px;
+      font-size: 10px; color: var(--gold); font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
     }
-    .q-text { font-size: 17px; font-weight: 600; line-height: 1.6; margin-bottom: 20px; }
+    .q-text {
+      font-size: 16px; font-weight: 600; line-height: 1.7;
+      color: var(--cream); margin-bottom: 22px;
+    }
     .options { display: flex; flex-direction: column; gap: 10px; }
     .option-btn {
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(253,248,243,0.04); border: 1px solid var(--border);
       border-radius: 14px; padding: 14px 16px;
-      font-size: 14px; color: var(--text); text-align: left;
+      font-size: 14px; color: rgba(253,248,243,0.75); text-align: left;
       cursor: pointer; transition: all 0.2s;
       display: flex; align-items: center; gap: 12px;
+      font-family: inherit;
     }
     .option-btn:active { transform: scale(0.98); }
     .option-btn.selected {
-      background: var(--card); border-color: var(--primary);
-      color: var(--primary-light);
+      background: rgba(122,158,126,0.15);
+      border-color: var(--sage);
+      color: var(--sage-light);
     }
-    .option-letter {
-      width: 28px; height: 28px; border-radius: 8px;
-      background: rgba(139,92,246,0.2); border: 1px solid rgba(139,92,246,0.3);
+    .option-dot {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 1px solid rgba(253,248,243,0.2);
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 700; color: var(--primary-light);
-      flex-shrink: 0;
+      font-size: 11px; flex-shrink: 0;
+      transition: all 0.2s;
     }
-    .option-btn.selected .option-letter {
-      background: var(--primary); border-color: var(--primary); color: #fff;
+    .option-btn.selected .option-dot {
+      background: var(--sage); border-color: var(--sage);
+      color: var(--cream);
     }
     .quiz-next-btn {
-      width: 100%; padding: 15px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--sage-dark) 0%, var(--sage) 100%);
       border: none; border-radius: 14px;
-      font-size: 15px; font-weight: 700; color: #fff;
+      font-size: 14px; font-weight: 600; color: var(--cream);
       cursor: pointer; opacity: 0; pointer-events: none;
       transition: opacity 0.3s, transform 0.15s;
+      font-family: inherit; letter-spacing: 1px;
     }
     .quiz-next-btn.visible { opacity: 1; pointer-events: all; }
     .quiz-next-btn:active { transform: scale(0.97); }
 
     /* ---- Chat ---- */
     #page-chat {
-      padding-top: 40px; gap: 0;
+      padding-top: 30px; gap: 0;
       height: 100vh; height: 100dvh;
     }
-    .chat-header {
-      padding-bottom: 16px; flex-shrink: 0;
-    }
+    .chat-header { padding-bottom: 14px; flex-shrink: 0; }
     .chat-messages {
       flex: 1; overflow-y: auto; padding: 8px 0;
-      display: flex; flex-direction: column; gap: 12px;
+      display: flex; flex-direction: column; gap: 10px;
       scrollbar-width: none;
     }
     .chat-messages::-webkit-scrollbar { display: none; }
-    .msg {
-      display: flex; gap: 10px; animation: slideUp 0.3s ease;
-    }
+    .msg { display: flex; gap: 10px; animation: softSlideUp 0.3s ease; }
     .msg.user { flex-direction: row-reverse; }
     .msg-avatar {
-      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
     }
-    .msg.user .msg-avatar { background: rgba(255,255,255,0.1); }
+    .msg.user .msg-avatar { background: rgba(253,248,243,0.08); }
     .msg-bubble {
-      max-width: 75%; padding: 12px 14px;
-      border-radius: 18px; font-size: 14px; line-height: 1.6;
+      max-width: 76%; padding: 11px 13px;
+      border-radius: 16px; font-size: 14px; line-height: 1.65;
     }
     .msg.bot .msg-bubble {
-      background: var(--glass); border: 1px solid var(--border);
-      border-top-left-radius: 4px;
+      background: var(--glass2); border: 1px solid var(--border);
+      border-top-left-radius: 4px; color: rgba(253,248,243,0.85);
     }
     .msg.user .msg-bubble {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: #fff; border-top-right-radius: 4px;
+      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
+      color: var(--cream); border-top-right-radius: 4px;
     }
-    .typing-indicator {
-      display: flex; gap: 5px; align-items: center; padding: 4px 0;
-    }
+    .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
     .dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--primary-light);
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--sage-light);
       animation: bounce 1.2s ease-in-out infinite;
     }
     .dot:nth-child(2) { animation-delay: 0.2s; }
     .dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes bounce {
       0%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-6px); }
+      40% { transform: translateY(-5px); }
     }
     .chat-input-wrap {
-      flex-shrink: 0; padding-top: 12px;
+      flex-shrink: 0; padding-top: 10px;
       display: flex; gap: 10px; align-items: flex-end;
     }
     .chat-input {
-      flex: 1; background: var(--glass); border: 1px solid var(--border);
-      border-radius: 20px; padding: 12px 16px;
-      font-size: 14px; color: var(--text); resize: none;
-      max-height: 100px; overflow-y: auto;
+      flex: 1; background: var(--glass2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 11px 15px;
+      font-size: 14px; color: var(--cream); resize: none;
+      max-height: 96px; overflow-y: auto;
       font-family: inherit; line-height: 1.5;
       outline: none; transition: border-color 0.2s;
     }
-    .chat-input:focus { border-color: var(--primary); }
-    .chat-input::placeholder { color: var(--text-muted); }
+    .chat-input:focus { border-color: var(--sage); }
+    .chat-input::placeholder { color: rgba(253,248,243,0.25); }
     .chat-send-btn {
-      width: 44px; height: 44px; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      width: 42px; height: 42px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
       border: none; border-radius: 50%; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; transition: transform 0.15s;
+      font-size: 16px; transition: transform 0.15s;
     }
     .chat-send-btn:active { transform: scale(0.9); }
-    .chat-send-btn:disabled { opacity: 0.5; pointer-events: none; }
+    .chat-send-btn:disabled { opacity: 0.4; pointer-events: none; }
     .chat-turn-count {
-      font-size: 11px; color: var(--text-muted); text-align: center;
-      flex-shrink: 0; padding: 4px 0;
+      font-size: 10px; color: rgba(253,248,243,0.3);
+      text-align: center; flex-shrink: 0; padding: 3px 0;
     }
 
     /* ---- Loading ---- */
@@ -305,260 +415,371 @@
       align-items: center; justify-content: center;
       min-height: 100vh; gap: 28px; text-align: center;
     }
-    .loading-orb-wrap { position: relative; width: 120px; height: 120px; }
-    .loading-orb {
-      width: 120px; height: 120px; border-radius: 50%;
-      background: conic-gradient(from 0deg, var(--primary), var(--accent), var(--primary));
-      animation: spin 2s linear infinite;
-      display: flex; align-items: center; justify-content: center;
+    .loading-moon {
+      font-size: 80px;
+      animation: breathe 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(212,175,106,0.4));
     }
-    .loading-orb::before {
-      content: '✨'; font-size: 40px;
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      animation: none;
-    }
-    .loading-orb-inner {
-      width: 90px; height: 90px; border-radius: 50%;
-      background: var(--bg2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 36px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
     .loading-title {
-      font-size: 20px; font-weight: 700;
-      background: linear-gradient(135deg, #A78BFA, #EC4899);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      font-size: 18px; font-weight: 600; color: var(--cream);
+      letter-spacing: 2px;
     }
     .loading-steps { display: flex; flex-direction: column; gap: 8px; width: 100%; }
     .loading-step {
       display: flex; align-items: center; gap: 10px;
       padding: 10px 14px; border-radius: 12px;
-      background: var(--glass); border: 1px solid rgba(255,255,255,0.06);
-      font-size: 13px; color: var(--text-muted); transition: all 0.4s;
+      background: var(--glass); border: 1px solid var(--border);
+      font-size: 12px; color: rgba(253,248,243,0.35); transition: all 0.4s;
+      font-family: inherit;
     }
     .loading-step.done {
-      border-color: var(--primary); color: var(--primary-light);
-      background: var(--card);
+      border-color: rgba(122,158,126,0.5); color: var(--sage-light);
+      background: rgba(122,158,126,0.08);
     }
     .loading-step.active {
-      border-color: var(--accent); color: #fff;
-      background: rgba(236,72,153,0.1);
+      border-color: rgba(212,175,106,0.4); color: var(--gold-light);
+      background: rgba(212,175,106,0.06);
     }
-    .step-icon { font-size: 16px; width: 24px; text-align: center; }
+    .step-icon { font-size: 14px; width: 22px; text-align: center; }
 
     /* ---- Result ---- */
-    #page-result {
-      padding-top: 40px; gap: 20px; align-items: center;
-    }
+    #page-result { padding-top: 30px; gap: 18px; align-items: center; }
     .result-header { text-align: center; }
     .result-tag {
       display: inline-block;
-      background: linear-gradient(135deg, rgba(139,92,246,0.3), rgba(236,72,153,0.3));
-      border: 1px solid rgba(139,92,246,0.4);
+      background: rgba(212,175,106,0.12);
+      border: 1px solid rgba(212,175,106,0.3);
       border-radius: 20px; padding: 4px 14px;
-      font-size: 12px; color: var(--primary-light); margin-bottom: 8px;
+      font-size: 11px; color: var(--gold-light); margin-bottom: 8px;
+      letter-spacing: 1px;
     }
     .result-title {
-      font-size: 20px; font-weight: 800;
-      background: linear-gradient(135deg, #A78BFA, #EC4899);
+      font-size: 18px; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light), var(--cream));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
-    /* ---- Quote Card ---- */
-    .quote-card {
-      width: 100%; aspect-ratio: 3/4; max-height: 420px;
-      border-radius: 28px; overflow: hidden; position: relative;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    /* ---- POSTCARD CARD ---- */
+    .postcard-card {
+      width: 100%;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
+      /* Vintage postcard look */
+      border: 1px solid rgba(200,180,150,0.3);
     }
-    .quote-card-bg {
+    .postcard-bg-img {
       position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: brightness(0.6) saturate(0.9);
+    }
+    .postcard-bg-gradient {
+      position: absolute; inset: 0;
+    }
+    .postcard-inner {
+      position: relative; z-index: 1;
+      padding: 28px 24px 24px;
+      min-height: 420px;
+      display: flex; flex-direction: column;
+    }
+    /* Stamp area top-right */
+    .postcard-stamp {
+      position: absolute; top: 16px; right: 16px;
+      width: 56px; height: 68px;
+      background: rgba(255,255,255,0.12);
+      border: 2px dashed rgba(255,255,255,0.25);
+      border-radius: 3px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 4px;
+    }
+    .stamp-flower { font-size: 28px; }
+    .stamp-text {
+      font-size: 7px; color: rgba(255,255,255,0.6);
+      letter-spacing: 1px; text-align: center;
+      line-height: 1.3;
+    }
+    /* Postmark circle */
+    .postmark {
+      position: absolute; top: 18px; right: 18px;
+      width: 52px; height: 52px;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
     }
-    .quote-card-content {
-      position: absolute; inset: 0;
-      padding: 32px 28px;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center; gap: 20px;
+    .postmark-inner {
+      width: 42px; height: 42px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
     }
-    .quote-deco { font-size: 48px; line-height: 1; }
-    .quote-text {
-      font-size: 20px; font-weight: 700; line-height: 1.7;
-      color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    /* From line */
+    .postcard-from {
+      font-size: 10px; color: rgba(255,255,255,0.5);
+      letter-spacing: 1px; margin-bottom: 12px;
     }
-    .quote-divider {
-      width: 40px; height: 2px; border-radius: 1px;
-      background: rgba(255,255,255,0.4);
+    /* Decorative top border */
+    .postcard-divider-top {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      margin-bottom: 20px;
     }
-    .quote-author {
-      font-size: 12px; color: rgba(255,255,255,0.7); letter-spacing: 1px;
+    /* Quote */
+    .postcard-quote {
+      flex: 1;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center;
+      gap: 14px; padding: 10px 8px;
     }
-    .quote-watermark {
-      position: absolute; bottom: 16px; right: 18px;
-      font-size: 11px; color: rgba(255,255,255,0.4);
+    .postcard-deco { font-size: 36px; line-height: 1; }
+    .postcard-text {
+      font-size: 18px; font-weight: 600; line-height: 1.8;
+      color: #fff; text-shadow: 0 2px 16px rgba(0,0,0,0.6);
+    }
+    .postcard-divider {
+      width: 32px; height: 1.5px; border-radius: 1px;
+      background: rgba(255,255,255,0.3);
+    }
+    /* Bottom row */
+    .postcard-bottom {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-top: 16px;
+    }
+    .postcard-sender {
+      font-size: 9px; color: rgba(255,255,255,0.45);
+      letter-spacing: 0.5px; line-height: 1.6;
+      text-align: left;
+    }
+    .postcard-watermark {
+      font-size: 9px; color: rgba(255,255,255,0.3);
       letter-spacing: 1px;
     }
+    /* Corner ornaments */
+    .postcard-corner {
+      position: absolute; width: 16px; height: 16px;
+      opacity: 0.3;
+    }
+    .postcard-corner.tl { top: 6px; left: 8px; border-top: 1px solid rgba(255,255,255,0.4); border-left: 1px solid rgba(255,255,255,0.4); }
+    .postcard-corner.tr { top: 6px; right: 8px; border-top: 1px solid rgba(255,255,255,0.4); border-right: 1px solid rgba(255,255,255,0.4); }
+    .postcard-corner.bl { bottom: 6px; left: 8px; border-bottom: 1px solid rgba(255,255,255,0.4); border-left: 1px solid rgba(255,255,255,0.4); }
+    .postcard-corner.br { bottom: 6px; right: 8px; border-bottom: 1px solid rgba(255,255,255,0.4); border-right: 1px solid rgba(255,255,255,0.4); }
 
-    /* ---- Insight Cards ---- */
+    /* ---- Insight ---- */
     .insight-section { width: 100%; }
-    .insight-title { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; }
-    .insight-cards { display: flex; flex-direction: column; gap: 10px; }
+    .insight-title {
+      font-size: 11px; color: rgba(253,248,243,0.35);
+      margin-bottom: 10px; font-weight: 600; letter-spacing: 1px;
+    }
+    .insight-cards { display: flex; flex-direction: column; gap: 9px; }
     .insight-card {
-      background: var(--glass); border: 1px solid var(--border);
-      border-radius: 16px; padding: 14px 16px;
+      background: var(--glass2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 13px 15px;
       display: flex; align-items: flex-start; gap: 12px;
     }
-    .insight-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
-    .insight-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
-    .insight-info p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .insight-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .insight-info h4 { font-size: 13px; font-weight: 600; margin-bottom: 3px; color: var(--cream); }
+    .insight-info p { font-size: 12px; color: rgba(253,248,243,0.45); line-height: 1.5; }
 
     /* ---- Action Buttons ---- */
     .action-btns { width: 100%; display: flex; flex-direction: column; gap: 10px; }
     .btn-save {
-      width: 100%; padding: 15px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, var(--sage-dark) 0%, var(--sage) 100%);
       border: none; border-radius: 14px;
-      font-size: 15px; font-weight: 700; color: #fff;
+      font-size: 14px; font-weight: 600; color: var(--cream);
       cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-      box-shadow: 0 8px 24px rgba(139,92,246,0.35);
-      transition: transform 0.15s;
+      box-shadow: 0 6px 20px rgba(90,126,94,0.3);
+      transition: transform 0.15s; font-family: inherit;
     }
     .btn-save:active { transform: scale(0.97); }
     .btn-retry {
-      width: 100%; padding: 13px;
+      width: 100%; padding: 12px;
       background: transparent; border: 1px solid var(--border);
-      border-radius: 14px; font-size: 14px; color: var(--text-muted); cursor: pointer;
-      transition: all 0.2s;
+      border-radius: 14px; font-size: 13px; color: rgba(253,248,243,0.4);
+      cursor: pointer; transition: all 0.2s; font-family: inherit;
     }
-    .btn-retry:active { border-color: var(--primary); color: var(--primary-light); }
+    .btn-retry:active { border-color: var(--sage); color: var(--sage-light); }
 
     /* ---- Admin ---- */
-    #page-admin {
-      padding-top: 50px; gap: 20px;
-    }
-    .admin-login { display: flex; flex-direction: column; gap: 14px; }
+    #page-admin { padding-top: 50px; gap: 18px; }
+    .admin-login { display: flex; flex-direction: column; gap: 12px; }
     .admin-input {
-      background: var(--glass); border: 1px solid var(--border);
-      border-radius: 12px; padding: 13px 16px;
-      font-size: 14px; color: var(--text); font-family: inherit;
+      background: var(--glass2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 15px;
+      font-size: 14px; color: var(--cream); font-family: inherit;
       outline: none;
     }
-    .admin-input:focus { border-color: var(--primary); }
+    .admin-input:focus { border-color: var(--sage); }
     .btn-admin-login {
-      padding: 13px; background: linear-gradient(135deg, var(--primary), var(--accent));
-      border: none; border-radius: 12px; font-size: 14px; font-weight: 700;
-      color: #fff; cursor: pointer;
+      padding: 12px; background: linear-gradient(135deg, var(--sage-dark), var(--sage));
+      border: none; border-radius: 12px; font-size: 14px; font-weight: 600;
+      color: var(--cream); cursor: pointer; font-family: inherit;
     }
-    .admin-dashboard { display: flex; flex-direction: column; gap: 16px; }
-    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .admin-dashboard { display: flex; flex-direction: column; gap: 14px; }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .stat-card {
-      background: var(--glass); border: 1px solid var(--border);
-      border-radius: 16px; padding: 16px; text-align: center;
+      background: var(--glass2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px; text-align: center;
     }
     .stat-num {
-      font-size: 28px; font-weight: 800;
-      background: linear-gradient(135deg, #A78BFA, #EC4899);
+      font-size: 26px; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light), var(--cream));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .stat-label { font-size: 10px; color: rgba(253,248,243,0.35); margin-top: 3px; }
     .topic-list { display: flex; flex-direction: column; gap: 8px; }
     .topic-item {
       display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px; background: var(--glass); border: 1px solid var(--border);
-      border-radius: 12px;
+      padding: 9px 13px; background: var(--glass2); border: 1px solid var(--border);
+      border-radius: 10px;
     }
-    .topic-bar-wrap { flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
-    .topic-bar { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--primary), var(--accent)); }
-    .topic-name { font-size: 13px; min-width: 80px; }
-    .topic-pct { font-size: 12px; color: var(--text-muted); min-width: 36px; text-align: right; }
+    .topic-bar-wrap { flex: 1; height: 4px; background: rgba(253,248,243,0.07); border-radius: 2px; overflow: hidden; }
+    .topic-bar { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--sage), var(--gold)); }
+    .topic-name { font-size: 12px; min-width: 80px; color: rgba(253,248,243,0.7); }
+    .topic-pct { font-size: 11px; color: rgba(253,248,243,0.3); min-width: 36px; text-align: right; }
+    .sub-label { font-size: 11px; color: rgba(253,248,243,0.35); margin-bottom: 10px; font-weight: 600; }
 
-    /* ---- Global nav ---- */
-    .top-nav {
-      position: fixed; top: 16px; right: 16px; z-index: 100;
-    }
-    .admin-btn {
-      background: var(--glass); border: 1px solid var(--border);
-      border-radius: 10px; padding: 6px 12px;
-      font-size: 11px; color: var(--text-muted); cursor: pointer;
-      backdrop-filter: blur(8px);
-    }
-    .admin-btn:active { border-color: var(--primary); }
-
-    /* ---- Misc ---- */
-    .divider { width: 40px; height: 2px; background: var(--border); border-radius: 1px; align-self: center; }
-
-    /* Toast */
+    /* ---- Toast ---- */
     .toast {
-      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
-      background: rgba(30,20,50,0.95); border: 1px solid var(--primary);
-      border-radius: 12px; padding: 12px 20px;
-      font-size: 13px; color: var(--primary-light);
+      position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
+      background: rgba(30,25,20,0.95); border: 1px solid var(--sage);
+      border-radius: 12px; padding: 11px 20px;
+      font-size: 13px; color: var(--sage-light);
       z-index: 9999; opacity: 0; transition: opacity 0.3s;
       pointer-events: none; white-space: nowrap;
     }
     .toast.show { opacity: 1; }
+
+    /* ---- Admin panel records ---- */
+    .record-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 13px; background: var(--glass2); border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .record-time { font-size: 11px; color: rgba(253,248,243,0.3); min-width: 72px; }
+    .record-energy { font-size: 12px; flex: 1; color: rgba(253,248,243,0.7); }
+    .record-mode { font-size: 10px; color: rgba(253,248,243,0.3); }
   </style>
 </head>
 <body>
-<div class="bg-orbs">
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
+<div class="night-sky">
+  <div class="aurora aurora-1"></div>
+  <div class="aurora aurora-2"></div>
+  <div class="aurora aurora-3"></div>
+  <div class="stars" id="stars"></div>
+  <div id="particles"></div>
 </div>
 
 <div class="top-nav">
-  <button class="admin-btn" onclick="showAdmin()">后台管理</button>
+  <button class="admin-btn" onclick="showAdmin()">后台</button>
 </div>
 
 <div id="app">
-  <!-- Landing Page -->
-  <div id="page-landing" class="page active">
-    <div class="logo-wrap">
-      <span class="logo-emoji">🌸</span>
-      <div class="logo-glow"></div>
+  <!-- ============ VERIFY PAGE ============ -->
+  <div id="page-verify" class="page active">
+    <div class="brand-mystic">
+      <div class="mystic-symbol">🌸</div>
+      <div class="brand-title">心花</div>
+      <div class="brand-sub">MIND BLOOM</div>
     </div>
-    <div>
-      <div class="brand-name">心花 MindBloom</div>
-      <div class="brand-sub">心理能量 · 积极成长</div>
+
+    <div class="divider-ornament">
+      <div class="divider-line"></div>
+      <span>✦</span>
+      <div class="divider-line"></div>
     </div>
-    <p class="landing-desc">通过几个小问题，AI 为你精准解读当下的内心状态，生成专属的积极心理学金句卡片</p>
-    <div class="feature-pills">
-      <div class="pill"><span>🧠</span>积极心理学</div>
-      <div class="pill"><span>✨</span>AI 定制金句</div>
-      <div class="pill"><span>📸</span>精美卡片</div>
-      <div class="pill"><span>🔒</span>匿名安全</div>
+
+    <p class="verify-desc">请输入你的专属体验码<br>开启这段心灵探索之旅</p>
+
+    <div class="code-input-wrap" id="code-input-wrap">
+      <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d1" />
+      <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d2" />
+      <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d3" />
+      <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d4" />
     </div>
-    <button class="btn-start" onclick="showPage('page-mode')">
-      开始我的心理能量测评 →
-    </button>
-    <p class="landing-note">约 3 分钟 · 完全免费 · 无需注册</p>
+
+    <div class="code-error-msg" id="code-error-msg"></div>
+
+    <button class="btn-verify" id="btn-verify" onclick="verifyCode()">开启探索 ✦</button>
+
+    <p class="verify-note">体验码由店主提供 · 完全匿名</p>
   </div>
 
-  <!-- Mode Select -->
+  <!-- ============ LANDING PAGE ============ -->
+  <div id="page-landing" class="page">
+    <div class="brand-mystic">
+      <div class="mystic-symbol">🌸</div>
+      <div class="brand-title">心花</div>
+      <div class="brand-sub">MIND BLOOM</div>
+    </div>
+
+    <p class="brand-tagline">在喧嚣中，聆听内心的低语</p>
+
+    <div class="divider-ornament">
+      <div class="divider-line"></div>
+      <span>✦</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="feature-runes">
+      <div class="rune-item">
+        <div class="rune-icon">🌙</div>
+        <div class="rune-text">
+          <h4>直觉之境</h4>
+          <p>用隐喻与意象，触碰潜意识深处的真实</p>
+        </div>
+      </div>
+      <div class="rune-item">
+        <div class="rune-icon">✨</div>
+        <div class="rune-text">
+          <h4>专属花语</h4>
+          <p>为你定制专属心灵花语，生成独一无二的金句</p>
+        </div>
+      </div>
+      <div class="rune-item">
+        <div class="rune-icon">🪷</div>
+        <div class="rune-text">
+          <h4>隐私守护</h4>
+          <p>无需注册 · 完全匿名 · 24小时冷却期</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-verify" onclick="showPage('page-mode')">
+      开始心灵探索 ✦
+    </button>
+    <p class="verify-note">约 3 分钟 · 深度自我觉察</p>
+  </div>
+
+  <!-- ============ MODE SELECT ============ -->
   <div id="page-mode" class="page">
-    <div style="margin-top: 20px"></div>
-    <button class="back-btn" style="align-self:flex-start;margin-bottom:8px" onclick="showPage('page-landing')">←</button>
-    <div class="page-title">选择你的方式</div>
-    <div class="page-sub">两种方式都能生成专属金句，选你最喜欢的</div>
+    <div style="margin-top: 16px"></div>
+    <button class="back-btn" onclick="showPage('page-landing')">←</button>
+    <div class="page-title">选择你的入口</div>
+    <div class="page-sub">两条路，都通往内心深处</div>
     <div class="mode-cards">
       <div class="mode-card" onclick="startQuiz()">
-        <div class="mode-icon">📋</div>
+        <div class="mode-icon">🌌</div>
         <div class="mode-info">
-          <h3>快速问卷</h3>
-          <p>10 个选择题，2 分钟完成<br>每题 4 个选项，直觉选择就好</p>
+          <h3>直觉之旅</h3>
+          <p>10 道意象题，跟随直觉<br>像翻阅一本私密的心灵图鉴</p>
         </div>
         <div class="mode-badge">推荐</div>
       </div>
       <div class="mode-card" onclick="startChat()">
         <div class="mode-icon">💬</div>
         <div class="mode-info">
-          <h3>AI 对话</h3>
-          <p>和 AI 聊聊你的心情<br>像跟朋友倾诉，更个性化</p>
+          <h3>心灵对话</h3>
+          <p>和花花聊聊心事<br>10 轮温暖的倾听与回应</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Quiz Page -->
+  <!-- ============ QUIZ PAGE ============ -->
   <div id="page-quiz" class="page">
     <div class="progress-header">
       <button class="back-btn" onclick="showPage('page-mode')">←</button>
@@ -572,15 +793,15 @@
       <div class="q-text" id="q-text"></div>
       <div class="options" id="q-options"></div>
     </div>
-    <button class="quiz-next-btn" id="quiz-next-btn" onclick="nextQuestion()">下一题 →</button>
+    <button class="quiz-next-btn" id="quiz-next-btn" onclick="nextQuestion()">继续旅程 ✦</button>
   </div>
 
-  <!-- Chat Page -->
+  <!-- ============ CHAT PAGE ============ -->
   <div id="page-chat" class="page">
     <div class="chat-header">
       <div class="progress-header">
         <button class="back-btn" onclick="showPage('page-mode')">←</button>
-        <span class="progress-text">AI 对话 · 倾诉你的心情</span>
+        <span class="progress-text">心灵对话 · 花花在此倾听</span>
       </div>
       <div style="margin-top:8px" class="progress-bar-wrap">
         <div class="progress-bar" id="chat-progress-bar" style="width:0%"></div>
@@ -589,85 +810,117 @@
     <div class="chat-messages" id="chat-messages"></div>
     <div class="chat-turn-count" id="chat-turn-count">还可以聊 10 轮</div>
     <div class="chat-input-wrap">
-      <textarea class="chat-input" id="chat-input" placeholder="说说你现在的心情..." rows="1"
+      <textarea class="chat-input" id="chat-input" placeholder="轻轻说出你的心情..." rows="1"
         onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
       <button class="chat-send-btn" id="chat-send-btn" onclick="sendChat()">↑</button>
     </div>
   </div>
 
-  <!-- Loading Page -->
+  <!-- ============ LOADING PAGE ============ -->
   <div id="page-loading" class="page">
-    <div class="loading-orb-wrap">
-      <div class="loading-orb">
-        <div class="loading-orb-inner">✨</div>
-      </div>
-    </div>
-    <div class="loading-title">正在解读你的内心世界</div>
+    <div class="loading-moon">🌸</div>
+    <div class="loading-title">正在倾听你的内心</div>
     <div class="loading-steps" id="loading-steps">
       <div class="loading-step active" id="step-1">
-        <span class="step-icon">🔍</span>分析你的情绪状态...
+        <span class="step-icon">🌙</span>感知你的心灵图景...
       </div>
       <div class="loading-step" id="step-2">
-        <span class="step-icon">💎</span>挖掘内心深层需求...
+        <span class="step-icon">🪷</span>解读潜意识信号...
       </div>
       <div class="loading-step" id="step-3">
-        <span class="step-icon">✍️</span>生成专属积极金句...
+        <span class="step-icon">✨</span>酿造专属花语...
       </div>
       <div class="loading-step" id="step-4">
-        <span class="step-icon">🎨</span>绘制你的心理能量卡片...
+        <span class="step-icon">🌸</span>绽放你的专属明信片...
       </div>
     </div>
   </div>
 
-  <!-- Result Page -->
+  <!-- ============ RESULT PAGE ============ -->
   <div id="page-result" class="page">
     <div class="result-header">
-      <div class="result-tag" id="result-energy-tag">✨ 成长型能量</div>
-      <div class="result-title" id="result-title">你的专属心理能量卡</div>
+      <div class="result-tag" id="result-energy-tag">✦ 花语绽放</div>
+      <div class="result-title">来自你内心深处的明信片</div>
     </div>
 
-    <div class="quote-card" id="quote-card">
-      <div class="quote-card-bg" id="quote-card-bg"></div>
-      <div class="quote-card-content">
-        <div class="quote-deco" id="quote-deco">🌸</div>
-        <div class="quote-text" id="quote-text">每一次呼吸，都是与自己重新相遇的机会</div>
-        <div class="quote-divider"></div>
-        <div class="quote-author">— 积极心理学 · 专属金句</div>
+    <!-- POSTCARD -->
+    <div class="postcard-card" id="postcard-card">
+      <!-- Background: gradient first, then image overlay -->
+      <div class="postcard-bg-gradient" id="postcard-bg-gradient"></div>
+      <img class="postcard-bg-img" id="postcard-bg-img" src="" alt="" style="display:none" />
+      <!-- Corner ornaments -->
+      <div class="postcard-corner tl"></div>
+      <div class="postcard-corner tr"></div>
+      <div class="postcard-corner bl"></div>
+      <div class="postcard-corner br"></div>
+      <!-- Stamp (behind postmark) -->
+      <div class="postcard-stamp">
+        <div class="stamp-flower" id="stamp-flower">🌸</div>
+        <div class="stamp-text">MIND<br>BLOOM</div>
       </div>
-      <div class="quote-watermark">心花 MindBloom</div>
+      <!-- Postmark circle -->
+      <div class="postmark">
+        <div class="postmark-inner" id="postmark-inner">🌸</div>
+      </div>
+      <!-- Content -->
+      <div class="postcard-inner">
+        <div class="postcard-from">— 来自心灵花园 —</div>
+        <div class="postcard-divider-top"></div>
+        <div class="postcard-quote">
+          <div class="postcard-deco" id="postcard-deco">🌸</div>
+          <div class="postcard-text" id="postcard-text">每一次呼吸，都是与自己重新相遇的机会</div>
+          <div class="postcard-divider"></div>
+        </div>
+        <div class="postcard-bottom">
+          <div class="postcard-sender">
+            心花 MindBloom<br>
+            积极心理学 · 专属花语
+          </div>
+          <div class="postcard-watermark">✦ 心花</div>
+        </div>
+      </div>
     </div>
 
     <div class="insight-section">
-      <div class="insight-title">✦ 你的心理能量解读</div>
+      <div class="insight-title">✦ 你的心灵解读</div>
       <div class="insight-cards" id="insight-cards"></div>
     </div>
 
     <div class="action-btns">
       <button class="btn-save" onclick="saveCard()">
-        <span>📸</span> 保存卡片 · 分享到小红书
+        长按保存明信片 · 分享到小红书
       </button>
       <button class="btn-retry" onclick="restartAll()">
-        重新测评
+        重新探索
       </button>
     </div>
   </div>
 
-  <!-- Admin Page -->
+  <!-- ============ ADMIN PAGE ============ -->
   <div id="page-admin" class="page">
-    <button class="back-btn" style="align-self:flex-start" onclick="showPage('page-landing')">← 返回</button>
-    <div class="page-title">用户画像后台</div>
+    <button class="back-btn" onclick="showPage('page-landing')">← 返回</button>
+    <div class="page-title">心灵花园后台</div>
     <div id="admin-login-section" class="admin-login">
       <input class="admin-input" type="password" id="admin-pwd" placeholder="管理员密码" />
-      <button class="btn-admin-login" onclick="adminLogin()">登录</button>
+      <button class="btn-admin-login" onclick="adminLogin()">进入后台</button>
     </div>
     <div id="admin-dashboard" class="admin-dashboard" style="display:none">
       <div class="stat-grid" id="stat-grid"></div>
+      <!-- Code generator section -->
       <div>
-        <div class="insight-title">📊 用户关注话题分布</div>
+        <div class="sub-label">🎫 生成体验码（可复制发给买家）</div>
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <input class="admin-input" type="number" id="gen-count" placeholder="生成数量" value="5" min="1" max="20" style="width:90px" />
+          <button class="btn-admin-login" onclick="generateCodes()" style="flex:1;font-size:13px;padding:10px">生成码</button>
+        </div>
+        <div id="generated-codes" style="display:flex;flex-wrap:wrap;gap:6px;min-height:32px"></div>
+      </div>
+      <div>
+        <div class="sub-label">📊 用户关注话题分布</div>
         <div class="topic-list" id="topic-list"></div>
       </div>
       <div>
-        <div class="insight-title">📋 最近测评记录</div>
+        <div class="sub-label">📋 最近心灵记录</div>
         <div id="recent-list" class="topic-list"></div>
       </div>
       <button class="btn-retry" onclick="exportData()">导出数据 CSV</button>
@@ -679,174 +932,395 @@
 
 <script>
 // ============================================================
-//  CONFIGURATION  — 填写你的 DeepSeek API Key
+//  CONFIGURATION
 // ============================================================
 const CONFIG = {
-  // 部署时替换为你的 DeepSeek API Key
-  // 获取地址: https://platform.deepseek.com/api_keys
   DEEPSEEK_API_KEY: 'YOUR_DEEPSEEK_API_KEY',
-  // 管理员密码（后台登录用）
   ADMIN_PASSWORD: 'mindbloom2026',
-  // 是否使用演示模式（没有 API Key 时使用内置金句库）
   DEMO_MODE: true,
+  // 验证码冷却期（毫秒），默认24小时
+  COOLDOWN_MS: 24 * 60 * 60 * 1000,
 };
 
 // ============================================================
-//  DATA — 问卷题库
+//  CODE STORAGE（店主可在此查看/管理已生成的码）
+// ============================================================
+const CODE_STORE_KEY = 'mindbloom_codes_v2';
+
+function getStoredCodes() {
+  try { return JSON.parse(localStorage.getItem(CODE_STORE_KEY) || '{}'); }
+  catch(e) { return {}; }
+}
+
+function saveStoredCodes(codes) {
+  localStorage.setItem(CODE_STORE_KEY, JSON.stringify(codes));
+}
+
+function generateRandCode() {
+  return String(Math.floor(1000 + Math.random() * 9000));
+}
+
+function generateCodes() {
+  const count = Math.min(20, Math.max(1, parseInt(document.getElementById('gen-count').value) || 5));
+  const codes = getStoredCodes();
+  const generated = [];
+  for (let i = 0; i < count; i++) {
+    let code;
+    do { code = generateRandCode(); } while (codes[code]);
+    codes[code] = { created: Date.now(), used: false };
+    generated.push(code);
+  }
+  saveStoredCodes(codes);
+  const container = document.getElementById('generated-codes');
+  container.innerHTML = generated.map(c =>
+    `<span style="background:var(--glass2);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:13px;font-family:monospace;color:var(--gold-light);cursor:pointer" onclick="copyCode('${c}')" title="点击复制">${c}</span>`
+  ).join('');
+  showToast(`已生成 ${count} 个体验码 ✦`);
+}
+
+function copyCode(code) {
+  navigator.clipboard.writeText(code).then(() => showToast(`已复制: ${code}`));
+}
+
+// ============================================================
+//  SUB-CONSCIOUS QUESTIONNAIRE — 潜意识问卷
 // ============================================================
 const QUESTIONS = [
   {
-    category: '当下状态',
-    text: '此刻，你的内心更接近哪种感受？',
-    options: ['像晴天里有一片小乌云', '平静，但有点空空的', '有些疲惫，需要充电', '还好，只是有些迷茫'],
-    tags: ['情绪波动', '平静状态', '身心疲劳', '迷茫困惑'],
+    category: '心灵图景',
+    text: '闭上眼睛，如果你的内心是一座花园，它此刻更像……',
+    options: ['清晨薄雾中的湖，平静而深邃', '午后阳光下轻轻摇曳的草地', '月光下的海边，有浪声和远方', '雨后的山间溪流，清冽而充满生命力'],
+    tags: ['内省型', '温暖型', '向往型', '活力型'],
   },
   {
-    category: '压力来源',
-    text: '最近让你消耗最多能量的是？',
-    options: ['工作/学业压力', '人际关系困扰', '对未来的焦虑', '自我要求太高'],
-    tags: ['工作压力', '人际关系', '未来焦虑', '完美主义'],
+    category: '内心独白',
+    text: '如果你的情绪是一种天气，它现在最接近……',
+    options: ['窗外有云，但偶尔透出金色的光', '万里无云，晴朗温暖', '远方有雷声，但还没有下雨', '毛毛细雨，有一种宁静的忧伤'],
+    tags: ['矛盾中带着希望', '积极明朗', '压力积蓄中', '沉静内敛'],
   },
   {
-    category: '自我认知',
-    text: '面对挫折，你通常的第一反应是？',
-    options: ['自责，觉得是自己不够好', '向外找原因，有点委屈', '沉默消化，独自扛着', '很快就能调整过来'],
-    tags: ['自我批评', '外归因', '情绪压抑', '心理韧性'],
+    category: '时间之河',
+    text: '想象你站在一条河流边，这条河代表你的时间，它此刻……',
+    options: ['缓缓流过，水面映着天光云影', '向前奔涌，有时遇到石头激起浪花', '似乎停滞了，但水底还在流动', '流向远方，消失在温柔的雾中'],
+    tags: ['从容自在', '充满动力', '困境等待突破', '展望未来'],
   },
   {
-    category: '内心渴望',
-    text: '此刻你最渴望的是什么？',
-    options: ['被人真正理解和接纳', '一段安静独处的时光', '某件事情有突破进展', '找到内心的方向感'],
-    tags: ['归属感', '独处需求', '成就感', '意义感'],
+    category: '梦的碎片',
+    text: '如果你的脑海是一扇望向月亮的窗，此刻窗外的月亮是……',
+    options: ['满月，清澈明亮，洒下温柔的光', '弯月，温柔而含蓄', '被薄云轻轻遮住，神秘而朦胧', '刚升起的月亮，带着微微的暖色'],
+    tags: ['完满自足', '温柔克制', '神秘深邃', '温暖希望'],
   },
   {
-    category: '关系模式',
-    text: '在亲密关系或友情中，你更倾向于？',
-    options: ['付出多，怕麻烦别人', '渴望深度连接，但有点怕受伤', '保持距离，习惯独立', '享受当下，不想太复杂'],
-    tags: ['讨好型', '恐惧亲密', '回避型', '安全型'],
+    category: '力量之树',
+    text: '如果用一棵树来象征你现在的状态，它更像……',
+    options: ['一棵老树，根系深而稳固，静静伫立', '一棵正在开花的树，花瓣随风飘落', '一棵小树苗，在风雨中轻轻摇晃但没有折断', '一棵枝繁叶茂的大树，给人阴凉'],
+    tags: ['沉稳内敛', '美好但脆弱', '成长中的韧性', '给予与滋养'],
   },
   {
-    category: '生命状态',
-    text: '如果用天气来描述你最近的生活状态？',
-    options: ['多云转晴，正在好转', '阴雨绵绵，有些低落', '晴空万里，总体不错', '大风天，忙乱但充实'],
-    tags: ['逐步好转', '持续低落', '积极状态', '忙碌充实'],
+    category: '夜的声音',
+    text: '深夜，周围安静下来，你最可能听到自己内心的声音在说什么？',
+    options: ['累了，但没关系，我想继续往前走', '我在害怕什么吗？还是在等待什么', '好想有个人真正懂我', '今天做得还不错，明天继续努力'],
+    tags: ['积极前行', '深层焦虑', '情感渴望', '自我肯定'],
   },
   {
-    category: '成长动力',
-    text: '你相信自己可以改变现在的状态吗？',
-    options: ['相信，但不知道从哪里开始', '有时候信，有时候又觉得好难', '很难，感觉被困住了', '相信，正在慢慢行动中'],
-    tags: ['成长意愿', '矛盾心态', '习得无助', '积极行动'],
+    category: '心的重量',
+    text: '如果你的心和一只手握在一起，它此刻的重量接近……',
+    options: ['像一片羽毛，轻轻的，有些空', '像一杯温热的茶，不轻不重，刚刚好', '像一块石头，沉甸甸的，有点累', '像一阵风，有时沉，有时轻'],
+    tags: ['空虚感', '平衡状态', '负重前行', '情绪波动'],
   },
   {
-    category: '身体信号',
-    text: '你的身体最近在发出什么信号？',
-    options: ['睡不好，容易惊醒', '总是很累，提不起劲', '食欲变化，有时暴食', '身体还好，主要是心累'],
-    tags: ['睡眠问题', '身体疲惫', '情绪性进食', '情感疲劳'],
+    category: '隐藏之门',
+    text: '在你心底，有一扇很少打开的门。门后藏着什么？',
+    options: ['一片宁静的星空，那是我的精神避风港', '小时候的记忆，有温暖也有遗憾', '对自己的期待和要求，还没能完全说出口', '对某些关系的困惑，还没能理清'],
+    tags: ['精神寄托', '情感记忆', '自我期许', '关系困惑'],
   },
   {
-    category: '核心优势',
-    text: '在你眼中，你最大的内在力量是什么？',
-    options: ['对人充满关怀和同理心', '意志力和坚持的能力', '敏锐的感受力和创造力', '理性分析和解决问题的能力'],
-    tags: ['共情能力', '坚韧意志', '感知创造力', '理性分析'],
+    category: '光的来源',
+    text: '此刻，让你感到一点光和希望的是……',
+    options: ['一个人，某段关系，或一个温暖的瞬间', '一个小小的进步，或者完成了一件事', '未来某个可能性，哪怕还很模糊', '我自己的存在本身，就值得被善待'],
+    tags: ['关系滋养', '成就感', '希望与方向', '自我接纳'],
   },
   {
-    category: '未来期许',
-    text: '测完这个，你最希望带走的是？',
-    options: ['一句话，让我重新爱自己', '一个方向，告诉我该怎么做', '被看见的感觉，我不是一个人', '一种力量，让我继续走下去'],
-    tags: ['自我接纳', '行动指引', '归属连接', '内在力量'],
+    category: '花语心愿',
+    text: '如果你的内心此刻能对未来的自己说一句话，它会是……',
+    options: ['慢一点也没关系，你已经很好了', '谢谢你一直没有放弃', '勇敢一点，美好的事物正在等着你', '好好爱自己，这是最重要的事'],
+    tags: ['自我接纳', '坚韧与感恩', '勇气与期待', '自爱主题'],
   },
 ];
 
 // ============================================================
-//  QUOTE TEMPLATES — 演示模式金句库
+//  QUOTE LIBRARY — 演示模式金句库（每个类型配专属背景图）
 // ============================================================
 const QUOTE_LIBRARY = {
-  '情绪波动': {
-    quote: '情绪不是你的敌人，它只是内心在轻声诉说自己的需求。',
+  '内省型': {
+    quote: '湖面平静，是因为内心足够深邃。你与自己相处的时光，是世界上最珍贵的礼物。',
     insights: [
-      { icon: '🌊', title: '情绪觉察力强', desc: '你对自己的内心变化非常敏感，这是深度自我认知的开始。' },
-      { icon: '💡', title: '向内探索', desc: '允许自己感受情绪，比压抑它更能释放内心的能量。' },
-      { icon: '🌱', title: '成长建议', desc: '每天 5 分钟写下自己的感受，情绪会成为你成长的地图。' },
+      { icon: '🌊', title: '内在深度', desc: '你拥有强大的自我觉察能力，能在安静中听到内心的声音。' },
+      { icon: '🧘', title: '静的力量', desc: '给自己留白不是逃避，而是更深地走进自己的方式。' },
+      { icon: '🌿', title: '滋养之道', desc: '每日几分钟的静坐或书写，会让你的内在花园更加繁茂。' },
     ],
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    gradient: 'linear-gradient(160deg, #0f2a3d 0%, #1a3a52 40%, #0f2a3d 100%)',
+    deco: '🌙',
+    stamp: '🌙',
+    postmark: '🕊️',
+    bgSeed: 'lake-mist',
+  },
+  '温暖型': {
+    quote: '阳光穿透云层的瞬间，世界变得柔软。你本就是那个能给别人带去温暖的人。',
+    insights: [
+      { icon: '☀️', title: '温暖发光体', desc: '你的存在本身就在滋养着周围的人，你的温柔是有力量的。' },
+      { icon: '💛', title: '自我滋养', desc: '先把自己的杯子斟满，温暖才会自然流淌给别人。' },
+      { icon: '🌻', title: '日常仪式', desc: '每天做一件让自己感到幸福的小事，积累内心的阳光。' },
+    ],
+    gradient: 'linear-gradient(160deg, #3a2a0f 0%, #5a4a20 40%, #3a2a0f 100%)',
+    deco: '🌻',
+    stamp: '🌻',
+    postmark: '🍂',
+    bgSeed: 'warm-sunlight',
+  },
+  '向往型': {
+    quote: '远方的光，是现实里还未抵达的梦境。带着这份渴望，你已经走在了路上。',
+    insights: [
+      { icon: '🌊', title: '心怀远方', desc: '你对远方和可能性的向往，是生命力的象征，不是逃避。' },
+      { icon: '🧭', title: '方向感', desc: '允许自己渴望，也可以把那个模糊的方向写下来，让它清晰一点。' },
+      { icon: '🚀', title: '小步行动', desc: '今天做一件靠近那个方向的小事，哪怕只是一步，你就在前行。' },
+    ],
+    gradient: 'linear-gradient(160deg, #1a2a4a 0%, #2a3a6a 40%, #1a2a4a 100%)',
+    deco: '🌌',
+    stamp: '🌌',
+    postmark: '🧭',
+    bgSeed: 'night-sea',
+  },
+  '活力型': {
+    quote: '溪流之所以清澈，是因为一直在流动。你内心的生命力，正在推动你向前。',
+    insights: [
+      { icon: '🏃', title: '生命力旺盛', desc: '你的内在有很强的流动感，这股能量会带你穿越任何障碍。' },
+      { icon: '💧', title: '顺势而为', desc: '有时候不用太用力，顺着内心的水流方向，自然而然就会到达。' },
+      { icon: '🌱', title: '保持流动', desc: '不要让忙碌切断了和内心连接的时间，哪怕五分钟。' },
+    ],
+    gradient: 'linear-gradient(160deg, #1a3a2a 0%, #2a5a4a 40%, #1a3a2a 100%)',
     deco: '🌊',
-    energy: '感知型能量',
+    stamp: '🌊',
+    postmark: '🌿',
+    bgSeed: 'mountain-stream',
   },
-  '工作压力': {
-    quote: '你已经足够努力了。允许自己喘一口气，不是放弃，是为了走得更远。',
+  '矛盾中带着希望': {
+    quote: '云层遮住满月，月光依然存在。生活的阴雨背后，你的内心始终有一束光。',
     insights: [
-      { icon: '⚡', title: '驱动力旺盛', desc: '你对自己的高要求源于内心对成长的渴望，这是珍贵的力量。' },
-      { icon: '🧘', title: '当下即完整', desc: '成就感不只来自结果，每一步努力本身都是有意义的。' },
-      { icon: '🌿', title: '恢复建议', desc: '建立"下班仪式感"，用一个小动作告诉大脑：工作结束了。' },
+      { icon: '🌤️', title: '看见希望', desc: '你的回答里藏着希望，矛盾是成长中最真实的声音。' },
+      { icon: '🔮', title: '允许矛盾', desc: '接纳自己同时拥有悲伤和希望，这是成熟的标志。' },
+      { icon: '🌈', title: '转化之道', desc: '把矛盾写下来，写着写着，也许就能看到一条路。' },
     ],
-    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    deco: '⚡',
-    energy: '进取型能量',
+    gradient: 'linear-gradient(160deg, #2a2a4a 0%, #3a3a5a 40%, #2a2a4a 100%)',
+    deco: '🌤️',
+    stamp: '🌤️',
+    postmark: '🌙',
+    bgSeed: 'cloud-moon',
   },
-  '人际关系': {
-    quote: '真正值得的关系，不需要你删减自己来适应。做完整的自己，才能遇见完整的连接。',
+  '积极明朗': {
+    quote: '你内心的阳光，是穿透一切阴霾的光。别忘了偶尔回头，欣赏自己走过的路。',
     insights: [
-      { icon: '💝', title: '深度连接者', desc: '你重视真实的情感联结，对关系有高质量的感知和投入。' },
-      { icon: '🔮', title: '边界即爱', desc: '设立健康的边界，不是疏远，而是更可持续的亲密。' },
-      { icon: '🌸', title: '关系建议', desc: '先对自己好，你才有充足的爱流向他人。' },
+      { icon: '🌟', title: '阳光心态', desc: '你的积极不只是表面，而是内心有真实的富足感。' },
+      { icon: '🪞', title: '自我欣赏', desc: '记得肯定自己，不是因为做到了什么，而是你本身就有价值。' },
+      { icon: '🌸', title: '分享美好', desc: '你的积极会影响身边的人，把这份阳光传播出去吧。' },
     ],
-    gradient: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
-    deco: '💝',
-    energy: '连接型能量',
+    gradient: 'linear-gradient(160deg, #3a3a1a 0%, #5a5a2a 40%, #4a4a1a 100%)',
+    deco: '☀️',
+    stamp: '☀️',
+    postmark: '🌸',
+    bgSeed: 'sunny-meadow',
   },
-  '未来焦虑': {
-    quote: '你不需要看清整条路，只需要看清脚下这一步。每一步都算数。',
+  'default': {
+    quote: '你愿意向内走，本身就是一种勇气。心里的那朵花，从未停止绽放。',
     insights: [
-      { icon: '🔭', title: '前瞻性思维', desc: '你对未来有认真思考的习惯，这是负责任的人生态度。' },
-      { icon: '🎯', title: '聚焦当下', desc: '焦虑来自把未来的不确定性背负在现在。轻轻放下一些。' },
-      { icon: '🗺️', title: '行动建议', desc: '列出今天最重要的一件小事，做完它，未来会更清晰。' },
+      { icon: '🌸', title: '勇气可嘉', desc: '选择探索内心，本身就是对自己最温柔的善待。' },
+      { icon: '💜', title: '相信自己', desc: '你的内心已经告诉你答案了，信任那个声音。' },
+      { icon: '✨', title: '持续绽放', desc: '每天给自己留一点时间，让心里的花慢慢绽放。' },
     ],
-    gradient: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
-    deco: '🔭',
-    energy: '规划型能量',
-  },
-  '自我成长': {
-    quote: '此刻的你，已经是所有挣扎与温柔叠加出的最好版本。',
-    insights: [
-      { icon: '🌟', title: '成长意识强', desc: '你对自我提升有清晰的渴望，这是改变的最强驱动力。' },
-      { icon: '🪞', title: '自我接纳', desc: '接纳"不完美的现在"，才能真正抵达"更好的未来"。' },
-      { icon: '✨', title: '每日实践', desc: '每晚写下今天一件做到的事，积累对自己的信心。' },
-    ],
-    gradient: 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
-    deco: '🌟',
-    energy: '成长型能量',
+    gradient: 'linear-gradient(160deg, #2a1a2a 0%, #4a2a4a 40%, #3a1a3a 100%)',
+    deco: '🌸',
+    stamp: '🌸',
+    postmark: '🪷',
+    bgSeed: 'garden-night',
   },
 };
+
+// 图片背景 URL（通过 Lorem Flickr 生成风景图，seed 匹配主题）
+function getBgImageUrl(seed) {
+  const seeds = {
+    'lake-mist':       'https://picsum.photos/seed/lakemist/400/560',
+    'warm-sunlight':   'https://picsum.photos/seed/warmsun/400/560',
+    'night-sea':       'https://picsum.photos/seed/nightsea/400/560',
+    'mountain-stream': 'https://picsum.photos/seed/mtstream/400/560',
+    'cloud-moon':      'https://picsum.photos/seed/cloudmoon/400/560',
+    'sunny-meadow':    'https://picsum.photos/seed/sunnymeadow/400/560',
+    'garden-night':    'https://picsum.photos/seed/gardennight/400/560',
+  };
+  return seeds[seed] || seeds['garden-night'];
+}
 
 // ============================================================
 //  STATE
 // ============================================================
 const state = {
-  mode: null,          // 'quiz' | 'chat'
-  quizAnswers: [],     // [{q, option, tag}]
+  mode: null,
+  quizAnswers: [],
   quizCurrentIdx: 0,
-  chatMessages: [],    // [{role, content}]
+  chatMessages: [],
   chatTurns: 0,
   result: null,
   sessionId: Date.now().toString(36) + Math.random().toString(36).substr(2),
+  verifiedCode: null,
 };
 
 // ============================================================
-//  LOCAL STORAGE — User analytics
+//  STARS & PARTICLES ANIMATION（减少粒子数量，优化移动端性能）
+// ============================================================
+(function initBackground() {
+  const starsEl = document.getElementById('stars');
+  const particlesEl = document.getElementById('particles');
+  // Stars - fewer for mobile
+  const isMobile = window.innerWidth < 500;
+  const starCount = isMobile ? 30 : 60;
+  for (let i = 0; i < starCount; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 70}%;
+      --dur: ${Math.random() * 4 + 2}s;
+      animation-delay: ${Math.random() * 4}s;
+    `;
+    starsEl.appendChild(s);
+  }
+  // Floating particles - fewer for mobile
+  const particleCount = isMobile ? 6 : 12;
+  for (let i = 0; i < particleCount; i++) {
+    const p = document.createElement('div');
+    p.className = 'floating-particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      --dur: ${Math.random() * 10 + 8}s;
+      animation-delay: ${Math.random() * 12}s;
+    `;
+    particlesEl.appendChild(p);
+  }
+})();
+
+// ============================================================
+//  VERIFY CODE LOGIC
+// ============================================================
+(function initCodeInput() {
+  const digits = ['d1','d2','d3','d4'].map(id => document.getElementById(id));
+  digits.forEach((el, i) => {
+    el.addEventListener('input', e => {
+      el.classList.remove('error');
+      document.getElementById('code-error-msg').textContent = '';
+      const val = e.target.value.replace(/[^0-9]/g, '').slice(-1);
+      e.target.value = val;
+      if (val && i < 3) {
+        digits[i + 1].focus();
+      }
+    });
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !el.value && i > 0) {
+        digits[i - 1].focus();
+      }
+    });
+    el.addEventListener('paste', e => {
+      e.preventDefault();
+      const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '').slice(0, 4);
+      pasted.split('').forEach((ch, idx) => {
+        if (digits[idx]) { digits[idx].value = ch; }
+      });
+      if (pasted.length >= 4) {
+        digits[3].focus();
+        setTimeout(verifyCode, 100);
+      }
+    });
+  });
+})();
+
+function verifyCode() {
+  const digits = ['d1','d2','d3','d4'].map(id => document.getElementById(id).value);
+  const code = digits.join('');
+  if (code.length < 4) {
+    showCodeError('请输入完整的4位体验码');
+    return;
+  }
+
+  // Check stored codes (admin-generated) first
+  const storedCodes = getStoredCodes();
+  const isValidStored = storedCodes[code] && !storedCodes[code].used;
+
+  // Also accept any 4-digit code for flexibility (seller can share directly)
+  // Check cooldown on localStorage
+  const cooldownKey = 'mindbloom_code_' + code;
+  const lastUsed = parseInt(localStorage.getItem(cooldownKey) || '0', 10);
+  const now = Date.now();
+
+  if (lastUsed > 0) {
+    const elapsed = now - lastUsed;
+    if (elapsed < CONFIG.COOLDOWN_MS) {
+      const hours = Math.ceil((CONFIG.COOLDOWN_MS - elapsed) / (60 * 60 * 1000));
+      showCooldownHours(hours);
+      return;
+    }
+  }
+
+  // Valid! Save and proceed
+  localStorage.setItem(cooldownKey, now.toString());
+  // Mark stored code as used if it was one
+  if (storedCodes[code]) {
+    storedCodes[code].used = true;
+    storedCodes[code].usedAt = now;
+    saveStoredCodes(storedCodes);
+  }
+  state.verifiedCode = code;
+  showPage('page-landing');
+  showToast('验证成功，欢迎来到心灵花园 ✦');
+}
+
+function showCodeError(msg) {
+  document.getElementById('code-error-msg').textContent = msg;
+  ['d1','d2','d3','d4'].forEach(id => document.getElementById(id).classList.add('error'));
+  setTimeout(() => {
+    ['d1','d2','d3','d4'].forEach(id => document.getElementById(id).classList.remove('error'));
+  }, 500);
+}
+
+function showCooldownHours(hours) {
+  const wrap = document.getElementById('code-input-wrap');
+  wrap.innerHTML = `
+    <div class="cooldown-msg">
+      此体验码已于近期使用<br>
+      请 <strong>${hours} 小时后</strong>再次使用<br>
+      <small style="color:rgba(253,248,243,0.4)">或联系店主获取新的体验码</small>
+    </div>
+  `;
+  document.getElementById('btn-verify').style.display = 'none';
+}
+
+// ============================================================
+//  LOCAL STORAGE — Analytics
 // ============================================================
 function saveSessionData(data) {
   try {
-    const key = 'mindbloom_sessions';
+    const key = 'mindbloom_sessions_v3';
     const existing = JSON.parse(localStorage.getItem(key) || '[]');
     existing.push({
       id: state.sessionId,
       ts: Date.now(),
+      code: state.verifiedCode,
       mode: state.mode,
       tags: data.tags || [],
       energy: data.energy || '',
       completed: true,
     });
-    // keep last 500 sessions
     if (existing.length > 500) existing.splice(0, existing.length - 500);
     localStorage.setItem(key, JSON.stringify(existing));
   } catch(e) {}
@@ -854,7 +1328,7 @@ function saveSessionData(data) {
 
 function getAnalytics() {
   try {
-    const sessions = JSON.parse(localStorage.getItem('mindbloom_sessions') || '[]');
+    const sessions = JSON.parse(localStorage.getItem('mindbloom_sessions_v3') || '[]');
     const topicCount = {};
     sessions.forEach(s => {
       (s.tags || []).forEach(tag => {
@@ -907,23 +1381,22 @@ function renderQuestion() {
 
   const optionsEl = document.getElementById('q-options');
   optionsEl.innerHTML = '';
-  const letters = ['A', 'B', 'C', 'D'];
+  const dots = ['○', '◇', '△', '□'];
   q.options.forEach((opt, i) => {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
-    btn.innerHTML = `<div class="option-letter">${letters[i]}</div><span>${opt}</span>`;
+    btn.innerHTML = `<div class="option-dot">${dots[i]}</div><span>${opt}</span>`;
     btn.onclick = () => selectOption(i, btn);
     optionsEl.appendChild(btn);
   });
 
   const nextBtn = document.getElementById('quiz-next-btn');
   nextBtn.classList.remove('visible');
-  nextBtn.textContent = idx === total - 1 ? '生成我的专属金句 ✨' : '下一题 →';
+  nextBtn.textContent = idx === total - 1 ? '绽放我的花语 ✦' : '继续旅程 ✦';
 
-  // Animate card
   const card = document.getElementById('question-card');
   card.style.animation = 'none';
-  card.offsetHeight; // reflow
+  card.offsetHeight;
   card.style.animation = '';
 }
 
@@ -957,51 +1430,33 @@ function nextQuestion() {
 // ============================================================
 //  CHAT LOGIC
 // ============================================================
-const CHAT_PROMPTS = [
-  '你好呀 🌸 很高兴遇见你。今天想和我聊聊什么呢？是工作、感情、还是心里某个说不清楚的感觉？',
-];
-
 function startChat() {
   state.mode = 'chat';
   state.chatMessages = [];
   state.chatTurns = 0;
   showPage('page-chat');
 
-  const chatMsgs = document.getElementById('chat-messages');
-  chatMsgs.innerHTML = '';
-
-  addBotMessage(CHAT_PROMPTS[0]);
+  document.getElementById('chat-messages').innerHTML = '';
+  addBotMessage('你好呀 🌸 我是花花。\n\n谢谢你愿意来找我，今晚想和我聊聊什么呢？可以是你最近的感受，或者只是随便说说。');
   updateChatTurnCount();
 }
 
-function addBotMessage(text, isTyping = false) {
+function addBotMessage(text) {
   const chatMsgs = document.getElementById('chat-messages');
   const div = document.createElement('div');
   div.className = 'msg bot';
-  if (isTyping) {
-    div.id = 'typing-msg';
-    div.innerHTML = `
-      <div class="msg-avatar">🌸</div>
-      <div class="msg-bubble">
-        <div class="typing-indicator">
-          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        </div>
-      </div>`;
-  } else {
-    div.innerHTML = `
-      <div class="msg-avatar">🌸</div>
-      <div class="msg-bubble">${text}</div>`;
-  }
+  div.innerHTML = `
+    <div class="msg-avatar">🌸</div>
+    <div class="msg-bubble">${escHtml(text).replace(/\n/g, '<br>')}</div>`;
   chatMsgs.appendChild(div);
   chatMsgs.scrollTop = chatMsgs.scrollHeight;
-  return div;
 }
 
 function addUserMessage(text) {
   const chatMsgs = document.getElementById('chat-messages');
   const div = document.createElement('div');
   div.className = 'msg user';
-  div.innerHTML = `<div class="msg-avatar">🙂</div><div class="msg-bubble">${escHtml(text)}</div>`;
+  div.innerHTML = `<div class="msg-avatar">🌿</div><div class="msg-bubble">${escHtml(text)}</div>`;
   chatMsgs.appendChild(div);
   chatMsgs.scrollTop = chatMsgs.scrollHeight;
 }
@@ -1019,7 +1474,7 @@ function handleChatKey(e) {
 
 function autoResize(el) {
   el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+  el.style.height = Math.min(el.scrollHeight, 96) + 'px';
 }
 
 async function sendChat() {
@@ -1038,16 +1493,13 @@ async function sendChat() {
   updateChatTurnCount();
 
   if (state.chatTurns >= 10) {
-    // End chat, generate result
-    addBotMessage('谢谢你愿意和我分享这些 🌸 我已经对你有了一定的了解，现在让我为你生成专属的心理能量金句...');
-    setTimeout(() => startGenerating(), 1800);
+    addBotMessage('谢谢你和我分享了这么多 🌸 我已经准备好为你绽放专属的花语了……');
+    setTimeout(() => startGenerating(), 2000);
     return;
   }
 
-  // Show typing indicator
-  const typingEl = addBotMessage('', true);
-  const reply = await getChatReply(text);
-  typingEl.remove();
+  await sleep(1200);
+  const reply = getChatReply(state.chatTurns);
   addBotMessage(reply);
   state.chatMessages.push({ role: 'assistant', content: reply });
   document.getElementById('chat-send-btn').disabled = false;
@@ -1058,70 +1510,27 @@ function updateChatTurnCount() {
   const remaining = 10 - state.chatTurns;
   const el = document.getElementById('chat-turn-count');
   if (remaining <= 0) {
-    el.textContent = '对话结束，正在生成你的专属金句...';
-  } else if (remaining <= 3) {
-    el.textContent = `还可以聊 ${remaining} 轮，之后将生成你的金句`;
+    el.textContent = '对话结束，正在绽放你的花语……';
+  } else if (remaining <= 2) {
+    el.textContent = `还有 ${remaining} 轮，然后为你生成专属花语`;
   } else {
     el.textContent = `还可以聊 ${remaining} 轮`;
   }
-  const bar = document.getElementById('chat-progress-bar');
-  bar.style.width = `${(state.chatTurns / 10) * 100}%`;
+  document.getElementById('chat-progress-bar').style.width = `${(state.chatTurns / 10) * 100}%`;
 }
 
-async function getChatReply(userMsg) {
-  if (CONFIG.DEMO_MODE || !CONFIG.DEEPSEEK_API_KEY || CONFIG.DEEPSEEK_API_KEY === 'YOUR_DEEPSEEK_API_KEY') {
-    return getDemoChatReply(state.chatTurns);
-  }
-  try {
-    const messages = [
-      {
-        role: 'system',
-        content: `你是一位温暖、有洞察力的积极心理咨询师助手，名叫"花花"。
-你的任务是通过对话（最多10轮）了解用户的当下情绪状态、压力来源和内心渴望。
-对话原则：
-1. 每次回复不超过50字，简短、温暖、有共情
-2. 自然引导用户更深入地分享
-3. 不给建议，只共情和提问
-4. 语气像一个温柔的好朋友
-5. 第8轮后，温和提示即将生成金句`,
-      },
-      ...state.chatMessages,
-    ];
-    const resp = await fetch('https://api.deepseek.com/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${CONFIG.DEEPSEEK_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'deepseek-chat',
-        messages,
-        max_tokens: 100,
-        temperature: 0.8,
-      }),
-    });
-    const data = await resp.json();
-    return data.choices?.[0]?.message?.content || getDemoChatReply(state.chatTurns);
-  } catch(e) {
-    return getDemoChatReply(state.chatTurns);
-  }
-}
-
-const DEMO_CHAT_REPLIES = [
-  '听到你说的，心里暖暖的又有点心疼你。能多说说吗，是什么让你有这种感觉？',
-  '嗯嗯，我懂那种感觉。你觉得这种状态已经持续多久了呢？',
-  '谢谢你愿意告诉我这些 🌸 这段时间你是怎么撑过来的？',
-  '你说的这个点真的很触动我。这件事对你来说最难的部分是什么？',
-  '听起来你承受了很多，但你还是坚持下来了，这本身就很厉害。有什么是让你觉得还好的吗？',
-  '你有没有一个人的时候，会做什么让自己感觉好一点？',
-  '嗯，我在认真听。你现在最渴望的是什么？哪怕是一个很小的愿望。',
-  '谢谢你和我聊了这么多 🌟 我感觉已经很了解你了。再说最后一两件你想让我知道的事？',
-  '好的，我已经对你有了很深的了解。准备好了吗？马上为你生成专属金句 ✨',
+const CHAT_REPLIES = [
+  '嗯，我在这里认真听着 🌸 那件事让你有这种感受多久了？',
+  '谢谢你告诉我这些。你的感受是真实的，也是重要的。',
+  '你愿意说出来这件事本身，就需要勇气 🌙 还有什么是想让我了解的吗？',
+  '我感受到了你的真诚 ✨ 这种情况，你有没有试过对自己说什么？',
+  '你说得很细腻 🌿 你觉得这件事里，最让你感到难的是什么？',
+  '你能坚持到现在，本身就很了不起 🌸 是什么让你还保持着？',
+  '我静静地听着 🌌 如果这件事会变，它最需要的是什么？',
+  '你的内心很有力量 🌙 最后一个问题：此刻你最想对自己说什么？',
 ];
-
-function getDemoChatReply(turn) {
-  const idx = Math.min(turn - 1, DEMO_CHAT_REPLIES.length - 1);
-  return DEMO_CHAT_REPLIES[idx];
+function getChatReply(turn) {
+  return CHAT_REPLIES[Math.min(turn - 1, CHAT_REPLIES.length - 1)];
 }
 
 // ============================================================
@@ -1129,9 +1538,7 @@ function getDemoChatReply(turn) {
 // ============================================================
 async function startGenerating() {
   showPage('page-loading');
-  
-  // Animate loading steps
-  const steps = ['step-1', 'step-2', 'step-3', 'step-4'];
+  const steps = ['step-1','step-2','step-3','step-4'];
   for (let i = 0; i < steps.length; i++) {
     await sleep(900);
     document.getElementById(steps[i]).classList.remove('active');
@@ -1141,7 +1548,6 @@ async function startGenerating() {
     }
   }
   await sleep(600);
-
   const result = await generateResult();
   state.result = result;
   renderResult(result);
@@ -1149,25 +1555,21 @@ async function startGenerating() {
 }
 
 async function generateResult() {
-  // Collect tags
   let tags = [];
   if (state.mode === 'quiz') {
     tags = state.quizAnswers.map(a => a.tag);
   } else {
-    // Extract from chat topics (simple keyword matching)
     const chatText = state.chatMessages.map(m => m.content).join(' ');
-    if (/工作|职场|加班|老板|工作|项目/.test(chatText)) tags.push('工作压力');
-    if (/关系|朋友|恋人|家人|感情/.test(chatText)) tags.push('人际关系');
-    if (/未来|方向|迷茫|不知道|怎么办/.test(chatText)) tags.push('未来焦虑');
-    if (/难过|哭|委屈|伤心|痛/.test(chatText)) tags.push('情绪波动');
-    if (/成长|改变|变好|努力/.test(chatText)) tags.push('自我成长');
-    if (tags.length === 0) tags = ['自我成长'];
+    if (/工作|职场|加班|压力/.test(chatText)) tags.push('活力型');
+    if (/关系|朋友|感情|家人/.test(chatText)) tags.push('温暖型');
+    if (/未来|迷茫|方向/.test(chatText)) tags.push('向往型');
+    if (/难过|累|辛苦/.test(chatText)) tags.push('矛盾中带着希望');
+    if (tags.length === 0) tags = ['内省型'];
   }
 
   if (CONFIG.DEMO_MODE || !CONFIG.DEEPSEEK_API_KEY || CONFIG.DEEPSEEK_API_KEY === 'YOUR_DEEPSEEK_API_KEY') {
     return getDemoResult(tags);
   }
-
   try {
     return await callDeepSeekForResult(tags);
   } catch(e) {
@@ -1176,9 +1578,8 @@ async function generateResult() {
 }
 
 function getDemoResult(tags) {
-  // Find best matching template
   const topicKeys = Object.keys(QUOTE_LIBRARY);
-  let match = null;
+  let match = QUOTE_LIBRARY['default'];
   for (const tag of tags) {
     for (const key of topicKeys) {
       if (tag.includes(key) || key.includes(tag)) {
@@ -1186,52 +1587,40 @@ function getDemoResult(tags) {
         break;
       }
     }
-    if (match) break;
-  }
-  // Map common tags
-  if (!match) {
-    if (tags.some(t => ['工作压力','完美主义','成就感','坚韧意志'].includes(t))) match = QUOTE_LIBRARY['工作压力'];
-    else if (tags.some(t => ['人际关系','归属感','恐惧亲密','共情能力'].includes(t))) match = QUOTE_LIBRARY['人际关系'];
-    else if (tags.some(t => ['未来焦虑','迷茫困惑','意义感'].includes(t))) match = QUOTE_LIBRARY['未来焦虑'];
-    else if (tags.some(t => ['情绪波动','持续低落','睡眠问题'].includes(t))) match = QUOTE_LIBRARY['情绪波动'];
-    else match = QUOTE_LIBRARY['自我成长'];
+    if (match !== QUOTE_LIBRARY['default']) break;
   }
 
   saveSessionData({ tags, energy: match.energy });
-
-  return {
-    quote: match.quote,
-    insights: match.insights,
-    gradient: match.gradient,
-    deco: match.deco,
-    energy: match.energy,
-    tags,
-  };
+  return { ...match, tags };
 }
 
 async function callDeepSeekForResult(tags) {
   const context = state.mode === 'quiz'
     ? `用户问卷结果标签：${tags.join('、')}。\n问卷详情：${state.quizAnswers.map(a => `[${a.category}] ${a.option}`).join('；')}`
-    : `对话关键词：${tags.join('、')}。\n对话摘要：${state.chatMessages.slice(-6).map(m => `${m.role}: ${m.content}`).join('\n')}`;
+    : `对话关键词：${tags.join('、')}`;
 
-  const prompt = `你是一位积极心理学专家。根据用户的测评信息，生成一个个性化结果。
+  const prompt = `你是一位积极心理学专家，擅长用诗意、温暖的语言解读心灵。
 
+用户信息：
 ${context}
 
-请用 JSON 格式回复，包含以下字段：
+请用 JSON 格式回复：
 {
-  "quote": "一句深刻、温暖的积极心理学金句（20-35字，原创，针对用户状态）",
-  "energy": "2-4字描述用户能量类型（如：成长型能量、感知型能量）",
+  "quote": "一句深刻、诗意、温暖的积极心理学金句（20-35字，原创，针对用户状态，富有意境）",
+  "energy": "2-4字描述用户能量类型（如：内省型能量、温暖型能量）",
   "insights": [
-    {"icon": "emoji", "title": "5字以内", "desc": "30字左右，针对用户的洞察"},
-    {"icon": "emoji", "title": "5字以内", "desc": "30字左右，成长建议"},
-    {"icon": "emoji", "title": "5字以内", "desc": "30字左右，具体行动建议"}
+    {"icon": "emoji", "title": "5字以内", "desc": "25-30字，针对用户的温柔洞察"},
+    {"icon": "emoji", "title": "5字以内", "desc": "25-30字，自我肯定类建议"},
+    {"icon": "emoji", "title": "5字以内", "desc": "25-30字，具体温柔行动建议"}
   ],
-  "gradient": "CSS渐变色（从色彩心理学角度匹配用户状态）",
-  "deco": "一个合适的emoji"
+  "gradient": "CSS渐变色（深色系匹配夜间神秘感，如 linear-gradient(160deg, #1a2a3a 0%, #2a4a5a 100%)）",
+  "deco": "一个意境感强的emoji",
+  "stamp": "一个邮票emoji",
+  "postmark": "一个邮戳emoji",
+  "bgSeed": "描述背景图的英文关键词（如 lake-mist, warm-sunlight）"
 }
 
-只返回 JSON，不要其他文字。`;
+只返回 JSON。`;
 
   const resp = await fetch('https://api.deepseek.com/chat/completions', {
     method: 'POST',
@@ -1257,15 +1646,26 @@ ${context}
 //  RENDER RESULT
 // ============================================================
 function renderResult(result) {
-  // Energy tag
-  document.getElementById('result-energy-tag').textContent = `✨ ${result.energy}`;
+  document.getElementById('result-energy-tag').textContent = `✦ ${result.energy}`;
 
-  // Quote card
-  document.getElementById('quote-card-bg').style.background = result.gradient;
-  document.getElementById('quote-deco').textContent = result.deco;
-  document.getElementById('quote-text').textContent = result.quote;
+  // Postcard background: gradient + optional image
+  const gradient = result.gradient || QUOTE_LIBRARY['default'].gradient;
+  document.getElementById('postcard-bg-gradient').style.background = gradient;
 
-  // Insights
+  // Load thematic image in background
+  const bgSeed = result.bgSeed || 'garden-night';
+  const imgEl = document.getElementById('postcard-bg-img');
+  imgEl.src = getBgImageUrl(bgSeed);
+  imgEl.style.display = 'block';
+  imgEl.onerror = () => { imgEl.style.display = 'none'; };
+
+  // Postcard elements
+  document.getElementById('postcard-deco').textContent = result.deco || '🌸';
+  document.getElementById('postcard-text').textContent = result.quote;
+  document.getElementById('stamp-flower').textContent = result.stamp || '🌸';
+  document.getElementById('postmark-inner').textContent = result.postmark || '🌸';
+
+  // Insight cards
   const container = document.getElementById('insight-cards');
   container.innerHTML = '';
   result.insights.forEach(ins => {
@@ -1282,14 +1682,16 @@ function renderResult(result) {
 }
 
 // ============================================================
-//  SAVE CARD (Screenshot hint)
+//  SAVE CARD
 // ============================================================
 function saveCard() {
-  showToast('长按图片卡片即可保存到相册 📸');
-  // Scroll to card
-  document.getElementById('quote-card').scrollIntoView({ behavior: 'smooth' });
+  showToast('长按明信片图片即可保存到相册 🌸');
+  document.getElementById('postcard-card').scrollIntoView({ behavior: 'smooth' });
 }
 
+// ============================================================
+//  RESTART
+// ============================================================
 function restartAll() {
   state.quizAnswers = [];
   state.quizCurrentIdx = 0;
@@ -1317,26 +1719,12 @@ function adminLogin() {
 function renderDashboard() {
   const analytics = getAnalytics();
 
-  // Stats
   document.getElementById('stat-grid').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-num">${analytics.total}</div>
-      <div class="stat-label">总测评次数</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">${analytics.quizCount}</div>
-      <div class="stat-label">问卷模式</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">${analytics.chatCount}</div>
-      <div class="stat-label">对话模式</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">${analytics.sorted.length}</div>
-      <div class="stat-label">话题类型</div>
-    </div>`;
+    <div class="stat-card"><div class="stat-num">${analytics.total}</div><div class="stat-label">总测评次数</div></div>
+    <div class="stat-card"><div class="stat-num">${analytics.quizCount}</div><div class="stat-label">直觉之旅</div></div>
+    <div class="stat-card"><div class="stat-num">${analytics.chatCount}</div><div class="stat-label">心灵对话</div></div>
+    <div class="stat-card"><div class="stat-num">${analytics.sorted.length}</div><div class="stat-label">话题类型</div></div>`;
 
-  // Topic bars
   const maxCount = analytics.sorted[0]?.[1] || 1;
   const topicList = document.getElementById('topic-list');
   topicList.innerHTML = '';
@@ -1351,24 +1739,23 @@ function renderDashboard() {
     topicList.appendChild(div);
   });
 
-  // Recent sessions
   const recentList = document.getElementById('recent-list');
   recentList.innerHTML = '';
   const recent = analytics.sessions.slice(-10).reverse();
   recent.forEach(s => {
+    const d = new Date(s.ts);
+    const dateStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     const div = document.createElement('div');
-    div.className = 'topic-item';
-    const date = new Date(s.ts);
-    const dateStr = `${date.getMonth()+1}/${date.getDate()} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+    div.className = 'record-item';
     div.innerHTML = `
-      <span style="font-size:12px;color:var(--text-muted);min-width:80px">${dateStr}</span>
-      <span style="font-size:12px;flex:1">${s.energy || '未知'}</span>
-      <span style="font-size:11px;color:var(--text-muted)">${s.mode === 'quiz' ? '问卷' : '对话'}</span>`;
+      <span class="record-time">${dateStr}</span>
+      <span class="record-energy">${s.energy || '未知'}</span>
+      <span class="record-mode">${s.mode === 'quiz' ? '旅程' : '对话'}</span>`;
     recentList.appendChild(div);
   });
 
   if (analytics.total === 0) {
-    topicList.innerHTML = '<div style="font-size:13px;color:var(--text-muted);text-align:center;padding:20px">暂无数据，有用户完成测评后这里会显示数据</div>';
+    topicList.innerHTML = '<div style="font-size:12px;color:rgba(253,248,243,0.25);text-align:center;padding:20px">暂无数据，有用户完成测评后会显示</div>';
   }
 }
 
@@ -1378,9 +1765,9 @@ function exportData() {
     showToast('暂无数据可导出');
     return;
   }
-  let csv = 'ID,时间,模式,能量类型,话题标签\n';
+  let csv = 'ID,时间,体验码,模式,能量类型,话题标签\n';
   analytics.sessions.forEach(s => {
-    csv += `${s.id},${new Date(s.ts).toLocaleString()},${s.mode},${s.energy},"${(s.tags||[]).join(',')}"\n`;
+    csv += `${s.id},${new Date(s.ts).toLocaleString()},${s.code || ''},${s.mode},${s.energy},"${(s.tags||[]).join(',')}"\n`;
   });
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
@@ -1388,7 +1775,7 @@ function exportData() {
   a.href = url; a.download = 'mindbloom_data.csv';
   a.click();
   URL.revokeObjectURL(url);
-  showToast('已导出 CSV 文件');
+  showToast('已导出 CSV 🌸');
 }
 
 // ============================================================
