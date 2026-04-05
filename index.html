@@ -320,29 +320,29 @@
         <div class="brand-title">心花</div>
         <div class="brand-sub">MIND BLOOM</div>
       </div>
-      <p style="font-size: 13px; color: rgba(253,248,243,0.5); text-align: center; margin-bottom: 10px;">在喧嚣中，聆听内心的低语</p>
+      <p style="font-size: 14px; color: rgba(253,248,243,0.6); text-align: center; margin-bottom: 30px; line-height: 1.8; max-width: 300px;">准备好开启一场与自己对话的奇妙旅程了吗？</p>
       
       <div class="product-grid">
         <div class="product-card" onclick="selectProduct('basic')">
-          <div class="product-icon">&#x1F31F;</div>
-          <div class="product-meta">
-            <span class="product-tag basic">初级版</span>
-            <span class="product-price">&#xFFE5;2.99</span>
+          <div style="text-align: center;">
+            <div class="product-icon">&#x1F31F;</div>
           </div>
-          <div class="product-name" style="margin-top: 12px;">意识之境</div>
-          <div class="product-desc">30道趣味心理题，带你探索意想不到的自己。趣味、意象、意想不到的问题，配积极心理语录。</div>
-          <div class="product-questions">30题 · 约5分钟</div>
+          <div class="product-name" style="text-align: center; margin: 12px 0 8px;">意识之境</div>
+          <div class="product-desc" style="text-align: center;">30个意想不到的问题，带你发现被忽略的自己。有点准，有点有趣，有点意外。</div>
+          <div style="text-align: center; margin-top: 14px;">
+            <span style="display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, var(--sage-dark), var(--sage)); border-radius: 20px; font-size: 13px; color: var(--cream);">开启探索 &#x2192;</span>
+          </div>
         </div>
         
         <div class="product-card" onclick="selectProduct('advanced')">
-          <div class="product-icon">&#x1F33F;</div>
-          <div class="product-meta">
-            <span class="product-tag advanced">高级版</span>
-            <span class="product-price">&#xFFE5;29.9</span>
+          <div style="text-align: center;">
+            <div class="product-icon">&#x1F33F;</div>
           </div>
-          <div class="product-name" style="margin-top: 12px;">心灵花园</div>
-          <div class="product-desc">200道综合测评，融合大五人格、MBTI、玄学与潜意识投射。全方位性格画像，职业、亲密关系、生活指引。</div>
-          <div class="product-questions">200题 · 约30分钟</div>
+          <div class="product-name" style="text-align: center; margin: 12px 0 8px;">心灵花园</div>
+          <div class="product-desc" style="text-align: center;">200道深度探索，看见性格的全貌。职业方向、关系模式、生活指引……这份报告，只属于你。</div>
+          <div style="text-align: center; margin-top: 14px;">
+            <span style="display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, var(--lavender), #C8BCD8); border-radius: 20px; font-size: 13px; color: var(--cream);">深度解读 &#x2192;</span>
+          </div>
         </div>
       </div>
 
@@ -356,10 +356,10 @@
     <!-- ============ VERIFY PAGE ============ -->
     <div id="page-verify" class="page">
       <button class="back-btn" onclick="showPage('page-home')">&#x2190;</button>
-      <div class="page-title" id="verify-title">验证体验码</div>
+      <div class="page-title" id="verify-title">解锁探索</div>
       <div class="verify-card">
-        <span class="product-badge" id="verify-badge">初级版</span>
-        <p style="font-size: 13px; color: rgba(253,248,243,0.5); margin-bottom: 10px;" id="verify-hint">请输入你获得的4位体验码</p>
+        <p style="font-size: 14px; color: rgba(253,248,243,0.7); margin-bottom: 8px;" id="verify-product-name">意识之境</p>
+        <p style="font-size: 12px; color: rgba(253,248,243,0.4); margin-bottom: 20px;">输入你的专属体验码</p>
         <div class="code-input-wrap" id="code-input-wrap">
           <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d1" />
           <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d2" />
@@ -368,7 +368,6 @@
         </div>
         <div class="code-error-msg" id="code-error-msg"></div>
         <button class="btn-verify" id="btn-verify" onclick="verifyCode()">开启探索</button>
-        <p class="verify-note">体验码由店主提供 · 完全匿名</p>
       </div>
     </div>
 
@@ -678,20 +677,14 @@ function showPage(id) {
 // ============================================================
 function selectProduct(product) {
   state.product = product;
-  const badge = document.getElementById('verify-badge');
-  const title = document.getElementById('verify-title');
-  const hint = document.getElementById('verify-hint');
+  const productName = document.getElementById('verify-product-name');
   
   if (product === 'basic') {
-    badge.textContent = '初级版';
-    badge.className = 'product-badge basic';
-    title.textContent = '意识之境';
-    hint.textContent = '请输入初级版4位体验码';
+    productName.textContent = '意识之境';
+    productName.style.color = 'var(--sage-light)';
   } else {
-    badge.textContent = '高级版';
-    badge.className = 'product-badge advanced';
-    title.textContent = '心灵花园';
-    hint.textContent = '请输入高级版4位体验码';
+    productName.textContent = '心灵花园';
+    productName.style.color = 'var(--lavender)';
   }
   
   // 重置验证码输入
@@ -740,7 +733,7 @@ function verifyCode() {
   const code = digits.join('');
   
   if (code.length < 4) {
-    showCodeError('请输入完整的4位体验码');
+    showCodeError('请输入完整的体验码');
     return;
   }
   
