@@ -1593,10 +1593,16 @@ function showPage(id) {
 }
 
 function showAdmin() {
-  if (!state.verifiedCode && !state.adminLoggedIn) {
-    showToast('请先输入体验码验证'); return;
-  }
   showPage('page-admin');
+  if (state.adminLoggedIn) {
+    document.getElementById('admin-login-section').style.display = 'none';
+    document.getElementById('admin-dashboard').style.display = 'flex';
+  } else {
+    // 未登录：显示登录表单
+    document.getElementById('admin-login-section').style.display = 'flex';
+    document.getElementById('admin-dashboard').style.display = 'none';
+    document.getElementById('admin-pwd').value = '';
+  }
 }
 
 // ============================================================
