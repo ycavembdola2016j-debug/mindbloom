@@ -159,7 +159,7 @@
     }
     .btn-start {
       width: 100%; padding: 14px; border: none; border-radius: 14px;
-      background: linear-gradient(135deg, var(--gold-dark, #B8944A), var(--gold));
+      background: linear-gradient(135deg, #B8944A, var(--gold));
       color: var(--bg); font-size: 15px; font-weight: 600; cursor: pointer;
       font-family: inherit; letter-spacing: 2px; transition: transform 0.15s;
     }
@@ -278,7 +278,7 @@
     .code-chip:hover { background: var(--border); }
     .code-chip.basic { border-left: 3px solid var(--sage); }
     .code-chip.advanced { border-left: 3px solid var(--lavender); }
-    .btn-generate { padding: 10px 16px; background: linear-gradient(135deg, var(--gold-dark, #B8944A), var(--gold)); border: none; border-radius: 10px; font-size: 13px; color: var(--bg); cursor: pointer; font-family: inherit; }
+    .btn-generate { padding: 10px 16px; background: linear-gradient(135deg, #B8944A, var(--gold)); border: none; border-radius: 10px; font-size: 13px; color: var(--bg); cursor: pointer; font-family: inherit; }
     .record-list { max-height: 200px; overflow-y: auto; }
     .record-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
     .record-time { color: rgba(253,248,243,0.4); min-width: 60px; }
@@ -356,7 +356,7 @@
     <!-- ============ VERIFY PAGE ============ -->
     <div id="page-verify" class="page">
       <button class="back-btn" onclick="showPage('page-home')">&#x2190;</button>
-      <div class="page-title" id="verify-title">解锁探索</div>
+      <div class="page-title">解锁探索</div>
       <div class="verify-card">
         <p style="font-size: 14px; color: rgba(253,248,243,0.7); margin-bottom: 8px;" id="verify-product-name">意识之境</p>
         <p style="font-size: 12px; color: rgba(253,248,243,0.4); margin-bottom: 20px;">输入你的专属体验码</p>
@@ -374,7 +374,7 @@
     <!-- ============ USER INFO PAGE ============ -->
     <div id="page-userinfo" class="page">
       <button class="back-btn" onclick="showPage('page-verify')">&#x2190;</button>
-      <div class="page-title">欢迎来到心灵花园</div>
+      <div class="page-title">欢迎</div>
       <div class="page-sub" style="margin-bottom: 24px;">让我们更好地认识你</div>
       <div class="userinfo-card">
         <div>
@@ -398,29 +398,27 @@
             <button class="age-btn" id="age-5" onclick="selectAge('46+')">46岁以上</button>
           </div>
         </div>
+        <div class="privacy-note">
+          &#x1F512; 你的信息完全匿名，仅用于统计分析
+        </div>
+        <button class="btn-start" onclick="startQuiz()">开始探索</button>
       </div>
-      <div class="privacy-note" style="max-width: 340px; margin-top: 16px;">
-        &#x1F512; 这些信息仅用于后台数据统计，你可以选择不填写
-      </div>
-      <button class="btn-start" style="max-width: 340px; margin-top: 20px;" onclick="submitUserInfo()">
-        进入花园
-      </button>
     </div>
 
     <!-- ============ QUIZ PAGE ============ -->
     <div id="page-quiz" class="page">
       <div class="progress-header">
         <button class="back-btn" onclick="confirmExit()">&#x2190;</button>
-        <span class="progress-text" id="quiz-progress-text">1 / 30</span>
-        <span style="width: 36px;"></span>
+        <span class="progress-text" id="progress-text">1/30</span>
+        <div style="width: 36px;"></div>
       </div>
       <div class="progress-bar-wrap">
-        <div class="progress-bar" id="quiz-progress-bar" style="width: 0%"></div>
+        <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
       </div>
       <div class="question-card" id="question-card">
         <div class="q-category" id="q-category"></div>
         <div class="q-text" id="q-text"></div>
-        <div class="options" id="q-options"></div>
+        <div class="options" id="options"></div>
       </div>
       <button class="quiz-next-btn" id="quiz-next-btn" onclick="nextQuestion()">继续旅程</button>
     </div>
@@ -428,792 +426,1320 @@
     <!-- ============ RESULT PAGE ============ -->
     <div id="page-result" class="page">
       <div class="result-card" id="result-card">
-        <!-- 动态填充 -->
+        <!-- 动态内容 -->
       </div>
     </div>
 
     <!-- ============ ADMIN PAGE ============ -->
     <div id="page-admin" class="page">
-      <button class="back-btn" id="admin-back-btn">&#x2192;</button>
-      <div class="page-title">心灵花园后台</div>
-      <div id="admin-login-section" class="admin-login">
-        <input class="admin-input" type="password" id="admin-pwd" placeholder="管理员密码" />
+      <div id="admin-login-section" class="admin-login" style="display: none;">
+        <input class="admin-input" type="password" id="admin-pwd" placeholder="输入管理员密码" />
         <button class="btn-admin-login" onclick="adminLogin()">进入后台</button>
+        <button class="back-btn" onclick="showPage('page-home')" style="align-self: center;">&#x2190;</button>
       </div>
-      <div id="admin-dashboard" class="admin-dashboard" style="display: none;">
-        <!-- 动态填充 -->
+      <div id="admin-dashboard" style="display: none; width: 100%; max-width: 500px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <div class="page-title" style="margin: 0;">数据后台</div>
+          <button class="back-btn" onclick="adminLogout()" title="退出登录">&#x2192;</button>
+        </div>
+        
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-label">总测评次数</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-repurchase">0</div>
+            <div class="stat-label">复购用户</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-basic">0</div>
+            <div class="stat-label">意识之境</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-advanced">0</div>
+            <div class="stat-label">心灵花园</div>
+          </div>
+        </div>
+
+        <div class="admin-section">
+          <div class="sub-label">&#x2728; 生成体验码</div>
+          <div class="admin-row">
+            <select id="gen-type" style="flex:1; padding:10px; background:var(--glass); border:1px solid var(--border); border-radius:8px; color:var(--cream); font-family:inherit;">
+              <option value="basic">意识之境 (B开头)</option>
+              <option value="advanced">心灵花园 (A开头)</option>
+            </select>
+            <input type="number" id="gen-count" value="5" min="1" max="20" style="width:60px; padding:10px; background:var(--glass); border:1px solid var(--border); border-radius:8px; color:var(--cream); font-family:inherit; text-align:center;" />
+            <button class="btn-generate" onclick="generateCodes()">生成</button>
+          </div>
+          <div class="admin-code-list" id="admin-code-list"></div>
+        </div>
+
+        <div class="admin-section">
+          <div class="sub-label">&#x1F4CB; 最近记录</div>
+          <div class="record-list" id="record-list"></div>
+          <button class="btn-save" style="margin-top: 12px;" onclick="exportCSV()">导出 CSV</button>
+        </div>
       </div>
     </div>
   </div>
 
-<script>
-// ============================================================
-//  CONFIG
-// ============================================================
-const CONFIG = {
-  ADMIN_PASSWORD: 'mindbloom2026',
-  CODE_VALID_MS: 24 * 60 * 60 * 1000,
-};
+  <script>
+    // ============================================================
+    //  APP STATE
+    // ============================================================
+    const state = {
+      product: null,
+      userNickname: '',
+      userGender: '',
+      userAge: '',
+      currentQuestion: 0,
+      answers: [],
+      adminLoggedIn: false,
+      verifiedCode: null,
+    };
 
-// ============================================================
-//  STATE
-// ============================================================
-const state = {
-  product: null,          // 'basic' | 'advanced'
-  quizAnswers: [],
-  quizCurrentIdx: 0,
-  result: null,
-  sessionId: Date.now().toString(36) + Math.random().toString(36).substr(2),
-  verifiedCode: null,
-  adminLoggedIn: false,
-  userNickname: '',
-  userGender: '',
-  userAge: '',
-  pendingOption: null,
-};
-
-// ============================================================
-//  BASIC QUIZ - 30题趣味心理题
-// ============================================================
-const BASIC_QUESTIONS = [
-  { category: '意象联想', text: '想象你走进一片森林，最先注意到的是什么？', options: ['一束穿透树叶的光', '脚下的苔藓小路', '远处隐约的鸟鸣', '林中若隐若现的小屋'] },
-  { category: '趣味心理', text: '如果你的情绪是一种天气，会是什么？', options: ['春日暖阳', '绵绵细雨', '夏夜星空', '清晨薄雾'] },
-  { category: '意象联想', text: '你面前出现一面镜子，镜中倒影让你想到什么？', options: ['童年的自己', '未来的某个瞬间', '一个陌生人', '模糊不清'] },
-  { category: '趣味心理', text: '你最想在哪个时间段发呆？', options: ['日出时分', '午后慵懒', '黄昏时刻', '午夜静谧'] },
-  { category: '意象联想', text: '你走进一间房间，最先被什么吸引？', options: ['窗边的植物', '墙上的画', '角落的旧书', '柔软的沙发'] },
-  { category: '趣味心理', text: '如果秘密有颜色，你觉得是什么？', options: ['深紫色', '透明', '金色', '黑色'] },
-  { category: '意象联想', text: '你在海边捡到一只贝壳，它是什么形状？', options: ['螺旋形', '心形', '不规则', '完美的圆形'] },
-  { category: '趣味心理', text: '你的内心世界更像哪里？', options: ['宁静的图书馆', '热闹的集市', '空旷的原野', '神秘的山洞'] },
-  { category: '意象联想', text: '你手中握着一颗种子，它会变成什么？', options: ['盛开的花', '一棵大树', '一片星空', '一封信'] },
-  { category: '趣味心理', text: '你最想拥有哪种超能力？', options: ['读心术', '穿越时空', '隐身术', '治愈力'] },
-  { category: '意象联想', text: '夜空中出现一个符号，它是什么？', options: ['月亮', '星星', '流星', '漩涡'] },
-  { category: '趣味心理', text: '如果时间可以暂停一小时，你最想做什么？', options: ['和重要的人在一起', '独自旅行', '学习新技能', '什么都不做'] },
-  { category: '意象联想', text: '你走进一座花园，看到的第一朵花是？', options: ['玫瑰', '向日葵', '薰衣草', '莲花'] },
-  { category: '趣味心理', text: '你最害怕失去什么？', options: ['记忆', '爱', '自由', '可能性'] },
-  { category: '意象联想', text: '你听到一段旋律，它让你想到什么场景？', options: ['雨中漫步', '篝火旁', '山巅观云', '童年午后'] },
-  { category: '趣味心理', text: '如果可以选择，你会变成什么动物？', options: ['猫', '狼', '鹰', '鲸鱼'] },
-  { category: '意象联想', text: '你站在一座桥上，桥下是什么？', options: ['清澈的河流', '云海', '深邃的峡谷', '城市的灯火'] },
-  { category: '趣味心理', text: '你更相信什么？', options: ['直觉', '理性', '经验', '缘分'] },
-  { category: '意象联想', text: '你打开一扇古老的门，门后是什么？', options: ['一片光明', '迷雾森林', '熟悉的房间', '未知的深渊'] },
-  { category: '趣味心理', text: '你最珍惜的记忆是什么颜色的？', options: ['暖黄色', '蓝色', '绿色', '白色'] },
-  { category: '意象联想', text: '你在森林中迷路，第一反应是？', options: ['寻找水源', '爬到高处', '等待救援', '跟着动物'] },
-  { category: '趣味心理', text: '如果生活是一部电影，你希望是什么类型？', options: ['治愈文艺', '悬疑烧脑', '冒险奇幻', '温暖喜剧'] },
-  { category: '意象联想', text: '你捡到一瓶魔法药水，喝下后会发生什么？', options: ['听懂动物说话', '学会飞行', '看见未来', '回到过去'] },
-  { category: '趣味心理', text: '你最想和谁交换一天的生活？', options: ['某个名人', '未来的自己', '古代诗人', '外星人'] },
-  { category: '意象联想', text: '你走进一家店，店里卖的是什么？', options: ['时间', '梦境', '回忆', '可能'] },
-  { category: '趣味心理', text: '你的灵魂伴侣最可能是什么形象？', options: ['安静的陪伴者', '热情的冒险家', '深邃的思想者', '温柔的守护者'] },
-  { category: '意象联想', text: '你面前出现一条路，它通向哪里？', options: ['大海', '山顶', '小镇', '星空'] },
-  { category: '趣味心理', text: '你更倾向于哪种表达方式？', options: ['文字', '图像', '声音', '行动'] },
-  { category: '意象联想', text: '你最喜欢的梦境场景是？', options: ['飞翔', '水下', '森林', '城市'] },
-  { category: '趣味心理', text: '如果可以用一个词形容你的内在世界？', options: ['深邃', '温暖', '辽阔', '神秘'] },
-];
-
-// ============================================================
-//  ADVANCED QUIZ - 200题综合测评
-// ============================================================
-const ADVANCED_QUESTIONS = [
-  // 大五人格维度 (40题)
-  { category: '大五人格·外向性', text: '在社交场合中，你通常是？', options: ['主动发起对话', '等待他人接近', '视情况而定', '尽量避免'] },
-  { category: '大五人格·外向性', text: '独处时你通常感到？', options: ['充电恢复', '孤独无聊', '平静放松', '思绪纷飞'] },
-  { category: '大五人格·外向性', text: '你更喜欢的工作环境是？', options: ['开放热闹', '安静独立', '混合灵活', '无所谓'] },
-  { category: '大五人格·外向性', text: '聚会结束后，你通常？', options: ['精力充沛', '疲惫需要休息', '平静', '意犹未尽'] },
-  { category: '大五人格·外向性', text: '你更容易在哪种情境下发挥？', options: ['众人面前', '独自一人', '小团队', '任何环境'] },
-  { category: '大五人格·宜人性', text: '当别人犯错时，你通常会？', options: ['宽容理解', '直接指出', '私下提醒', '视而不见'] },
-  { category: '大五人格·宜人性', text: '你认为自己是一个？', options: ['富有同情心', '理性客观', '独立自主', '难以定义'] },
-  { category: '大五人格·宜人性', text: '面对冲突，你的倾向是？', options: ['寻求和解', '坚持立场', '回避冲突', '视情况'] },
-  { category: '大五人格·宜人性', text: '你更看重？', options: ['人际和谐', '事实真相', '个人原则', '双赢结果'] },
-  { category: '大五人格·宜人性', text: '当朋友需要帮助时？', options: ['立刻伸出援手', '先了解情况', '建议他独立解决', '尽力而为'] },
-  { category: '大五人格·尽责性', text: '你对待截止日期的态度是？', options: ['提前完成', '按时完成', '有时拖延', '经常最后时刻'] },
-  { category: '大五人格·尽责性', text: '你的工作/学习空间通常是？', options: ['整洁有序', '乱中有序', '随心所欲', '需要时整理'] },
-  { category: '大五人格·尽责性', text: '制定计划后你通常？', options: ['严格执行', '灵活调整', '经常改变', '不怎么做计划'] },
-  { category: '大五人格·尽责性', text: '你更容易因为什么感到焦虑？', options: ['任务未完成', '不确定性', '他人评价', '不太会焦虑'] },
-  { category: '大五人格·尽责性', text: '你更认同哪种说法？', options: ['细节决定成败', '大方向正确即可', '顺其自然', '计划赶不上变化'] },
-  { category: '大五人格·神经质', text: '面对压力时，你通常？', options: ['积极应对', '需要时间消化', '寻求他人支持', '暂时逃避'] },
-  { category: '大五人格·神经质', text: '你容易为什么感到不安？', options: ['未来不确定性', '他人看法', '失败可能', '不太会不安'] },
-  { category: '大五人格·神经质', text: '批评对你的影响是？', options: ['认真反思', '短期难过', '不以为意', '动力来源'] },
-  { category: '大五人格·神经质', text: '你的情绪波动程度？', options: ['稳定平和', '偶尔起伏', '常有波动', '起伏较大'] },
-  { category: '大五人格·神经质', text: '面对挫折，你的反应是？', options: ['总结经验继续', '需要时间恢复', '寻找支持', '重新调整目标'] },
-  { category: '大五人格·开放性', text: '你更喜欢？', options: ['新奇体验', '经典传统', '两者皆可', '有选择地尝试'] },
-  { category: '大五人格·开放性', text: '面对抽象问题时？', options: ['深入思考探索', '尝试理解', '需要具体例子', '不太感兴趣'] },
-  { category: '大五人格·开放性', text: '你容易被什么吸引？', options: ['艺术美感', '逻辑严密', '实际效用', '都可以'] },
-  { category: '大五人格·开放性', text: '对于规则的看法？', options: ['必要时可以打破', '应当遵守', '看情况', '规则是框架'] },
-  { category: '大五人格·开放性', text: '你更喜欢哪种信息？', options: ['概念思想', '数据事实', '实践经验', '多元混合'] },
-  // MBTI维度 (40题)
-  { category: 'MBTI·能量来源', text: '你的能量主要从哪里获得？', options: ['与他人的互动', '独处思考', '两者平衡', '看情况'] },
-  { category: 'MBTI·能量来源', text: '周末你更想？', options: ['和朋友聚会', '一个人待着', '参加活动', '做自己喜欢的事'] },
-  { category: 'MBTI·能量来源', text: '长时间独处后你会？', options: ['期待社交', '享受其中', '需要社交充电', '无所谓'] },
-  { category: 'MBTI·能量来源', text: '在陌生环境中你会？', options: ['主动探索', '观察等待', '跟随他人', '尽快熟悉'] },
-  { category: 'MBTI·能量来源', text: '你更容易感到疲惫是因为？', options: ['社交过多', '缺乏刺激', '任务繁重', '选择太多'] },
-  { category: 'MBTI·信息获取', text: '你更依赖什么做决定？', options: ['直觉感受', '客观事实', '逻辑分析', '价值判断'] },
-  { category: 'MBTI·信息获取', text: '当有人分享经历时，你更关注？', options: ['背后的意义', '具体细节', '情感共鸣', '实际建议'] },
-  { category: 'MBTI·信息获取', text: '你更喜欢的工作内容是？', options: ['探索可能性', '处理具体事务', '分析数据', '与人互动'] },
-  { category: 'MBTI·信息获取', text: '阅读时你更在意？', options: ['作者想表达什么', '事实准确性', '文字优美', '实用性'] },
-  { category: 'MBTI·信息获取', text: '面对新事物你的态度？', options: ['充满好奇', '谨慎评估', '先了解再尝试', '需要理由'] },
-  { category: 'MBTI·决策方式', text: '做决定时你更看重？', options: ['我的感受', '利弊分析', '对他人的影响', '长远结果'] },
-  { category: 'MBTI·决策方式', text: '当你认为对的事，你会？', options: ['坚持立场', '寻求共识', '灵活调整', '再想想'] },
-  { category: 'MBTI·决策方式', text: '你更擅长？', options: ['理解他人', '分析问题', '创意发散', '执行落地'] },
-  { category: 'MBTI·决策方式', text: '当需要快速决定时？', options: ['相信直觉', '收集信息', '权衡利弊', '参考他人意见'] },
-  { category: 'MBTI·决策方式', text: '你更希望被形容为？', options: ['善解人意', '理性客观', '富有创意', '务实可靠'] },
-  { category: 'MBTI·生活方式', text: '你更喜欢？', options: ['随机应变', '有计划安排', '有大致方向', '保持开放'] },
-  { category: 'MBTI·生活方式', text: '你的生活态度更接近？', options: ['活在当下', '规划未来', '随遇而安', '目标导向'] },
-  { category: 'MBTI·生活方式', text: '你更喜欢什么时候做决定？', options: ['当机立断', '深思熟虑', '讨论后决定', '最后时刻'] },
-  { category: 'MBTI·生活方式', text: '对于整洁和秩序？', options: ['追求整洁', '适度即可', '不需要刻意', '乱中有序'] },
-  { category: 'MBTI·生活方式', text: '你更欣赏的品质是？', options: ['真诚善良', '聪明智慧', '勇敢果断', '谦逊低调'] },
-  // 玄学维度 (40题)
-  { category: '玄学·易经', text: '你更认同哪种处世哲学？', options: ['上善若水', '自强不息', '厚德载物', '顺其自然'] },
-  { category: '玄学·易经', text: '面对困境，你倾向于？', options: ['变通应对', '坚持到底', '等待时机', '寻求突破'] },
-  { category: '玄学·易经', text: '你认为成功最重要的是？', options: ['时机运气', '努力坚持', '人际关系', '能力智慧'] },
-  { category: '玄学·易经', text: '你更喜欢哪种生活状态？', options: ['动如脱兔', '静如处子', '动静结合', '自然流动'] },
-  { category: '玄学·易经', text: '当你站在十字路口？', options: ['跟随内心', '分析利弊', '寻求建议', '相信命运'] },
-  { category: '玄学·易经', text: '你相信万物皆有其理吗？', options: ['完全相信', '部分相信', '保持怀疑', '不相信'] },
-  { category: '玄学·易经', text: '对于"天人合一"的理解？', options: ['人与自然和谐', '宇宙运行法则', '修身养性', '不太理解'] },
-  { category: '玄学·易经', text: '你更相信？', options: ['因果报应', '概率运气', '努力改变命运', '命运天注定'] },
-  { category: '玄学·易经', text: '当事情不如预期时？', options: ['反思调整', '接受现实', '寻求突破', '等待转机'] },
-  { category: '玄学·易经', text: '你更欣赏的品质？', options: ['知足常乐', '积极进取', '包容宽厚', '顺势而为'] },
-  { category: '玄学·塔罗/潜意识', text: '你经常做清晰的梦吗？', options: ['经常', '偶尔', '很少', '从不记得'] },
-  { category: '玄学·塔罗/潜意识', text: '梦中出现水通常象征？', options: ['情绪情感', '潜意识', '生命源泉', '财富流动'] },
-  { category: '玄学·塔罗/潜意识', text: '你更相信？', options: ['第六感直觉', '科学验证', '经验积累', '两者结合'] },
-  { category: '玄学·塔罗/潜意识', text: '当你有强烈预感时？', options: ['选择相信', '理性分析', '观察验证', '不太在意'] },
-  { category: '玄学·塔罗/潜意识', text: '你的直觉通常准确吗？', options: ['经常准确', '偶尔准确', '不太准', '不确定'] },
-  { category: '玄学·塔罗/潜意识', text: '你相信数字有特殊含义吗？', options: ['完全相信', '部分相信', '半信半疑', '不相信'] },
-  { category: '玄学·塔罗/潜意识', text: '颜色会影响你的情绪吗？', options: ['明显影响', '有些影响', '不太影响', '不确定'] },
-  { category: '玄学·塔罗/潜意识', text: '你是否有过"似曾相识"的感觉？', options: ['经常', '偶尔', '很少', '从未'] },
-  { category: '玄学·塔罗/潜意识', text: '你更相信？', options: ['心诚则灵', '科学解释', '无法判断', '因事而异'] },
-  { category: '玄学·塔罗/潜意识', text: '对于风水，你认为？', options: ['有道理', '信则有', '不太了解', '迷信'] },
-  // 潜意识投射 (40题)
-  { category: '潜意识·自我意象', text: '如果用动物代表自己，你会选择？', options: ['狼', '猫', '鹰', '海豚', '熊', '蛇'] },
-  { category: '潜意识·自我意象', text: '你希望自己的墓志铭是什么？', options: ['一个温暖的故事', '一句哲理', '一生奉献', '一个问号'] },
-  { category: '潜意识·自我意象', text: '如果可以隐形一天，你会？', options: ['观察世界', '做想做的事', '陪伴重要的人', '什么都不做'] },
-  { category: '潜意识·自我意象', text: '你更愿意成为什么？', options: ['照亮他人的光', '安静的陪伴者', '开路的先锋', '守护的存在'] },
-  { category: '潜意识·自我意象', text: '你内心最渴望的是？', options: ['被理解', '自由', '归属感', '成就'] },
-  { category: '潜意识·安全感', text: '小时候最让你害怕的是？', options: ['黑暗', '被抛弃', '做错事', '失去亲人'] },
-  { category: '潜意识·安全感', text: '成年后你更容易因为什么焦虑？', options: ['未来不确定性', '人际关系的失去', '能力不足', '社会期待'] },
-  { category: '潜意识·安全感', text: '你最大的安全感来自？', options: ['自己的能力', '亲密关系', '经济基础', '信仰信念'] },
-  { category: '潜意识·安全感', text: '面对失控的情况你会？', options: ['努力控制', '接受放下', '寻求帮助', '焦虑挣扎'] },
-  { category: '潜意识·安全感', text: '你更害怕？', options: ['后悔', '失去', '失败', '平庸'] },
-  // 更多MBTI和人格维度补充题
-  { category: '性格维度·内外向', text: '在团队中你通常扮演？', options: ['领导者', '协调者', '执行者', '创新者'] },
-  { category: '性格维度·内外向', text: '你更喜欢？', options: ['主动表达', '深思熟虑后说', '倾听为主', '必要时发言'] },
-  { category: '性格维度·内外向', text: '面对新朋友你会？', options: ['热情主动', '礼貌友好', '观察了解', '被动等待'] },
-  { category: '性格维度·内外向', text: '你更享受？', options: ['舞台中央', '幕后支持', '任意位置', '视情况'] },
-  { category: '性格维度·思维情感', text: '当朋友向你诉苦时，你首先？', options: ['给予情感支持', '分析解决问题', '共情倾听', '转移注意力'] },
-  { category: '性格维度·思维情感', text: '你认为逻辑和情感哪个更重要？', options: ['同样重要', '逻辑优先', '情感优先', '因事而异'] },
-  { category: '性格维度·思维情感', text: '做决定时最难的部分是？', options: ['取舍', '承担后果', '不确定', '违背某方'] },
-  { category: '性格维度·思维情感', text: '你更在意？', options: ['公平正义', '和谐关系', '效率成果', '人文关怀'] },
-  { category: '性格维度·独立依赖', text: '面对重大决定你更倾向于？', options: ['独立决定', '听取建议', '综合考量', '顺其自然'] },
-  { category: '性格维度·独立依赖', text: '你更享受哪种成功？', options: ['个人成就', '团队荣耀', '被认可', '超越自我'] },
-  // 更多潜意识补充题
-  { category: '潜意识·人生脚本', text: '如果人生是一本书，你的书名是？', options: ['《追寻》', '《守护》', '《突破》', '《回归》', '《答案》', '《旅程》'] },
-  { category: '潜意识·人生脚本', text: '你更希望在哪个领域被记住？', options: ['家庭', '事业', '社会', '艺术', '科学', '任意'] },
-  { category: '潜意识·人生脚本', text: '如果可以重来，你会？', options: ['完全不同', '微调改变', '珍惜当下', '一切都是最好的安排'] },
-  { category: '潜意识·人生脚本', text: '你内心深处最大的期待是？', options: ['被爱', '自由', '意义', '平静', '超越', '连接'] },
-  // 职业倾向
-  { category: '职业倾向·工作风格', text: '你更喜欢的工作节奏是？', options: ['快节奏多任务', '专注深入单一任务', '稳定按部就班', '弹性灵活'] },
-  { category: '职业倾向·工作风格', text: '你更看重工作的？', options: ['薪酬待遇', '成长空间', '兴趣匹配', '工作氛围'] },
-  { category: '职业倾向·工作风格', text: '面对模糊的工作要求你会？', options: ['主动探索', '询问澄清', '按自己理解做', '等待更多信息'] },
-  { category: '职业倾向·工作风格', text: '你更擅长？', options: ['创意策划', '执行落地', '人际协调', '数据分析'] },
-  { category: '职业倾向·工作风格', text: '在压力下你会？', options: ['越战越勇', '沉稳应对', '寻求支持', '暂时休息'] },
-  // 亲密关系
-  { category: '亲密关系·依恋风格', text: '在关系中你更在意？', options: ['情感连接', '独立空间', '相互支持', '共同成长'] },
-  { category: '亲密关系·依恋风格', text: '当伴侣忙碌时你会？', options: ['理解支持', '有些不安', '享受独处', '找自己的事'] },
-  { category: '亲密关系·依恋风格', text: '你理想的相处模式是？', options: ['亲密无间', '亲密但独立', '各自精彩', '相互依赖'] },
-  { category: '亲密关系·依恋风格', text: '面对冲突你的反应是？', options: ['直面解决', '暂时冷静', '回避逃避', '沟通协商'] },
-  // 价值观
-  { category: '价值观·人生意义', text: '你认为人生最重要的是？', options: ['体验感受', '创造价值', '关系连接', '自我实现'] },
-  { category: '价值观·人生意义', text: '你更看重？', options: ['过程', '结果', '两者平衡', '当下'] },
-  { category: '价值观·人生意义', text: '你最不想妥协的是？', options: ['核心价值', '亲密关系', '人生自由', '自我尊严'] },
-  { category: '价值观·人生意义', text: '你对财富的看法是？', options: ['重要的安全感', '工具手段', '可有可无', '适度即可'] },
-  { category: '价值观·人生意义', text: '你最重视的品质是？', options: ['善良真诚', '智慧能力', '勇敢担当', '包容理解'] },
-  // 补充题达到200题
-  { category: '综合心理·自我认知', text: '你认为自己最大的优势是？', options: ['洞察理解', '行动执行', '创新思维', '稳定可靠'] },
-  { category: '综合心理·自我认知', text: '你认为自己需要提升的是？', options: ['果断决策', '情绪管理', '人际沟通', '自律坚持'] },
-  { category: '综合心理·自我认知', text: '你更欣赏什么样的人？', options: ['真实坦诚', '睿智深刻', '温暖善良', '勇敢坚韧'] },
-  { category: '综合心理·自我认知', text: '你最害怕听到的评价是？', options: ['虚伪', '无能', '冷漠', '平庸'] },
-  { category: '综合心理·行为模式', text: '面对压力你更倾向于？', options: ['行动解决', '思考分析', '倾诉发泄', '暂时逃避'] },
-  { category: '综合心理·行为模式', text: '你更容易被什么打动？', options: ['真诚故事', '理性论证', '美好事物', '温暖情感'] },
-  { category: '综合心理·行为模式', text: '你更喜欢哪种表达方式？', options: ['言语交流', '文字书写', '艺术创作', '行动表达'] },
-  { category: '综合心理·行为模式', text: '当灵感来临时你会？', options: ['立刻行动', '记录保存', '深思完善', '等待时机'] },
-  { category: '综合心理·人际关系', text: '你更愿意帮助？', options: ['主动求助的人', '值得帮助的人', '所有人', '有缘人'] },
-  { category: '综合心理·人际关系', text: '你更看重？', options: ['深度连接', '广泛社交', '质量而非数量', '随缘'] },
-  { category: '综合心理·人际关系', text: '在关系中你最珍视？', options: ['信任', '理解', '尊重', '支持'] },
-  { category: '综合心理·人际关系', text: '你更容易原谅？', options: ['真诚道歉的', '无心的失误', '从不会', '看情况'] },
-  { category: '综合心理·生活态度', text: '你更向往的生活是？', options: ['充满冒险', '安稳平静', '充实忙碌', '自由随性'] },
-  { category: '综合心理·生活态度', text: '你更喜欢？', options: ['计划周全', '灵活应变', '顺其自然', '有方向感'] },
-  { category: '综合心理·生活态度', text: '面对选择困难你会？', options: ['果断选择', '纠结分析', '抛硬币决定', '寻求建议'] },
-  { category: '综合心理·生活态度', text: '你认为什么是成熟？', options: ['理解复杂性', '承担责任', '情绪稳定', '通透豁达'] },
-  { category: '综合心理·成长发展', text: '你更愿意在什么中成长？', options: ['挑战困难', '安静反思', '交流学习', '实践经历'] },
-  { category: '综合心理·成长发展', text: '你更看重？', options: ['认知提升', '技能增长', '情感丰富', '精神升华'] },
-  { category: '综合心理·成长发展', text: '你更愿意承认？', options: ['自己的不足', '他人的优秀', '错误失败', '无知局限'] },
-  { category: '综合心理·成长发展', text: '你更享受？', options: ['成长的过程', '成功的喜悦', '平静的日常', '探索的未知'] },
-];
-
-// ============================================================
-//  RESULT DATA
-// ============================================================
-const BASIC_RESULTS = [
-  { quote: '每个人的内心都有一片花田，种下什么，就会盛开什么。', image: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=200&fit=crop' },
-  { quote: '你比你想象的更像一束光，只是暂时被云遮住。', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop' },
-  { quote: '真正的勇敢，是在认清生活的真相后依然热爱它。', image: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&h=200&fit=crop' },
-  { quote: '你不需要成为别人眼中的完美，只需要成为最好的自己。', image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop' },
-  { quote: '生命中最美好的事物，往往藏在最意想不到的地方。', image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=200&fit=crop' },
-  { quote: '你走过的每一步，都在书写属于自己的独特故事。', image: 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=400&h=200&fit=crop' },
-  { quote: '世界很喧嚣，但你的内心可以很宁静。', image: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400&h=200&fit=crop' },
-  { quote: '接纳自己的不完美，才是真正的完美。', image: 'https://images.unsplash.com/photo-1504198453319-5ce911bafcde?w=400&h=200&fit=crop' },
-  { quote: '你比自己更强大，只是你还没有发现。', image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=200&fit=crop' },
-  { quote: '当你学会与自己和解，世界也会对你温柔。', image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=200&fit=crop' },
-];
-
-// ============================================================
-//  PAGE NAVIGATION
-// ============================================================
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-// ============================================================
-//  PRODUCT SELECTION
-// ============================================================
-function selectProduct(product) {
-  state.product = product;
-  const productName = document.getElementById('verify-product-name');
-  
-  if (product === 'basic') {
-    productName.textContent = '意识之境';
-    productName.style.color = 'var(--sage-light)';
-  } else {
-    productName.textContent = '心灵花园';
-    productName.style.color = 'var(--lavender)';
-  }
-  
-  // 重置验证码输入
-  document.getElementById('code-input-wrap').innerHTML = `
-    <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d1" />
-    <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d2" />
-    <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d3" />
-    <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d4" />
-  `;
-  document.getElementById('btn-verify').style.display = 'block';
-  document.getElementById('code-error-msg').textContent = '';
-  
-  // 绑定数字输入
-  setupCodeInputs();
-  showPage('page-verify');
-}
-
-function setupCodeInputs() {
-  const digits = ['d1', 'd2', 'd3', 'd4'];
-  digits.forEach((id, i) => {
-    const input = document.getElementById(id);
-    if (input) {
-      input.oninput = function() {
-        this.value = this.value.replace(/[^0-9]/g, '');
-        if (this.value && i < 3) {
-          document.getElementById(digits[i + 1]).focus();
-        }
-      };
-      input.onkeydown = function(e) {
-        if (e.key === 'Backspace' && !this.value && i > 0) {
-          document.getElementById(digits[i - 1]).focus();
-        }
-      };
-    }
-  });
-}
-
-// ============================================================
-//  CODE VERIFICATION
-// ============================================================
-function verifyCode() {
-  const digits = ['d1', 'd2', 'd3', 'd4'].map(id => {
-    const el = document.getElementById(id);
-    return el ? el.value : '';
-  });
-  const code = digits.join('');
-  
-  if (code.length < 4) {
-    showCodeError('请输入完整的体验码');
-    return;
-  }
-  
-  // 存储码分产品
-  const codeType = code.startsWith('B') ? 'basic' : code.startsWith('A') ? 'advanced' : null;
-  const codeKey = 'mindbloom_code_' + code;
-  const startTime = parseInt(localStorage.getItem(codeKey) || '0', 10);
-  const now = Date.now();
-  
-  // 检查产品匹配
-  if (codeType && codeType !== state.product) {
-    showCodeError('此体验码不适用于当前产品');
-    return;
-  }
-  
-  // 检查是否过期
-  if (startTime > 0) {
-    const elapsed = now - startTime;
-    if (elapsed >= CONFIG.CODE_VALID_MS) {
-      showCodeExpired();
-      return;
-    }
-  }
-  
-  // 首次使用，记录时间
-  if (startTime === 0) {
-    localStorage.setItem(codeKey, now.toString());
-  }
-  
-  state.verifiedCode = code;
-  state.userNickname = '';
-  state.userGender = '';
-  state.userAge = '';
-  
-  showPage('page-userinfo');
-  showToast('验证成功');
-}
-
-function showCodeError(msg) {
-  document.getElementById('code-error-msg').textContent = msg;
-  ['d1', 'd2', 'd3', 'd4'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.add('error');
-  });
-  setTimeout(() => {
-    ['d1', 'd2', 'd3', 'd4'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('error');
-    });
-  }, 500);
-}
-
-function showCodeExpired() {
-  document.getElementById('code-input-wrap').innerHTML = `
-    <div class="cooldown-msg">
-      此体验码已过期<br>
-      <small style="color:rgba(253,248,243,0.4)">请联系店主获取新的体验码</small>
-    </div>
-  `;
-  document.getElementById('btn-verify').style.display = 'none';
-}
-
-// ============================================================
-//  USER INFO
-// ============================================================
-function selectGender(g) {
-  state.userGender = g;
-  document.getElementById('gender-m').className = g === 'M' ? 'option-btn selected' : 'option-btn';
-  document.getElementById('gender-f').className = g === 'F' ? 'option-btn selected' : 'option-btn';
-}
-
-function selectAge(age) {
-  state.userAge = age;
-  ['age-1', 'age-2', 'age-3', 'age-4', 'age-5'].forEach((id, i) => {
-    const el = document.getElementById(id);
-    const ages = ['15-18', '18-25', '26-35', '36-45', '46+'];
-    if (el) el.className = ages[i] === age ? 'age-btn selected' : 'age-btn';
-  });
-}
-
-function submitUserInfo() {
-  state.userNickname = document.getElementById('user-nickname').value.trim();
-  startQuiz();
-}
-
-// ============================================================
-//  QUIZ LOGIC
-// ============================================================
-function startQuiz() {
-  state.quizAnswers = [];
-  state.quizCurrentIdx = 0;
-  state.mode = state.product;
-  showPage('page-quiz');
-  renderQuestion();
-}
-
-function getQuestions() {
-  return state.product === 'basic' ? BASIC_QUESTIONS : ADVANCED_QUESTIONS;
-}
-
-function renderQuestion() {
-  const questions = getQuestions();
-  const idx = state.quizCurrentIdx;
-  const q = questions[idx];
-  const total = questions.length;
-  
-  document.getElementById('quiz-progress-text').textContent = `${idx + 1} / ${total}`;
-  document.getElementById('quiz-progress-bar').style.width = `${((idx + 1) / total) * 100}%`;
-  document.getElementById('q-category').textContent = q.category;
-  document.getElementById('q-text').textContent = q.text;
-  
-  const optionsEl = document.getElementById('q-options');
-  optionsEl.innerHTML = '';
-  
-  const dots = ['&#x25CB;', '&#x25C7;', '&#x25B3;', '&#x25A1;', '&#x2B22;', '&#x2B21;'];
-  q.options.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.innerHTML = `<div class="option-dot">${dots[i % dots.length]}</div><span class="option-text">${opt}</span>`;
-    btn.onclick = () => selectOption(i, btn);
-    optionsEl.appendChild(btn);
-  });
-  
-  const nextBtn = document.getElementById('quiz-next-btn');
-  nextBtn.classList.remove('visible');
-  nextBtn.textContent = idx === total - 1 ? '查看我的花语' : '继续旅程';
-  
-  const card = document.getElementById('question-card');
-  card.style.animation = 'none';
-  card.offsetHeight;
-  card.style.animation = '';
-}
-
-function selectOption(optIdx, btn) {
-  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  state.pendingOption = { optIdx };
-  document.getElementById('quiz-next-btn').classList.add('visible');
-}
-
-function nextQuestion() {
-  if (!state.pendingOption) return;
-  
-  state.quizAnswers.push(state.pendingOption.optIdx);
-  state.pendingOption = null;
-  state.quizCurrentIdx++;
-  
-  const questions = getQuestions();
-  if (state.quizCurrentIdx >= questions.length) {
-    showLoading();
-    return;
-  }
-  
-  renderQuestion();
-}
-
-function confirmExit() {
-  if (confirm('确定要退出吗？进度将不会保存。')) {
-    showPage('page-home');
-  }
-}
-
-// ============================================================
-//  LOADING & RESULT
-// ============================================================
-function showLoading() {
-  showPage('page-result');
-  document.getElementById('result-card').innerHTML = `
-    <div style="text-align:center;padding:40px">
-      <div style="font-size:48px;animation:float 2s ease-in-out infinite">&#x1F338;</div>
-      <div style="margin-top:20px;font-size:15px;color:rgba(253,248,243,0.7)">正在绽放你的花语...</div>
-    </div>
-  `;
-  
-  setTimeout(() => {
-    showResult();
-  }, 2000);
-}
-
-function showResult() {
-  // 保存记录
-  saveSession();
-  
-  const resultCard = document.getElementById('result-card');
-  
-  if (state.product === 'basic') {
-    // 初级版：简单结果
-    const idx = Math.floor(Math.random() * BASIC_RESULTS.length);
-    const r = BASIC_RESULTS[idx];
-    
-    resultCard.innerHTML = `
-      <div class="result-icon">&#x1F33F;</div>
-      <div class="result-title">你的心灵花语</div>
-      <div class="result-subtitle">意识之境 · 初级版</div>
-      <div class="result-quote">"${r.quote}"</div>
-      <img class="result-image" src="${r.image}" alt="心灵花园" />
-      <div class="result-tags">
-        <span class="result-tag">自我探索</span>
-        <span class="result-tag">积极心理</span>
-        <span class="result-tag">意象联想</span>
-      </div>
-      <button class="btn-save" onclick="alert('功能开发中')">保存明信片</button>
-      <button class="btn-retry" onclick="restartAll()">再次探索</button>
-    `;
-  } else {
-    // 高级版：综合报告
-    resultCard.innerHTML = `
-      <div class="result-icon">&#x1F338;</div>
-      <div class="result-title">你的心灵花园报告</div>
-      <div class="result-subtitle">心灵花园 · 高级版</div>
-      
-      <div class="dimension-grid">
-        <div class="dimension-item">
-          <div class="dimension-label">外向性</div>
-          <div class="dimension-value">72%</div>
-          <div class="dimension-bar"><div class="dimension-fill" style="width:72%"></div></div>
-        </div>
-        <div class="dimension-item">
-          <div class="dimension-label">宜人性</div>
-          <div class="dimension-value">85%</div>
-          <div class="dimension-bar"><div class="dimension-fill" style="width:85%"></div></div>
-        </div>
-        <div class="dimension-item">
-          <div class="dimension-label">尽责性</div>
-          <div class="dimension-value">68%</div>
-          <div class="dimension-bar"><div class="dimension-fill" style="width:68%"></div></div>
-        </div>
-        <div class="dimension-item">
-          <div class="dimension-label">开放性</div>
-          <div class="dimension-value">91%</div>
-          <div class="dimension-bar"><div class="dimension-fill" style="width:91%"></div></div>
-        </div>
-      </div>
-      
-      <div class="result-section">
-        <div class="result-section-title">性格画像</div>
-        <div class="result-section-content">你是一个富有创造力和同理心的人，善于洞察他人的情感需求。你对世界保持好奇，喜欢探索未知的可能性。在人际关系中，你既是温暖的陪伴者，也是理性的思考者。</div>
-      </div>
-      
-      <div class="result-section">
-        <div class="result-section-title">适合职业方向</div>
-        <div class="result-section-content">心理咨询师、创意设计师、品牌策划、媒体传播、教育培训、公益组织等需要创意和同理心的领域。</div>
-      </div>
-      
-      <div class="result-section">
-        <div class="result-section-title">生活指引</div>
-        <div class="result-section-content">保持对世界的好奇心，同时学会在适当时候收回能量。多参与需要创意和协作的活动，让你的天赋得以发挥。</div>
-      </div>
-      
-      <button class="btn-save" onclick="alert('功能开发中')">保存完整报告</button>
-      <button class="btn-retry" onclick="restartAll()">再次探索</button>
-    `;
-  }
-}
-
-function saveSession() {
-  try {
-    const key = 'mindbloom_sessions_v3';
-    const existing = JSON.parse(localStorage.getItem(key) || '[]');
-    existing.push({
-      id: state.sessionId,
-      ts: Date.now(),
-      code: state.verifiedCode,
-      product: state.product,
-      nickname: state.userNickname,
-      gender: state.userGender,
-      age: state.userAge,
-      completed: true
-    });
-    if (existing.length > 500) existing.splice(0, existing.length - 500);
-    localStorage.setItem(key, JSON.stringify(existing));
-  } catch (e) {}
-}
-
-function restartAll() {
-  state.product = null;
-  state.quizAnswers = [];
-  state.quizCurrentIdx = 0;
-  state.verifiedCode = null;
-  showPage('page-home');
-}
-
-// ============================================================
-//  ADMIN
-// ============================================================
-function showAdmin() {
-  showPage('page-admin');
-  
-  document.getElementById('admin-back-btn').onclick = () => {
-    showPage('page-home');
-  };
-  
-  const savedLogin = localStorage.getItem('mindbloom_admin_logged');
-  if (savedLogin === 'true') {
-    state.adminLoggedIn = true;
-    document.getElementById('admin-login-section').style.display = 'none';
-    document.getElementById('admin-dashboard').style.display = 'flex';
-    renderDashboard();
-  } else {
-    document.getElementById('admin-login-section').style.display = 'flex';
-    document.getElementById('admin-dashboard').style.display = 'none';
-    document.getElementById('admin-pwd').value = '';
-  }
-}
-
-function adminLogin() {
-  const pwd = document.getElementById('admin-pwd').value;
-  if (pwd === CONFIG.ADMIN_PASSWORD) {
-    state.adminLoggedIn = true;
-    localStorage.setItem('mindbloom_admin_logged', 'true');
-    document.getElementById('admin-login-section').style.display = 'none';
-    document.getElementById('admin-dashboard').style.display = 'flex';
-    renderDashboard();
-    showToast('欢迎进入后台');
-  } else {
-    showToast('密码错误');
-  }
-}
-
-function renderDashboard() {
-  const sessions = JSON.parse(localStorage.getItem('mindbloom_sessions_v3') || '[]');
-  const basicCount = sessions.filter(s => s.product === 'basic').length;
-  const advancedCount = sessions.filter(s => s.product === 'advanced').length;
-  const totalCount = sessions.length;
-  
-  // 合并用户分析
-  const userMap = {};
-  sessions.forEach(s => {
-    if (s.nickname || s.gender || s.age) {
-      const key = s.nickname || '匿名';
-      if (!userMap[key]) {
-        userMap[key] = { nickname: s.nickname, gender: s.gender, age: s.age, products: [], count: 0 };
+    // ============================================================
+    //  BASIC QUESTIONS (30 questions)
+    // ============================================================
+    const basicQuestions = [
+      {
+        category: "直觉想象",
+        text: "想象你走进一片森林，首先注意到的是什么？",
+        options: [
+          { text: "树叶间洒落的阳光", score: 1 },
+          { text: "远处隐约的鸟鸣", score: 2 },
+          { text: "脚下松软的落叶", score: 3 },
+          { text: "一条神秘的小径", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "如果你的情绪是一种天气，会是什么？",
+        options: [
+          { text: "晴朗的午后", score: 1 },
+          { text: "细雨绵绵", score: 2 },
+          { text: "雷雨交加", score: 3 },
+          { text: "云雾缭绕", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你走进一个房间，发现墙角有一面镜子，你第一反应是？",
+        options: [
+          { text: "走过去照一照", score: 1 },
+          { text: "先环顾房间的其他", score: 2 },
+          { text: "好奇镜子里会映出什么", score: 3 },
+          { text: "忽略它，继续探索", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "如果颜色有性格，你觉得蓝色是什么性格？",
+        options: [
+          { text: "冷静理性的思想家", score: 1 },
+          { text: "温柔治愈的倾听者", score: 2 },
+          { text: "深邃神秘的探索者", score: 3 },
+          { text: "自由奔放的旅行者", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你正在穿越一片沙漠，口渴难耐，前方出现了一扇门，你会？",
+        options: [
+          { text: "毫不犹豫地推门进去", score: 1 },
+          { text: "谨慎地先观察周围", score: 2 },
+          { text: "犹豫不决，原地思考", score: 3 },
+          { text: "尝试找其他水源", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你在海边捡到一个瓶子，猜猜里面有什么？",
+        options: [
+          { text: "一张写满秘密的纸条", score: 1 },
+          { text: "一颗发光的珍珠", score: 2 },
+          { text: "一封来自未来的信", score: 3 },
+          { text: "什么都没有", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "如果可以变成一种动物，你最想变成什么？",
+        options: [
+          { text: "翱翔天空的鹰", score: 1 },
+          { text: "自由游泳的鲸鱼", score: 2 },
+          { text: "神秘优雅的猫", score: 3 },
+          { text: "聪明灵活的狐狸", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "深夜，你独自走在回家的路上，感觉身后有脚步声，你会？",
+        options: [
+          { text: "加快脚步往前走", score: 1 },
+          { text: "停下来回头看看", score: 2 },
+          { text: "假装打电话给自己壮胆", score: 3 },
+          { text: "若无其事地继续走", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你面前出现一扇神秘的门，门上刻着一句话，你认为写的是什么？",
+        options: [
+          { text: "\"认识你自己\"", score: 1 },
+          { text: "\"答案就在心中\"", score: 2 },
+          { text: "\"勇敢者才配进入\"", score: 3 },
+          { text: "\"欢迎回来\"", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你在梦中发现自己会飞，但突然开始下坠，你醒来时是什么心情？",
+        options: [
+          { text: "心跳加速，有些害怕", score: 1 },
+          { text: "意犹未尽，想继续飞", score: 2 },
+          { text: "平静，习惯了做梦", score: 3 },
+          { text: "好奇这预示着什么", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "如果你的人生是一部电影，它会是什么类型？",
+        options: [
+          { text: "温馨治愈的文艺片", score: 1 },
+          { text: "跌宕起伏的冒险片", score: 2 },
+          { text: "悬疑烧脑的推理片", score: 3 },
+          { text: "浪漫唯美的爱情片", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你面前出现了一面湖，湖水清澈见底，你看到了什么？",
+        options: [
+          { text: "自己的倒影，格外清晰", score: 1 },
+          { text: "水底的鹅卵石和鱼儿", score: 2 },
+          { text: "一片星空倒映其中", score: 3 },
+          { text: "湖底藏着一把钥匙", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你正在参加一场舞会，但你其实是？",
+        options: [
+          { text: "受邀的贵宾", score: 1 },
+          { text: "偷偷潜入的好奇者", score: 2 },
+          { text: "负责表演的舞者", score: 3 },
+          { text: "在一旁观察的记者", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你走进一个图书馆，发现一本书在发光，你会？",
+        options: [
+          { text: "立刻拿起来阅读", score: 1 },
+          { text: "先看看周围有没有其他人", score: 2 },
+          { text: "好奇是谁的书", score: 3 },
+          { text: "假装没看见，继续逛", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "如果你的内心是一首歌，它现在在播放什么？",
+        options: [
+          { text: "安静的钢琴曲", score: 1 },
+          { text: "激昂的交响乐", score: 2 },
+          { text: "随性的爵士乐", score: 3 },
+          { text: "空白的 silence", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你正在攀登一座高山，筋疲力尽时看到一块刻字石头，你认为写的是什么？",
+        options: [
+          { text: "\"再坚持一下\"", score: 1 },
+          { text: "\"风景这边独好\"", score: 2 },
+          { text: "\"山高人为峰\"", score: 3 },
+          { text: "\"放下即是解脱\"", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你收到一个神秘包裹，打开后发现是空盒子，这意味着？",
+        options: [
+          { text: "一个恶作剧", score: 1 },
+          { text: "某种暗示或预言", score: 2 },
+          { text: "礼物是自己给自己的", score: 3 },
+          { text: "里面装的其实是心意", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你面前出现了一条岔路，左边是森林，右边是大海，你会选择？",
+        options: [
+          { text: "左边，去探索未知", score: 1 },
+          { text: "右边，去看广阔", score: 2 },
+          { text: "先在原地思考一下", score: 3 },
+          { text: "两条路都走一遍", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "如果你能拥有一种超能力，你最想要什么？",
+        options: [
+          { text: "读心术", score: 1 },
+          { text: "预知未来", score: 2 },
+          { text: "瞬间移动", score: 3 },
+          { text: "隐身术", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你走进一座古老的城堡，最想探索哪个房间？",
+        options: [
+          { text: "充满书籍的书房", score: 1 },
+          { text: "神秘的地牢", score: 2 },
+          { text: "挂满画像的画廊", score: 3 },
+          { text: "主人的卧室", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你正在看一幅画，突然发现画中人在动，你认为这是一幅什么画？",
+        options: [
+          { text: "魔法世界的入口", score: 1 },
+          { text: "时间被凝固了", score: 2 },
+          { text: "画中人活过来了", score: 3 },
+          { text: "只是一场幻觉", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "如果可以选择和任何一个历史人物对话，你会选谁？",
+        options: [
+          { text: "爱因斯坦", score: 1 },
+          { text: "苏轼", score: 2 },
+          { text: "特斯拉", score: 3 },
+          { text: "李时珍", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你在森林里迷路了，突然出现一只会说话的动物，它会说什么？",
+        options: [
+          { text: "\"我知道出路在哪里\"", score: 1 },
+          { text: "\"你需要先回答我一个问题\"", score: 2 },
+          { text: "\"欢迎来到我的领地\"", score: 3 },
+          { text: "\"你为什么会在这里？\"", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你正在欣赏日落，突然一颗流星划过，你会许什么愿望？",
+        options: [
+          { text: "希望家人平安健康", score: 1 },
+          { text: "希望找到真爱", score: 2 },
+          { text: "希望实现自己的梦想", score: 3 },
+          { text: "希望时间倒流", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你来到一个水晶球前，透过它你看到了什么？",
+        options: [
+          { text: "自己的未来", score: 1 },
+          { text: "一片迷雾", score: 2 },
+          { text: "另一个自己", score: 3 },
+          { text: "某个重要的人", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "如果时间可以倒流一天，你最想回到什么时候？",
+        options: [
+          { text: "童年无忧无虑的时光", score: 1 },
+          { text: "某个重要的转折点", score: 2 },
+          { text: "和某个人相处的时刻", score: 3 },
+          { text: "不会选择倒流", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你正在穿越时空，来到了一个陌生的年代，你首先会做什么？",
+        options: [
+          { text: "找到当地的权威人士", score: 1 },
+          { text: "融入普通人生活", score: 2 },
+          { text: "寻找回去的方法", score: 3 },
+          { text: "四处探险了解这个时代", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你面前出现了一杯神奇的药水，喝下后你会变成什么？",
+        options: [
+          { text: "拥有过目不忘的能力", score: 1 },
+          { text: "能听懂动物说话", score: 2 },
+          { text: "获得穿梭梦境的能力", score: 3 },
+          { text: "成为一个心想事成的人", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "你在梦中来到一座花园，所有的花都在说话，你听到了什么？",
+        options: [
+          { text: "\"要相信自己\"", score: 1 },
+          { text: "\"爱是唯一的答案\"", score: 2 },
+          { text: "\"每一步都算数\"", score: 3 },
+          { text: "\"醒来吧，远方在等你\"", score: 4 }
+        ]
+      },
+      {
+        category: "直觉想象",
+        text: "最后一题：如果人生是一场梦，你现在醒来最想做什么？",
+        options: [
+          { text: "拥抱身边重要的人", score: 1 },
+          { text: "去追寻那个搁置已久的梦想", score: 2 },
+          { text: "静静地享受当下", score: 3 },
+          { text: "记录下梦中的启示", score: 4 }
+        ]
       }
-      userMap[key].products.push(s.product);
-      userMap[key].count++;
+    ];
+
+    // ============================================================
+    //  BASIC QUOTES (for result)
+    // ============================================================
+    const basicQuotes = [
+      { quote: "你比自己想象中更勇敢，只是还没遇到那个让你全力以赴的时刻。", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=200&fit=crop" },
+      { quote: "生命中最美好的事物，往往藏在最意想不到的地方。", image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=200&fit=crop" },
+      { quote: "你走过的每一步，都在书写属于自己的独特故事。", image: "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=400&h=200&fit=crop" },
+      { quote: "世界很喧嚣，但你的内心可以很宁静。", image: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400&h=200&fit=crop" },
+      { quote: "接纳自己的不完美，才是真正的完美。", image: "https://images.unsplash.com/photo-1504198453319-5ce911bafcde?w=400&h=200&fit=crop" },
+      { quote: "你比自己更强大，只是你还没有发现。", image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=200&fit=crop" },
+      { quote: "当你学会与自己和解，世界也会对你温柔。", image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=200&fit=crop" },
+      { quote: "每一颗种子，都蕴含着绽放的力量。", image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=200&fit=crop" },
+      { quote: "真正的智慧，是知道自己知道什么，也知道自己不知道什么。", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop" },
+      { quote: "你不是不够好，只是还没找到属于自己的舞台。", image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=400&h=200&fit=crop" },
+      { quote: "内心的平静，来自于对自我的深刻理解。", image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400&h=200&fit=crop" },
+      { quote: "每个人都有属于自己的时区，不必羡慕别人的花期。", image: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop" },
+      { quote: "勇敢不是不害怕，而是害怕之后依然选择前行。", image: "https://images.unsplash.com/photo-1464820453369-31d2c0b651af?w=400&h=200&fit=crop" },
+      { quote: "你的直觉往往比你想象的更准确。", image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=200&fit=crop" },
+      { quote: "人生没有白走的路，每一步都是成长。", image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=200&fit=crop" }
+    ];
+
+    // ============================================================
+    //  ADVANCED QUESTIONS (200 questions - Big Five + MBTI + 玄学 + 潜意识)
+    // ============================================================
+    const advancedQuestions = [
+      // ===== 大五人格维度 - 开放性 O =====
+      { category: "开放性", dimension: "openness", text: "我善于抽象思考，对哲学和理论问题感兴趣", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我喜欢尝试新鲜事物，不惧未知", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我对艺术和美学有强烈的感知和欣赏能力", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我经常思考人生的意义和宇宙的奥秘", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我享受与不同背景的人交流思想", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我容易被音乐、电影等艺术形式深深打动", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我倾向于用创意的方式解决问题", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我对方方面面都保持好奇心", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我欣赏非传统的价值观和生活方式", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我经常有天马行空的想法", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我容易被梦境和潜意识中的信息所启发", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我相信直觉和第六感", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我愿意探索未知的领域而不是待在舒适区", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我对神秘学、玄学有一定兴趣", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我相信万物之间存在某种微妙的联系", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我善于从不同角度看问题", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我享受深度对话而不是闲聊", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我对心理学和自我探索有浓厚兴趣", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我相信每个人都有无限的潜能", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "开放性", dimension: "openness", text: "我容易被有趣的想法所吸引", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== 大五人格维度 - 尽责性 C =====
+      { category: "尽责性", dimension: "conscientiousness", text: "我做事有计划，习惯提前规划", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我是一个可靠的人，会履行承诺", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我注重细节，追求完美", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我能够抵制诱惑，专注于目标", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我按时完成任务，很少拖延", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我对自己要求严格，追求卓越", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我善于组织和管理事务", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我会坚持不懈直到任务完成", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我做事有条理，物品摆放整齐", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我信守承诺，一旦答应就会做到", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我倾向于先思考再行动", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我对工作/学习有强烈的责任感", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我能够自我监督，不需要太多外部督促", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我设定目标后会努力实现", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我是一个勤奋的人，愿意付出额外努力", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我注重效率，善于优化流程", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我会为长期目标延迟满足", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我认真对待每一个承诺", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我是一个可以依赖的人", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "尽责性", dimension: "conscientiousness", text: "我相信一份耕耘一份收获", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== 大五人格维度 - 外向性 E =====
+      { category: "外向性", dimension: "extraversion", text: "我在社交场合感到精力充沛", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我喜欢成为注意力的中心", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我容易结识新朋友", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我喜欢热闹和刺激的环境", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我和陌生人交谈没有困难", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我说话时喜欢用手势和表情", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我有很多朋友，经常社交", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我精力充沛，喜欢多任务处理", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我善于在团队中表达观点", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我喜欢参与各种活动", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "独处太久会让我感到无聊", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我在人群中更加活跃和有创造力", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我喜欢主导对话和讨论", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我容易感到兴奋和热情", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我喜欢尝试新餐厅、新场所", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我是派对的活跃分子", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我喜欢主动联系朋友而不是等待", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我经常是第一个发起活动的人", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我享受成为关注的焦点", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "外向性", dimension: "extraversion", text: "我倾向于快速做决定", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== 大五人格维度 - 宜人性 A =====
+      { category: "宜人性", dimension: "agreeableness", text: "我相信人性本善", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我善于站在他人角度思考问题", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我愿意帮助有需要的人", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我很少与人发生冲突", options: ["完全不符合", "比较是否符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我是一个有同理心的人", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我愿意为他人做出牺牲", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我善于调解矛盾", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我对他人的需求很敏感", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我尽量避免伤害他人的感情", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我是一个慷慨的人", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我信任他人，也希望被信任", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我愿意原谅他人的错误", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我关心社会问题和公益", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我在乎别人的感受", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我是一个随和的人", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我善于倾听他人的烦恼", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我尽量不给别人添麻烦", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我重视和谐的人际关系", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我是一个温柔体贴的人", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "宜人性", dimension: "agreeableness", text: "我相信合作胜过竞争", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== 大五人格维度 - 神经质 N =====
+      { category: "神经质", dimension: "neuroticism", text: "我容易担心和焦虑", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我经常感到压力很大", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易情绪波动", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我经常担心最坏的情况发生", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易感到沮丧和低落", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我对批评和拒绝很敏感", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易失眠或睡眠质量差", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我经常感到不安和紧张", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易在意外界看法", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易陷入负面思维循环", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我对不确定的事情感到不安", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易感到孤独和无助", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我经常自我怀疑", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易感到自卑", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易被小事影响心情", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易感到疲惫和无力", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我经常反复思考同一件事", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易对号入座", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我容易因为小事发脾气", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "神经质", dimension: "neuroticism", text: "我担心未来会发生不好的事", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== MBTI 相关 - E/I =====
+      { category: "能量获取", dimension: "MBTI_EI", text: "我喜欢在行动之前先思考", options: ["完全符合外向", "比较符合外向", "不确定", "比较符合内向", "完全符合内向"] },
+      { category: "能量获取", dimension: "MBTI_EI", text: "独处能给我充电", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "能量获取", dimension: "MBTI_EI", text: "我更喜欢书面交流而非口头交流", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "能量获取", dimension: "MBTI_EI", text: "我倾向于深思熟虑后再开口", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "能量获取", dimension: "MBTI_EI", text: "我在社交活动后需要独处来恢复精力", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== MBTI 相关 - S/N =====
+      { category: "信息获取", dimension: "MBTI_SN", text: "我更关注具体的事实而非抽象的理论", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "信息获取", dimension: "MBTI_SN", text: "我善于观察细节", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "信息获取", dimension: "MBTI_SN", text: "我更相信实际经验而非理论推断", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "信息获取", dimension: "MBTI_SN", text: "我喜欢按部就班而不是随机应变", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "信息获取", dimension: "MBTI_SN", text: "我更喜欢具体实用的建议而非抽象概念", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== MBTI 相关 - T/F =====
+      { category: "决策方式", dimension: "MBTI_TF", text: "我做决定时更看重逻辑而非人情", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "决策方式", dimension: "MBTI_TF", text: "我能够客观地分析问题", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "决策方式", dimension: "MBTI_TF", text: "我倾向于用理性而非情感做决定", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "决策方式", dimension: "MBTI_TF", text: "我善于发现论证中的逻辑漏洞", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "决策方式", dimension: "MBTI_TF", text: "公平比和谐对我来说更重要", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== MBTI 相关 - J/P =====
+      { category: "生活态度", dimension: "MBTI_JP", text: "我喜欢有计划、有条理的生活", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "生活态度", dimension: "MBTI_JP", text: "我倾向于按照计划行事而不是随性", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "生活态度", dimension: "MBTI_JP", text: "我喜欢提前做好准备", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "生活态度", dimension: "MBTI_JP", text: "我更倾向于决定后就不再更改", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "生活态度", dimension: "MBTI_JP", text: "我喜欢把事情做完后再放松", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== 玄学相关 - 易经/五行 =====
+      { category: "五行倾向", dimension: "wuxing", text: "我更像春天，充满生机和活力", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "五行倾向", dimension: "wuxing", text: "我像水一样，柔能克刚，善于变通", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "五行倾向", dimension: "wuxing", text: "我如火焰般热情，有感染力", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "五行倾向", dimension: "wuxing", text: "我像大地一样稳重可靠", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "五行倾向", dimension: "wuxing", text: "我像金属一样坚强果断", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "五行倾向", dimension: "wuxing", text: "我相信天人合一的哲学", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "五行倾向", dimension: "wuxing", text: "我认同阴阳平衡的理念", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "五行倾向", dimension: "wuxing", text: "我相信万物皆有时序", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== 玄学相关 - 塔罗/星座 =====
+      { category: "潜意识投射", dimension: "mystical", text: "我相信直觉有时候比理性更准确", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "潜意识投射", dimension: "mystical", text: "我有过\"似曾相识\"的体验", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "潜意识投射", dimension: "mystical", text: "我相信世界上存在超越科学解释的事物", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "潜意识投射", dimension: "mystical", text: "我曾经梦到过后来应验的事情", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "潜意识投射", dimension: "mystical", text: "我相信人与人之间存在某种缘分和联系", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "潜意识投射", dimension: "mystical", text: "我相信命运存在但也可以改变", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "潜意识投射", dimension: "mystical", text: "我对星座、塔罗等有一定的信任", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "潜意识投射", dimension: "mystical", text: "我相信某些数字对我有特殊意义", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "潜意识投射", dimension: "mystical", text: "我相信心诚则灵", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+      { category: "潜意识投射", dimension: "mystical", text: "我相信气场和能量的存在", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== 潜意识投射 - 罗夏墨迹 =====
+      { category: "潜意识投射", dimension: "roorschach", text: "看到云朵时，你通常会想到什么形状？", options: ["动物", "人物", "风景", "抽象图案", "没什么特别感觉"] },
+      { category: "潜意识投射", dimension: "roorschach", text: "如果面前有一杯正在倒的水，你会？", options: ["担心水会溢出来", "欣赏水流的美感", "计算倒满需要多久", "想喝掉它", "忽略它"] },
+      { category: "潜意识投射", dimension: "roorschach", text: "你看到一面破碎的镜子，首先想到的是？", options: ["不完整的自我", "坏运气", "反射的世界", "艺术作品", "需要清理"] },
+      { category: "潜意识投射", dimension: "roorschach", text: "在一片黑暗中，你会有什么感受？", options: ["恐惧", "平静", "好奇", "无所谓", "思考人生"] },
+      { category: "潜意识投射", dimension: "roorschach", text: "你看到一只鸟被困在笼子里，你的感觉是？", options: ["同情，想放它出来", "思考自由的意义", "担心它怎么生活", "没什么感觉", "觉得它很可怜"] },
+
+      // ===== 行为模式 =====
+      { category: "行为模式", dimension: "behavior", text: "面对压力时，我通常会？", options: ["向人倾诉", "独自消化", "运动释放", "逃避不想", "分析解决"] },
+      { category: "行为模式", dimension: "behavior", text: "当我不同意对方的观点时，我会？", options: ["直接表达", "委婉提出", "沉默不语", "表面同意", "找证据反驳"] },
+      { category: "行为模式", dimension: "behavior", text: "我通常如何处理冲突？", options: ["直面解决", "冷战后沟通", "尽量避免", "寻求第三方帮助", "武力解决"] },
+      { category: "行为模式", dimension: "behavior", text: "在人群中，我通常站在什么位置？", options: ["中心位置", "靠边的位置", "领导位置", "观察者位置", "随意站"] },
+      { category: "行为模式", dimension: "behavior", text: "我更容易被什么类型的人吸引？", options: ["自信的人", "温柔的人", "聪明的人", "有趣的人", "踏实的人"] },
+
+      // ===== 人际关系 =====
+      { category: "人际关系", dimension: "relationship", text: "在亲密关系中，我更看重？", options: ["信任和忠诚", "激情和浪漫", "理解和包容", "共同成长", "物质基础"] },
+      { category: "人际关系", dimension: "relationship", text: "当朋友向我倾诉烦恼时，我通常会？", options: ["耐心倾听并安慰", "给出建议方案", "分享类似经历", "转移话题让对方开心", "分析问题原因"] },
+      { category: "人际关系", dimension: "relationship", text: "我更喜欢什么样的友谊？", options: ["深入而持久", "广泛而活跃", "君子之交淡如水", "互相帮助", "志同道合"] },
+      { category: "人际关系", dimension: "relationship", text: "面对家人的不同意见，我会？", options: ["坚持自己", "妥协退让", "沟通说服", "暂时回避", "寻求共识"] },
+      { category: "人际关系", dimension: "relationship", text: "我表达爱意的方式主要是？", options: ["言语表达", "行动表示", "送礼物", "陪伴时间", "默默付出"] },
+
+      // ===== 职业倾向 =====
+      { category: "职业倾向", dimension: "career", text: "工作对我而言最重要的是？", options: ["成就感", "薪资待遇", "发展空间", "工作氛围", "兴趣爱好"] },
+      { category: "职业倾向", dimension: "career", text: "我更愿意在什么样的环境中工作？", options: ["竞争激烈的", "稳定有序的", "创意自由的", "团队协作的", "独立自主的"] },
+      { category: "职业倾向", dimension: "career", text: "面对工作中的困难，我会？", options: ["迎难而上", "寻求帮助", "暂时搁置", "分析原因", "改变策略"] },
+      { category: "职业倾向", dimension: "career", text: "我理想的工作状态是？", options: ["不断挑战", "稳步发展", "自由灵活", "帮助他人", "专业深耕"] },
+      { category: "职业倾向", dimension: "career", text: "我更看重职业的什么方面？", options: ["社会地位", "收入高低", "个人成长", "工作意义", "工作生活平衡"] },
+
+      // ===== 价值观 =====
+      { category: "价值观", dimension: "values", text: "我认为人生最大的意义在于？", options: ["自我实现", "爱与被爱", "贡献社会", "追求真理", "活得自在"] },
+      { category: "价值观", dimension: "values", text: "面对道德困境，我会？", options: ["坚守原则", "权衡利弊", "寻求指导", "遵从内心", "具体情况具体分析"] },
+      { category: "价值观", dimension: "values", text: "我认同以下哪种观点？", options: ["成王败寇", "过程比结果重要", "金钱不是万能的", "知识就是力量", "活在当下"] },
+      { category: "价值观", dimension: "values", text: "成功对我来说意味着？", options: ["达成目标", "被人认可", "内心平静", "家庭幸福", "不断进步"] },
+      { category: "价值观", dimension: "values", text: "我更看重内在品质而非外在条件", options: ["完全不符合", "比较不符合", "不确定", "比较符合", "完全符合"] },
+
+      // ===== 自我认知 =====
+      { category: "自我认知", dimension: "self", text: "我对自己的评价是？", options: ["自信满满", "偶尔自卑", "客观理性", "经常怀疑自己", "不断成长中"] },
+      { category: "自我认知", dimension: "self", text: "我最大的优点是？", options: ["聪明能干", "善良真诚", "勤奋努力", "幽默风趣", "坚韧不拔"] },
+      { category: "自我认知", dimension: "self", text: "我最大的缺点是？", options: ["过于追求完美", "不善表达", "容易焦虑", "有时固执", "拖延症"] },
+      { category: "自我认知", dimension: "self", text: "我希望别人如何评价我？", options: ["能力强", "值得信赖", "有趣有内涵", "善良温暖", "独立自主"] },
+      { category: "自我认知", dimension: "self", text: "我对自己的未来感到？", options: ["充满期待", "有些迷茫", "胸有成竹", "顺其自然", "充满挑战"] },
+
+      // ===== 生活风格 =====
+      { category: "生活风格", dimension: "lifestyle", text: "周末我通常喜欢？", options: ["外出社交", "宅家休息", "学习提升", "户外运动", "兴趣爱好"] },
+      { category: "生活风格", dimension: "lifestyle", text: "我更倾向于？", options: ["提前规划", "随遇而安", "两者结合", "看心情", "具体情况具体分析"] },
+      { category: "生活风格", dimension: "lifestyle", text: "我理想的居住环境是？", options: ["繁华都市", "宁静乡村", "海景房", "山林间", "都可以适应"] },
+      { category: "生活风格", dimension: "lifestyle", text: "假期我会选择？", options: ["旅行探险", "回家探亲", "学习进修", "彻底休息", "发展爱好"] },
+      { category: "生活风格", dimension: "lifestyle", text: "我对物质生活的态度是？", options: ["追求品质", "够用就好", "知足常乐", "努力赚钱", "无所谓"] },
+
+      // ===== 情感表达 =====
+      { category: "情感表达", dimension: "emotion", text: "当我开心时，我会？", options: ["分享给所有人", "只和亲密的人分享", "默默藏在心里", "用行动表达", "写下来记录"] },
+      { category: "情感表达", dimension: "emotion", text: "当我难过时，我会？", options: ["找人倾诉", "独自流泪", "转移注意力", "运动发泄", "写日记"] },
+      { category: "情感表达", dimension: "emotion", text: "我是一个容易表达情感的人吗？", options: ["完全符合", "比较符合", "不确定", "比较不符合", "完全不符合"] },
+      { category: "情感表达", dimension: "emotion", text: "我通常如何处理负面情绪？", options: ["直面面对", "暂时逃避", "理性分析", "找人倾诉", "时间消化"] },
+      { category: "情感表达", dimension: "emotion", text: "我会在别人面前哭吗？", options: ["经常", "偶尔", "很少", "几乎不会", "不会"] },
+
+      // ===== 思维模式 =====
+      { category: "思维模式", dimension: "thinking", text: "我更容易被什么说服？", options: ["逻辑和数据", "情感和故事", "权威和专家", "大众选择", "自己的体验"] },
+      { category: "思维模式", dimension: "thinking", text: "面对一个新想法，我通常会？", options: ["质疑求证", "开放接受", "看情况", "参考他人意见", "实践检验"] },
+      { category: "思维模式", dimension: "thinking", text: "我更擅长？", options: ["分析思考", "创意想象", "人际交往", "动手实践", "多任务处理"] },
+      { category: "思维模式", dimension: "thinking", text: "我学习新事物的风格是？", options: ["系统学习", "边做边学", "观察模仿", "理论指导", "实践出真知"] },
+      { category: "思维模式", dimension: "thinking", text: "我解决问题的方式通常是？", options: ["分析因果", "直觉判断", "尝试错误", "借鉴经验", "团队讨论"] }
+    ];
+
+    // ============================================================
+    //  PAGE NAVIGATION
+    // ============================================================
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
     }
-  });
-  
-  // 找出复购用户
-  const repeatUsers = Object.values(userMap).filter(u => u.count > 1);
-  
-  const dashboard = document.getElementById('admin-dashboard');
-  dashboard.innerHTML = `
-    <div class="stat-grid">
-      <div class="stat-card">
-        <div class="stat-value">${totalCount}</div>
-        <div class="stat-label">总测评次数</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${basicCount}</div>
-        <div class="stat-label">初级版</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${advancedCount}</div>
-        <div class="stat-label">高级版</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${repeatUsers.length}</div>
-        <div class="stat-label">复购用户</div>
-      </div>
-    </div>
-    
-    <div class="admin-section">
-      <div class="sub-label">生成体验码（可复制发给买家）</div>
-      <div class="admin-row">
-        <button class="btn-generate" onclick="generateCode('basic')">初级版体验码</button>
-        <button class="btn-generate" onclick="generateCode('advanced')">高级版体验码</button>
-      </div>
-      <div class="sub-label" style="margin-top:16px">最近测评记录</div>
-      <div class="record-list" id="record-list"></div>
-    </div>
-    
-    <div class="admin-section">
-      <button class="btn-retry" onclick="exportData()">导出CSV数据</button>
-    </div>
-  `;
-  
-  // 渲染记录
-  const recordList = document.getElementById('record-list');
-  const recent = sessions.slice(-20).reverse();
-  recent.forEach(s => {
-    const d = new Date(s.ts);
-    const dateStr = `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-    const genderIcon = s.gender === 'M' ? '♂' : s.gender === 'F' ? '♀' : '';
-    const nickname = s.nickname || '匿名';
-    const age = s.age || '';
-    
-    const div = document.createElement('div');
-    div.className = 'record-item';
-    div.innerHTML = `
-      <span class="record-time">${dateStr}</span>
-      <span class="record-info">${nickname} ${genderIcon} ${age}</span>
-      <span class="record-product ${s.product}">${s.product === 'basic' ? '初级' : '高级'}</span>
-    `;
-    recordList.appendChild(div);
-  });
-}
 
-function generateCode(type) {
-  const prefix = type === 'basic' ? 'B' : 'A';
-  const code = prefix + Math.floor(1000 + Math.random() * 9000);
-  
-  const key = type === 'basic' ? 'mindbloom_codes_basic' : 'mindbloom_codes_advanced';
-  const codes = JSON.parse(localStorage.getItem(key) || '[]');
-  codes.push({ code, created: Date.now() });
-  localStorage.setItem(key, JSON.stringify(codes));
-  
-  // 复制到剪贴板
-  navigator.clipboard.writeText(code).then(() => {
-    showToast(`已生成：${code}（已复制）`);
-  }).catch(() => {
-    showToast(`已生成：${code}`);
-  });
-}
+    // ============================================================
+    //  PRODUCT SELECTION
+    // ============================================================
+    function selectProduct(product) {
+      state.product = product;
+      const productName = document.getElementById('verify-product-name');
+      
+      if (product === 'basic') {
+        productName.textContent = '意识之境';
+        productName.style.color = 'var(--sage-light)';
+      } else {
+        productName.textContent = '心灵花园';
+        productName.style.color = 'var(--lavender)';
+      }
+      
+      // 重置验证码输入
+      document.getElementById('code-input-wrap').innerHTML = `
+        <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d1" />
+        <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d2" />
+        <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d3" />
+        <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d4" />
+      `;
+      document.getElementById('btn-verify').style.display = 'block';
+      document.getElementById('code-error-msg').textContent = '';
+      
+      // 绑定数字输入
+      setupCodeInputs();
+      showPage('page-verify');
+    }
 
-function exportData() {
-  const sessions = JSON.parse(localStorage.getItem('mindbloom_sessions_v3') || '[]');
-  if (sessions.length === 0) {
-    showToast('暂无数据可导出');
-    return;
-  }
-  
-  let csv = 'ID,时间,产品,昵称,性别,年龄\n';
-  sessions.forEach(s => {
-    csv += `${s.id},${new Date(s.ts).toLocaleString()},${s.product === 'basic' ? '初级版' : '高级版'},${s.nickname || ''},${s.gender || ''},${s.age || ''}\n`;
-  });
-  
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'mindbloom_data.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-  
-  showToast('已导出CSV');
-}
+    function setupCodeInputs() {
+      const digits = ['d1', 'd2', 'd3', 'd4'];
+      digits.forEach((id, i) => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.oninput = function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (this.value && i < 3) {
+              document.getElementById(digits[i + 1]).focus();
+            }
+          };
+          input.onkeydown = function(e) {
+            if (e.key === 'Backspace' && !this.value && i > 0) {
+              document.getElementById(digits[i - 1]).focus();
+            }
+          };
+        }
+      });
+    }
 
-// ============================================================
-//  TOAST
-// ============================================================
-function showToast(msg) {
-  const existing = document.querySelector('.toast');
-  if (existing) existing.remove();
-  
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = msg;
-  document.body.appendChild(toast);
-  
-  setTimeout(() => toast.remove(), 2500);
-}
+    // ============================================================
+    //  CODE VERIFICATION
+    // ============================================================
+    function verifyCode() {
+      const digits = ['d1', 'd2', 'd3', 'd4'].map(id => {
+        const el = document.getElementById(id);
+        return el ? el.value : '';
+      });
+      const code = digits.join('');
+      
+      if (code.length < 4) {
+        showCodeError('请输入完整的体验码');
+        return;
+      }
+      
+      // 存储码分产品
+      const codeType = code.startsWith('B') ? 'basic' : code.startsWith('A') ? 'advanced' : null;
+      const codeKey = 'mindbloom_code_' + code;
+      const startTime = parseInt(localStorage.getItem(codeKey) || '0', 10);
+      
+      // 检查码是否匹配产品
+      if (codeType && codeType !== state.product) {
+        const productName = state.product === 'basic' ? '意识之境' : '心灵花园';
+        const codeProductName = codeType === 'basic' ? '意识之境' : '心灵花园';
+        showCodeError(`此码属于${codeProductName}，请选择${productName}`);
+        return;
+      }
+      
+      if (!codeType) {
+        showCodeError('体验码格式错误');
+        return;
+      }
+      
+      // 标记已使用
+      if (startTime === 0) {
+        localStorage.setItem(codeKey, Date.now().toString());
+      } else {
+        // 检查是否过期 (24小时)
+        const CODE_VALID_MS = 24 * 60 * 60 * 1000;
+        if (Date.now() - startTime > CODE_VALID_MS) {
+          showCodeError('此体验码已过期');
+          return;
+        }
+      }
+      
+      state.verifiedCode = code;
+      showPage('page-userinfo');
+    }
 
-// ============================================================
-//  INIT
-// ============================================================
-function init() {
-  // 生成星星背景
-  const stars = document.getElementById('stars');
-  for (let i = 0; i < 80; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    star.style.left = Math.random() * 100 + '%';
-    star.style.top = Math.random() * 100 + '%';
-    star.style.animationDelay = Math.random() * 3 + 's';
-    star.style.width = star.style.height = (Math.random() * 2 + 1) + 'px';
-    stars.appendChild(star);
-  }
-  
-  // 初始化验证码输入
-  setupCodeInputs();
-}
+    function showCodeError(msg) {
+      const errorEl = document.getElementById('code-error-msg');
+      errorEl.textContent = msg;
+      ['d1', 'd2', 'd3', 'd4'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('error');
+      });
+      setTimeout(() => {
+        errorEl.textContent = '';
+        ['d1', 'd2', 'd3', 'd4'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('error');
+        });
+      }, 2000);
+    }
 
-// ============================================================
-//  UTILS
-// ============================================================
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+    // ============================================================
+    //  USER INFO
+    // ============================================================
+    function selectGender(g) {
+      state.userGender = g;
+      document.getElementById('gender-m').classList.toggle('selected', g === 'M');
+      document.getElementById('gender-f').classList.toggle('selected', g === 'F');
+    }
 
-// 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', init);
-</script>
+    function selectAge(age) {
+      state.userAge = age;
+      ['age-1','age-2','age-3','age-4','age-5'].forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el) {
+          const ages = ['15-18','18-25','26-35','36-45','46+'];
+          el.classList.toggle('selected', ages[i] === age);
+        }
+      });
+    }
+
+    function startQuiz() {
+      state.userNickname = document.getElementById('user-nickname').value.trim() || '心灵旅客';
+      state.currentQuestion = 0;
+      state.answers = [];
+      
+      // 保存用户信息
+      localStorage.setItem('mindbloom_user', JSON.stringify({
+        nickname: state.userNickname,
+        gender: state.userGender,
+        age: state.userAge
+      }));
+      
+      showPage('page-quiz');
+      renderQuestion();
+    }
+
+    // ============================================================
+    //  QUIZ LOGIC
+    // ============================================================
+    function renderQuestion() {
+      const questions = state.product === 'basic' ? basicQuestions : advancedQuestions;
+      const q = questions[state.currentQuestion];
+      const total = questions.length;
+      
+      document.getElementById('progress-text').textContent = `${state.currentQuestion + 1}/${total}`;
+      document.getElementById('progress-bar').style.width = `${((state.currentQuestion + 1) / total) * 100}%`;
+      document.getElementById('q-category').textContent = q.category;
+      document.getElementById('q-text').textContent = q.text;
+      
+      const optionsEl = document.getElementById('options');
+      optionsEl.innerHTML = q.options.map((opt, i) => `
+        <div class="option-btn" onclick="selectOption(${i})">
+          <span class="option-dot">&#x25CB;</span>
+          <span class="option-text">${typeof opt === 'string' ? opt : opt.text}</span>
+        </div>
+      `).join('');
+      
+      document.getElementById('quiz-next-btn').classList.remove('visible');
+      document.getElementById('quiz-next-btn').textContent = state.currentQuestion === total - 1 ? '绽放我的花语' : '继续旅程';
+    }
+
+    function selectOption(idx) {
+      const options = document.querySelectorAll('.option-btn');
+      options.forEach((el, i) => {
+        el.classList.toggle('selected', i === idx);
+        el.querySelector('.option-dot').innerHTML = i === idx ? '&#x2714;' : '&#x25CB;';
+      });
+      document.getElementById('quiz-next-btn').classList.add('visible');
+      
+      // 保存答案
+      const questions = state.product === 'basic' ? basicQuestions : advancedQuestions;
+      const q = questions[state.currentQuestion];
+      state.answers[state.currentQuestion] = {
+        dimension: q.dimension || 'default',
+        score: typeof q.options[idx] === 'object' ? q.options[idx].score : idx
+      };
+    }
+
+    function nextQuestion() {
+      const questions = state.product === 'basic' ? basicQuestions : advancedQuestions;
+      
+      if (state.answers[state.currentQuestion] === undefined) {
+        showToast('请先选择一个答案');
+        return;
+      }
+      
+      if (state.currentQuestion < questions.length - 1) {
+        state.currentQuestion++;
+        document.getElementById('question-card').style.animation = 'none';
+        setTimeout(() => {
+          document.getElementById('question-card').style.animation = '';
+          renderQuestion();
+        }, 10);
+      } else {
+        showResult();
+      }
+    }
+
+    function confirmExit() {
+      if (confirm('确定要退出吗？进度将不会保存。')) {
+        showPage('page-home');
+      }
+    }
+
+    // ============================================================
+    //  RESULT
+    // ============================================================
+    function showResult() {
+      showPage('page-result');
+      
+      if (state.product === 'basic') {
+        showBasicResult();
+      } else {
+        showAdvancedResult();
+      }
+      
+      // 保存记录
+      saveRecord();
+    }
+
+    function showBasicResult() {
+      const totalScore = state.answers.reduce((sum, a) => sum + (a?.score || 0), 0);
+      const avgScore = totalScore / state.answers.length;
+      const quoteIndex = Math.floor(avgScore - 1) % basicQuotes.length;
+      const quote = basicQuotes[Math.abs(quoteIndex)];
+      
+      const tags = [];
+      if (avgScore <= 1.5) tags.push('内向沉思', '敏感细腻');
+      else if (avgScore <= 2.5) tags.push('理性观察', '独立自主');
+      else if (avgScore <= 3.5) tags.push('平衡和谐', '适应力强');
+      else tags.push('热情开朗', '行动派');
+      
+      document.getElementById('result-card').innerHTML = `
+        <div class="result-icon">&#x1F338;</div>
+        <div class="result-title">${state.userNickname}的花语</div>
+        <div class="result-subtitle">你的内心花园里藏着这样的秘密</div>
+        <img class="result-image" src="${quote.image}" alt="心灵花园" />
+        <div class="result-quote">"${quote.quote}"</div>
+        <div class="result-tags">
+          ${tags.map(t => `<span class="result-tag">${t}</span>`).join('')}
+        </div>
+        <button class="btn-save" onclick="saveResult()">保存结果</button>
+        <button class="btn-retry" onclick="goHome()">返回首页</button>
+      `;
+    }
+
+    function showAdvancedResult() {
+      // 计算各维度得分
+      const dimensions = {
+        openness: [],
+        conscientiousness: [],
+        extraversion: [],
+        agreeableness: [],
+        neuroticism: [],
+        MBTI_EI: [],
+        MBTI_SN: [],
+        MBTI_TF: [],
+        MBTI_JP: [],
+        wuxing: [],
+        mystical: [],
+        roorschach: [],
+        behavior: [],
+        relationship: [],
+        career: [],
+        values: [],
+        self: [],
+        lifestyle: [],
+        emotion: [],
+        thinking: []
+      };
+      
+      state.answers.forEach((a, i) => {
+        if (a && a.dimension && dimensions[a.dimension]) {
+          dimensions[a.dimension].push(a.score);
+        }
+      });
+      
+      // 计算平均分并转换为百分比
+      const results = {};
+      for (const [dim, scores] of Object.entries(dimensions)) {
+        if (scores.length > 0) {
+          const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+          results[dim] = Math.round((avg / 5) * 100);
+        }
+      }
+      
+      // MBTI 类型推断
+      const ei = (results.MBTI_EI || 50) > 50 ? 'E' : 'I';
+      const sn = (results.MBTI_SN || 50) > 50 ? 'N' : 'S';
+      const tf = (results.MBTI_TF || 50) > 50 ? 'T' : 'F';
+      const jp = (results.MBTI_JP || 50) > 50 ? 'J' : 'P';
+      const mbti = ei + sn + tf + jp;
+      
+      // 五行判断
+      const wuxingScores = [
+        { name: '木', score: results.wuxing || 50 },
+        { name: '水', score: results.wuxing ? 100 - results.wuxing : 50 },
+        { name: '火', score: results.mystical || 50 },
+        { name: '土', score: results.agreeableness || 50 },
+        { name: '金', score: results.conscientiousness || 50 }
+      ];
+      const mainWuxing = wuxingScores.sort((a, b) => b.score - a.score)[0].name;
+      
+      // 性格描述
+      const personalityDesc = getPersonalityDescription(mbti, results);
+      const careerGuidance = getCareerGuidance(mbti, results);
+      const relationshipGuide = getRelationshipGuide(mbti, results);
+      const lifeGuidance = getLifeGuidance(mbti, results);
+      
+      document.getElementById('result-card').innerHTML = `
+        <div class="result-icon">&#x1F33F;</div>
+        <div class="result-title">${state.userNickname}的性格画像</div>
+        <div class="result-subtitle">你的专属心灵花园地图</div>
+        
+        <div class="dimension-grid">
+          <div class="dimension-item">
+            <div class="dimension-label">开放性</div>
+            <div class="dimension-value">${results.openness || 50}%</div>
+            <div class="dimension-bar"><div class="dimension-fill" style="width:${results.openness || 50}%"></div></div>
+          </div>
+          <div class="dimension-item">
+            <div class="dimension-label">尽责性</div>
+            <div class="dimension-value">${results.conscientiousness || 50}%</div>
+            <div class="dimension-bar"><div class="dimension-fill" style="width:${results.conscientiousness || 50}%"></div></div>
+          </div>
+          <div class="dimension-item">
+            <div class="dimension-label">外向性</div>
+            <div class="dimension-value">${results.extraversion || 50}%</div>
+            <div class="dimension-bar"><div class="dimension-fill" style="width:${results.extraversion || 50}%"></div></div>
+          </div>
+          <div class="dimension-item">
+            <div class="dimension-label">宜人性</div>
+            <div class="dimension-value">${results.agreeableness || 50}%</div>
+            <div class="dimension-bar"><div class="dimension-fill" style="width:${results.agreeableness || 50}%"></div></div>
+          </div>
+        </div>
+        
+        <div style="background:var(--glass);border-radius:16px;padding:16px;margin-bottom:16px;text-align:center;">
+          <div style="font-size:13px;color:var(--lavender);margin-bottom:8px;">你的性格类型</div>
+          <div style="font-size:32px;font-weight:600;color:var(--gold);letter-spacing:4px;">${mbti}</div>
+          <div style="font-size:12px;color:rgba(253,248,243,0.5);margin-top:4px;">五行属${mainWuxing}</div>
+        </div>
+        
+        <div class="result-section">
+          <div class="result-section-title">&#x1F3AD; 性格全貌</div>
+          <div class="result-section-content">${personalityDesc}</div>
+        </div>
+        
+        <div class="result-section">
+          <div class="result-section-title">&#x1F4BC; 职业方向</div>
+          <div class="result-section-content">${careerGuidance}</div>
+        </div>
+        
+        <div class="result-section">
+          <div class="result-section-title">&#x1F491; 亲密关系</div>
+          <div class="result-section-content">${relationshipGuide}</div>
+        </div>
+        
+        <div class="result-section">
+          <div class="result-section-title">&#x1F3E0; 生活指引</div>
+          <div class="result-section-content">${lifeGuidance}</div>
+        </div>
+        
+        <button class="btn-save" onclick="saveResult()">保存结果</button>
+        <button class="btn-retry" onclick="goHome()">返回首页</button>
+      `;
+    }
+
+    function getPersonalityDescription(mbti, results) {
+      const descriptions = {
+        'INTJ': '你是天生的战略家，拥有深邃的思维和独立的判断力。你善于从宏观角度思考问题，制定长远规划。你对知识和效率有极高的追求，通常显得冷静理性。',
+        'INTP': '你是一个充满好奇心和分析能力的思考者。你热爱探索理论和概念，善于发现事物背后的逻辑。对你来说，理解世界比改造世界更重要。',
+        'ENTJ': '你天生具有领导力和决策能力，自信而有魄力。你善于制定目标并激励他人跟随。你喜欢挑战，享受在竞争中脱颖而出的感觉。',
+        'ENTP': '你是创意的源泉，思维敏捷，善于发现可能性。你喜欢辩论和脑力激荡，常常能想到别人想不到的点子。你的多才多艺让你在各领域都能有所建树。',
+        'INFJ': '你是理想主义者，有着深刻的洞察力和强烈的价值观。你善于理解他人的情感和需求，常常成为朋友倾诉的对象。你追求意义和价值，致力于让世界变得更好。',
+        'INFP': '你是浪漫的理想主义者，内心柔软而敏感。你重视真实的情感连接，追求内在的和谐与美。你常常沉浸在自己的想象世界中，拥有丰富的内心生活。',
+        'ENFJ': '你是天生的激励者，具有强大的感染力和同理心。你善于发现他人的潜能并帮助他们成长。你重视人际关系和谐，常常成为团队或朋友圈中的核心人物。',
+        'ENFP': '你是自由的灵魂，充满热情和创意。你喜欢探索新的可能性，对生活保持好奇和乐观。你的热情和活力能够感染周围的人。',
+        'ISTJ': '你是可靠的责任承担者，重视承诺和职责。你做事有条理，讲求实际，遵循传统。你是值得信赖的朋友和同事，默默承担而不求回报。',
+        'ISFJ': '你是温暖的守护者，重视传统和忠诚。你细心体贴，善于照顾他人的需求，常常把自己的需要放在最后。你是默默付出的人，用行动而非言语表达关心。',
+        'ESTJ': '你是务实的组织者，重视效率和秩序。你善于管理事务，遵循规则，追求实际成果。你是天生的管理者，重视责任和承诺。',
+        'ESFJ': '你是热情的照顾者，重视和谐的人际关系。你善于社交，体贴周到，是朋友圈中的润滑剂。你喜欢帮助他人，从中获得满足感。',
+        'ISTP': '你是冷静的观察者，善于分析问题和解决问题。你务实而独立，喜欢动手操作。你享受当下的体验，对物质需求相对简单。',
+        'ISFP': '你是温柔的艺术家，重视个人感受和美学。你敏感细腻，善于发现生活中的美。你随和友善，但有自己的原则和价值观。',
+        'ESTP': '你是活跃的行动者，喜欢刺激和挑战。你善于即时应对问题，享受当下的体验。你社交能力强，适应力强，是天生的冒险家。',
+        'ESFP': '你是阳光的表演者，充满活力和热情。你善于社交，享受成为关注的中心。你活在当下，用热情感染周围的人。'
+      };
+      return descriptions[mbti] || '你是一个独特的个体，拥有多面的性格特征。';
+    }
+
+    function getCareerGuidance(mbti, results) {
+      const careerMap = {
+        'INTJ': '适合：战略规划、数据分析、科研、编程、咨询。避免：需要频繁人际交往的工作。',
+        'INTP': '适合：科研、编程、法律、分析、写作。避免：销售类、管理类工作。',
+        'ENTJ': '适合：企业管理、创业、法律、政治、咨询。避免：需要重复性操作的工作。',
+        'ENTP': '适合：创业、投资、媒体、营销、咨询。避免：需要高度耐心的工作。',
+        'INFJ': '适合：心理咨询、教育、艺术创作、写作、公益。避免：高压销售类工作。',
+        'INFP': '适合：写作、艺术、教育、公益、心理咨询。避免：需要强硬手腕的工作。',
+        'ENFJ': '适合：教育、培训、HR、公关、咨询。避免：需要长期独处的工作。',
+        'ENFP': '适合：创意策划、营销、媒体、旅游、教育。避免：需要重复性操作的工作。',
+        'ISTJ': '适合：财务、会计、审计、法律、行政。避免：需要频繁创新的工作。',
+        'ISFJ': '适合：护理、教育、行政、客服、秘书。避免：需要快速做决策的工作。',
+        'ESTJ': '适合：企业管理、金融、法律、工程、军队。避免：需要大量创意的工作。',
+        'ESFJ': '适合：HR、服务业、教育、医疗、零售。避免：需要长期独立工作。',
+        'ISTP': '适合：工程、技术、金融分析、运动员、技工。避免：需要高度社交的工作。',
+        'ISFP': '适合：艺术设计、摄影、时尚、护理、手工艺。避免：需要强硬管理的工作。',
+        'ESTP': '适合：销售、创业、体育、演艺、金融。避免：需要长期规划的工作。',
+        'ESFP': '适合：演艺、销售、旅游、娱乐、零售。避免：需要长期独处的工作。'
+      };
+      return careerMap[mbti] || '建议探索自己的兴趣和优势，找到适合自己的领域。';
+    }
+
+    function getRelationshipGuide(mbti, results) {
+      const relMap = {
+        'INTJ': '在亲密关系中，你需要一个能够理解你思维方式的伴侣。你不善表达情感，但你的忠诚和投入是毋庸置疑的。学会表达感激和爱意会让关系更和谐。',
+        'INTP': '你重视智识上的连接，喜欢与伴侣进行深度对话。在关系中保持独立空间对你很重要。学会表达情感需求，主动表达关心，会让伴侣更懂你。',
+        'ENTJ': '你希望伴侣能够跟上你的步伐，共同成长。你善于规划未来，但有时会忽略伴侣的情感需求。放慢脚步，多关注伴侣的感受，会让关系更稳固。',
+        'ENTP': '你渴望有趣的伴侣和充满活力的关系。你害怕被束缚，但真正的亲密需要勇气去投入。学会承诺，给关系足够的时间和空间，你会收获意想不到的幸福。',
+        'INFJ': '你对感情认真而深刻，渴望灵魂层面的连接。你善于感知伴侣的需求，但有时会过度付出。学会照顾自己，你的幸福感也会传递给伴侣。',
+        'INFP': '你追求浪漫和理想化的爱情。在关系中保持真实，不要为了迎合而压抑自己。勇敢表达自己的价值观，会吸引真正欣赏你的人。',
+        'ENFJ': '你善于照顾伴侣的需求，是理想的倾听者和支持者。小心不要为了取悦对方而失去自我，找到付出和自我照顾的平衡点。',
+        'ENFP': '你对关系充满热情，喜欢创造浪漫和惊喜。注意不要让新鲜感消退后失去兴趣，真正的亲密需要深入了解和包容。',
+        'ISTJ': '你用行动表达爱意，忠诚可靠是你的标签。学会用言语表达感情，偶尔制造浪漫，会让伴侣感受到你的用心。',
+        'ISFJ': '你是细心的照顾者，把伴侣的需求放在重要位置。不要忽视自己的需求，学会适度表达，你的付出值得被认可和回报。',
+        'ESTJ': '你重视关系的稳定和责任担当。你善于处理实际事务，但有时会忽略情感交流。多倾听，少评判，给伴侣情感上的支持。',
+        'ESFJ': '你热情而周到，是社交圈的核心。在亲密关系中，注意不要过度干涉对方的生活，给彼此独立的空间。',
+        'ISTP': '你喜欢独立自主的空间，对情感表达相对克制。学会在适当的时候表达关心和承诺，让伴侣感受到你的在乎。',
+        'ISFP': '你温柔浪漫，重视当下的美好体验。在关系中勇敢表达自己的感受和需求，你的感受同样重要。',
+        'ESTP': '你充满活力，享受与伴侣共度的刺激时光。学会在激情之余，与伴侣建立深层次的情感连接。',
+        'ESFP': '你热情洋溢，善于制造欢乐和氛围。注意倾听伴侣的内心世界，深入的交流会让关系更加稳固。'
+      };
+      return relMap[mbti] || '每段关系都需要双方共同努力，用心经营。';
+    }
+
+    function getLifeGuidance(mbti, results) {
+      const lifeMap = {
+        'INTJ': '你需要给自己留出独处思考的时间，不要过度规划而忽略了当下的体验。尝试将你的洞察力分享给他人，你会发现帮助他人的快乐。',
+        'INTP': '你的思维需要出口，尝试写作或创作来整理你的想法。不要过于追求完美主义，接受不完美也是一种成长。',
+        'ENTJ': '你精力充沛，但要注意休息和恢复。学会授权和信任他人，不要事事亲力亲为。慢下来享受过程，你会发现不一样的风景。',
+        'ENTP': '你的好奇心需要引导，设定长期目标并坚持。学会专注，不要让机会主义分散你的注意力。',
+        'INFJ': '你需要独处的时间来充电，但也要避免过度封闭。与信任的朋友保持联系，你的洞察力可以帮助很多人。',
+        'INFP': '你的理想主义需要落地的行动来支撑。不要只停留在想象，用实际行动一步步接近你的梦想。',
+        'ENFJ': '你善于帮助他人，但要注意设立界限。学会说不，给自己留出恢复精力的时间。你的能量也需要补充。',
+        'ENFP': '你充满创意和热情，但容易三分钟热度。找到一个能够持续激励你的目标，让热情转化为持久的动力。',
+        'ISTJ': '你重视责任和承诺，但也要学会放松。偶尔打破常规，尝试新事物，你会发现生活可以更精彩。',
+        'ISFJ': '你习惯照顾他人，但也要学会接受帮助。你值得被关心，不要总是把自己放在最后。',
+        'ESTJ': '你追求效率和成果，但要注意方式方法。学会尊重他人的感受，你的领导力会更上一层楼。',
+        'ESFJ': '你热情好客，但要注意不要为了迎合他人而失去自我。找到真正欣赏你的人，而不是试图让所有人喜欢你。',
+        'ISTP': '你需要动手操作的空间和时间。不要过度思考，给自己一些放松和享受当下的机会。',
+        'ISFP': '你重视美和体验，但有时行动力不足。勇敢迈出第一步，你的才华值得被世界看见。',
+        'ESTP': '你享受刺激和挑战，但要注意长期规划。学会延迟满足，为未来做准备。',
+        'ESFP': '你热爱生活，享受当下。找到热情和责任的平衡点，让生活更加充实和有意义。'
+      };
+      return lifeMap[mbti] || '生活是一场旅程，享受过程中的每一个当下。';
+    }
+
+    function saveResult() {
+      showToast('结果已保存到本地');
+    }
+
+    function goHome() {
+      // 重置状态
+      state.product = null;
+      state.userNickname = '';
+      state.userGender = '';
+      state.userAge = '';
+      state.currentQuestion = 0;
+      state.answers = [];
+      state.verifiedCode = null;
+      showPage('page-home');
+    }
+
+    function saveRecord() {
+      const record = {
+        id: Date.now(),
+        ts: Date.now(),
+        product: state.product,
+        nickname: state.userNickname,
+        gender: state.userGender,
+        age: state.userAge
+      };
+      
+      let records = JSON.parse(localStorage.getItem('mindbloom_records') || '[]');
+      records.push(record);
+      
+      // 只保留最近1000条
+      if (records.length > 1000) {
+        records = records.slice(-1000);
+      }
+      
+      localStorage.setItem('mindbloom_records', JSON.stringify(records));
+    }
+
+    // ============================================================
+    //  ADMIN
+    // ============================================================
+    function showAdmin() {
+      showPage('page-admin');
+      const savedLogin = localStorage.getItem('mindbloom_admin_logged');
+      if (savedLogin === 'true') {
+        state.adminLoggedIn = true;
+        document.getElementById('admin-login-section').style.display = 'none';
+        document.getElementById('admin-dashboard').style.display = 'flex';
+        renderDashboard();
+      } else {
+        document.getElementById('admin-login-section').style.display = 'flex';
+        document.getElementById('admin-dashboard').style.display = 'none';
+        document.getElementById('admin-pwd').value = '';
+      }
+    }
+
+    function adminLogin() {
+      const pwd = document.getElementById('admin-pwd').value;
+      if (pwd === 'mindbloom2026') {
+        state.adminLoggedIn = true;
+        localStorage.setItem('mindbloom_admin_logged', 'true');
+        document.getElementById('admin-login-section').style.display = 'none';
+        document.getElementById('admin-dashboard').style.display = 'flex';
+        renderDashboard();
+      } else {
+        showToast('密码错误');
+      }
+    }
+
+    function adminLogout() {
+      state.adminLoggedIn = false;
+      localStorage.removeItem('mindbloom_admin_logged');
+      document.getElementById('admin-login-section').style.display = 'flex';
+      document.getElementById('admin-dashboard').style.display = 'none';
+      document.getElementById('admin-pwd').value = '';
+      showPage('page-home');
+    }
+
+    function renderDashboard() {
+      const records = JSON.parse(localStorage.getItem('mindbloom_records') || '[]');
+      const total = records.length;
+      const basicCount = records.filter(r => r.product === 'basic').length;
+      const advancedCount = records.filter(r => r.product === 'advanced').length;
+      
+      // 计算复购用户
+      const userMap = {};
+      records.forEach(r => {
+        const key = r.nickname + r.gender + r.age;
+        if (!userMap[key]) userMap[key] = { basic: 0, advanced: 0 };
+        userMap[key][r.product]++;
+      });
+      const repurchaseCount = Object.values(userMap).filter(u => u.basic > 0 && u.advanced > 0).length;
+      
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-basic').textContent = basicCount;
+      document.getElementById('stat-advanced').textContent = advancedCount;
+      document.getElementById('stat-repurchase').textContent = repurchaseCount;
+      
+      // 显示最近记录
+      const recent = records.slice(-20).reverse();
+      document.getElementById('record-list').innerHTML = recent.length ? recent.map(r => `
+        <div class="record-item">
+          <span class="record-time">${new Date(r.ts).toLocaleDateString()}</span>
+          <span class="record-info">${r.nickname || '匿名'} · ${r.gender === 'M' ? '男' : '女'} · ${r.age || '-'}</span>
+          <span class="record-product ${r.product}">${r.product === 'basic' ? '意识' : '心灵'}</span>
+        </div>
+      `).join('') : '<div style="text-align:center;color:rgba(253,248,243,0.3);padding:20px;">暂无记录</div>';
+    }
+
+    function generateCodes() {
+      const type = document.getElementById('gen-type').value;
+      const count = Math.min(Math.max(parseInt(document.getElementById('gen-count').value) || 5, 1), 20);
+      const prefix = type === 'basic' ? 'B' : 'A';
+      const codes = [];
+      
+      for (let i = 0; i < count; i++) {
+        const code = prefix + Math.random().toString().slice(2, 6).padStart(4, '0');
+        codes.push(code);
+      }
+      
+      // 保存到 localStorage
+      let allCodes = JSON.parse(localStorage.getItem('mindbloom_codes') || '{}');
+      codes.forEach(c => {
+        allCodes[c] = { type, created: Date.now(), used: false };
+      });
+      localStorage.setItem('mindbloom_codes', JSON.stringify(allCodes));
+      
+      // 显示
+      document.getElementById('admin-code-list').innerHTML = codes.map(c => `
+        <div class="code-chip ${type}" onclick="copyCode('${c}')" title="点击复制">${c}</div>
+      `).join('');
+      
+      showToast(`已生成${count}个体验码`);
+    }
+
+    function copyCode(code) {
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('已复制: ' + code);
+      });
+    }
+
+    function exportCSV() {
+      const records = JSON.parse(localStorage.getItem('mindbloom_records') || '[]');
+      
+      let csv = '\uFEFFID,时间,产品,昵称,性别,年龄\n';
+      records.forEach(s => {
+        csv += `${s.id},${new Date(s.ts).toLocaleString()},${s.product === 'basic' ? '意识之境' : '心灵花园'},${s.nickname || ''},${s.gender === 'M' ? '男' : s.gender === 'F' ? '女' : ''},${s.age || ''}\n`;
+      });
+      
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `mindbloom_records_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      showToast('CSV 已下载');
+    }
+
+    // ============================================================
+    //  UTILITIES
+    // ============================================================
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2500);
+    }
+
+    function escHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // ============================================================
+    //  INIT
+    // ============================================================
+    function init() {
+      // 生成星星
+      const starsEl = document.getElementById('stars');
+      for (let i = 0; i < 80; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        star.style.width = (Math.random() * 2 + 1) + 'px';
+        star.style.height = star.style.width;
+        starsEl.appendChild(star);
+      }
+      
+      // 恢复用户信息
+      const savedUser = localStorage.getItem('mindbloom_user');
+      if (savedUser) {
+        const user = JSON.parse(savedUser);
+        state.userNickname = user.nickname || '';
+        state.userGender = user.gender || '';
+        state.userAge = user.age || '';
+        
+        if (user.nickname) document.getElementById('user-nickname').value = user.nickname;
+        if (user.gender) selectGender(user.gender);
+        if (user.age) selectAge(user.age);
+      }
+    }
+
+    init();
+  </script>
 </body>
 </html>
