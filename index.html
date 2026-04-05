@@ -361,10 +361,11 @@
         <p style="font-size: 14px; color: rgba(253,248,243,0.7); margin-bottom: 8px;" id="verify-product-name">意识之境</p>
         <p style="font-size: 12px; color: rgba(253,248,243,0.4); margin-bottom: 20px;">输入你的专属体验码</p>
         <div class="code-input-wrap" id="code-input-wrap">
-          <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d1" />
+          <input class="code-digit" type="text" maxlength="1" inputmode="text" id="d1" style="font-size:20px;letter-spacing:0;" />
           <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d2" />
           <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d3" />
           <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d4" />
+          <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d5" />
         </div>
         <div class="code-error-msg" id="code-error-msg"></div>
         <button class="btn-verify" id="btn-verify" onclick="verifyCode()">开启探索</button>
@@ -408,9 +409,9 @@
     <!-- ============ QUIZ PAGE ============ -->
     <div id="page-quiz" class="page">
       <div class="progress-header">
-        <button class="back-btn" onclick="confirmExit()">&#x2190;</button>
+        <button class="back-btn" id="quiz-prev-btn" onclick="prevQuestion()" title="返回上一题" style="opacity:0.3;">&#x2190;</button>
         <span class="progress-text" id="progress-text">1/30</span>
-        <div style="width: 36px;"></div>
+        <button class="back-btn" onclick="confirmExit()" title="退出">&#x2715;</button>
       </div>
       <div class="progress-bar-wrap">
         <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
@@ -420,7 +421,6 @@
         <div class="q-text" id="q-text"></div>
         <div class="options" id="options"></div>
       </div>
-      <button class="quiz-next-btn" id="quiz-next-btn" onclick="nextQuestion()">继续旅程</button>
     </div>
 
     <!-- ============ RESULT PAGE ============ -->
@@ -495,6 +495,7 @@
       userAge: '',
       currentQuestion: 0,
       answers: [],
+      answerHistory: [], // 记录答题历史，用于返回功能
       adminLoggedIn: false,
       verifiedCode: null,
     };
@@ -1080,10 +1081,11 @@
       
       // 重置验证码输入
       document.getElementById('code-input-wrap').innerHTML = `
-        <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d1" />
+        <input class="code-digit" type="text" maxlength="1" inputmode="text" id="d1" style="font-size:20px;letter-spacing:0;" />
         <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d2" />
         <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d3" />
         <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d4" />
+        <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d5" />
       `;
       document.getElementById('btn-verify').style.display = 'block';
       document.getElementById('code-error-msg').textContent = '';
@@ -1094,13 +1096,18 @@
     }
 
     function setupCodeInputs() {
-      const digits = ['d1', 'd2', 'd3', 'd4'];
+      const digits = ['d1', 'd2', 'd3', 'd4', 'd5'];
       digits.forEach((id, i) => {
         const input = document.getElementById(id);
         if (input) {
           input.oninput = function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-            if (this.value && i < 3) {
+            // d1只能是字母，其他只能是数字
+            if (i === 0) {
+              this.value = this.value.replace(/[^A-Za-z]/g, '').toUpperCase();
+            } else {
+              this.value = this.value.replace(/[^0-9]/g, '');
+            }
+            if (this.value && i < 4) {
               document.getElementById(digits[i + 1]).focus();
             }
           };
@@ -1117,13 +1124,13 @@
     //  CODE VERIFICATION
     // ============================================================
     function verifyCode() {
-      const digits = ['d1', 'd2', 'd3', 'd4'].map(id => {
+      const digits = ['d1', 'd2', 'd3', 'd4', 'd5'].map(id => {
         const el = document.getElementById(id);
         return el ? el.value : '';
       });
-      const code = digits.join('');
+      const code = digits.join('').toUpperCase();
       
-      if (code.length < 4) {
+      if (code.length < 5) {
         showCodeError('请输入完整的体验码');
         return;
       }
@@ -1142,7 +1149,7 @@
       }
       
       if (!codeType) {
-        showCodeError('体验码格式错误');
+        showCodeError('体验码格式错误（应为B或A开头）');
         return;
       }
       
@@ -1165,13 +1172,13 @@
     function showCodeError(msg) {
       const errorEl = document.getElementById('code-error-msg');
       errorEl.textContent = msg;
-      ['d1', 'd2', 'd3', 'd4'].forEach(id => {
+      ['d1', 'd2', 'd3', 'd4', 'd5'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('error');
       });
       setTimeout(() => {
         errorEl.textContent = '';
-        ['d1', 'd2', 'd3', 'd4'].forEach(id => {
+        ['d1', 'd2', 'd3', 'd4', 'd5'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.remove('error');
         });
@@ -1202,6 +1209,7 @@
       state.userNickname = document.getElementById('user-nickname').value.trim() || '心灵旅客';
       state.currentQuestion = 0;
       state.answers = [];
+      state.answerHistory = []; // 重置答题历史
       
       // 保存用户信息
       localStorage.setItem('mindbloom_user', JSON.stringify({
@@ -1227,6 +1235,10 @@
       document.getElementById('q-category').textContent = q.category;
       document.getElementById('q-text').textContent = q.text;
       
+      // 更新返回按钮状态
+      const prevBtn = document.getElementById('quiz-prev-btn');
+      prevBtn.style.opacity = state.currentQuestion > 0 ? '1' : '0.3';
+      
       const optionsEl = document.getElementById('options');
       optionsEl.innerHTML = q.options.map((opt, i) => `
         <div class="option-btn" onclick="selectOption(${i})">
@@ -1234,9 +1246,6 @@
           <span class="option-text">${typeof opt === 'string' ? opt : opt.text}</span>
         </div>
       `).join('');
-      
-      document.getElementById('quiz-next-btn').classList.remove('visible');
-      document.getElementById('quiz-next-btn').textContent = state.currentQuestion === total - 1 ? '绽放我的花语' : '继续旅程';
     }
 
     function selectOption(idx) {
@@ -1245,7 +1254,6 @@
         el.classList.toggle('selected', i === idx);
         el.querySelector('.option-dot').innerHTML = i === idx ? '&#x2714;' : '&#x25CB;';
       });
-      document.getElementById('quiz-next-btn').classList.add('visible');
       
       // 保存答案
       const questions = state.product === 'basic' ? basicQuestions : advancedQuestions;
@@ -1254,25 +1262,42 @@
         dimension: q.dimension || 'default',
         score: typeof q.options[idx] === 'object' ? q.options[idx].score : idx
       };
+      
+      // 记录到历史
+      state.answerHistory.push(state.currentQuestion);
+      
+      // 自动跳转下一题（延迟300ms让用户看到选择效果）
+      setTimeout(() => {
+        if (state.currentQuestion < questions.length - 1) {
+          state.currentQuestion++;
+          document.getElementById('question-card').style.animation = 'none';
+          setTimeout(() => {
+            document.getElementById('question-card').style.animation = '';
+            renderQuestion();
+          }, 10);
+        } else {
+          showResult();
+        }
+      }, 300);
     }
 
-    function nextQuestion() {
-      const questions = state.product === 'basic' ? basicQuestions : advancedQuestions;
-      
-      if (state.answers[state.currentQuestion] === undefined) {
-        showToast('请先选择一个答案');
-        return;
-      }
-      
-      if (state.currentQuestion < questions.length - 1) {
-        state.currentQuestion++;
+    function prevQuestion() {
+      // 从历史中弹出上一个位置
+      if (state.answerHistory.length > 0) {
+        state.currentQuestion = state.answerHistory.pop();
         document.getElementById('question-card').style.animation = 'none';
         setTimeout(() => {
           document.getElementById('question-card').style.animation = '';
           renderQuestion();
         }, 10);
-      } else {
-        showResult();
+      } else if (state.currentQuestion > 0) {
+        // 如果没有历史但还有题目可返回
+        state.currentQuestion--;
+        document.getElementById('question-card').style.animation = 'none';
+        setTimeout(() => {
+          document.getElementById('question-card').style.animation = '';
+          renderQuestion();
+        }, 10);
       }
     }
 
@@ -1546,6 +1571,7 @@
       state.userAge = '';
       state.currentQuestion = 0;
       state.answers = [];
+      state.answerHistory = [];
       state.verifiedCode = null;
       showPage('page-home');
     }
@@ -1649,7 +1675,9 @@
       const codes = [];
       
       for (let i = 0; i < count; i++) {
-        const code = prefix + Math.random().toString().slice(2, 6).padStart(4, '0');
+        // 生成5位码：前缀 + 4位随机数字
+        const num = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        const code = prefix + num;
         codes.push(code);
       }
       
