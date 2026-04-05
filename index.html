@@ -16,7 +16,6 @@
       --rose: #C4908A;
       --rose-light: #E8B4AE;
       --lavender: #B5A8C4;
-      --lavender-light: #D4CAE0;
       --gold: #D4AF6A;
       --gold-light: #EDD9A3;
       --text: #4A3F35;
@@ -49,1600 +48,621 @@
       background: radial-gradient(ellipse at 30% 20%, #1C1430 0%, #0F1A1A 40%, #0A0E0A 100%);
       overflow: hidden;
     }
-    .aurora {
-      position: absolute; border-radius: 50%;
-      filter: blur(100px); opacity: 0.12;
-      animation: auroraMove 20s ease-in-out infinite alternate;
-    }
-    .aurora-1 { width: 500px; height: 300px; background: #5B8A6A; top: -80px; left: -100px; animation-duration: 18s; }
-    .aurora-2 { width: 400px; height: 250px; background: #8A6A8A; top: 10%; right: -80px; animation-duration: 24s; animation-delay: -8s; }
-    .aurora-3 { width: 350px; height: 220px; background: #6A7A9A; bottom: 5%; left: 15%; animation-duration: 22s; animation-delay: -4s; }
-    @keyframes auroraMove {
-      0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
-      50%  { transform: translate(40px, 20px) scale(1.1) rotate(5deg); }
-      100% { transform: translate(-20px, 40px) scale(0.95) rotate(-3deg); }
-    }
-    .stars {
-      position: absolute; inset: 0;
-    }
+    .stars { position: absolute; inset: 0; }
     .star {
-      position: absolute; border-radius: 50%;
-      background: rgba(255, 248, 235, 0.8);
-      animation: twinkle var(--dur, 3s) ease-in-out infinite;
+      position: absolute; width: 2px; height: 2px; border-radius: 50%;
+      background: white; opacity: 0.6; animation: twinkle 3s ease-in-out infinite;
     }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.2; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.3); }
-    }
-    .floating-particle {
-      position: absolute; border-radius: 50%;
-      background: rgba(212, 175, 106, 0.4);
-      animation: floatUp var(--dur, 8s) ease-in-out infinite;
-    }
-    @keyframes floatUp {
-      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-      20%  { opacity: 1; }
-      80%  { opacity: 0.6; }
-      100% { transform: translateY(-20vh) scale(1); opacity: 0; }
-    }
+    @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .page { display: none; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px 20px 40px; position: relative; z-index: 1; }
+    .page.active { display: flex; }
 
-    /* ============ APP LAYOUT ============ */
-    #app {
-      position: relative; z-index: 1;
-      min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center;
-      padding: 0 0 60px;
-    }
-    .page { display: none; width: 100%; max-width: 400px; padding: 0 24px; }
-    .page.active { display: flex; flex-direction: column; }
+    /* ============ TYPOGRAPHY ============ */
+    .brand-mystic { text-align: center; margin: 40px 0 20px; }
+    .mystic-symbol { font-size: 48px; margin-bottom: 8px; animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .brand-title { font-size: 36px; font-weight: 300; letter-spacing: 8px; color: var(--cream); }
+    .brand-sub { font-size: 11px; letter-spacing: 4px; color: var(--sage-light); margin-top: 4px; opacity: 0.8; }
+    .page-title { font-size: 24px; font-weight: 300; letter-spacing: 4px; text-align: center; margin: 30px 0 10px; }
+    .page-sub { font-size: 13px; color: rgba(253,248,243,0.5); text-align: center; }
 
-    /* ============ TOP NAV ============ */
-    .top-nav {
-      position: fixed; top: 16px; right: 16px; z-index: 100;
+    /* ============ PRODUCT CARDS ============ */
+    .product-grid { display: flex; flex-direction: column; gap: 16px; width: 100%; max-width: 380px; margin: 20px 0; }
+    .product-card {
+      background: var(--glass2); border: 1px solid var(--border); border-radius: 20px;
+      padding: 24px; cursor: pointer; transition: all 0.3s ease;
     }
-    .admin-btn {
-      background: var(--glass2); border: 1px solid var(--border);
-      border-radius: 8px; padding: 5px 10px;
-      font-size: 10px; color: rgba(253,248,243,0.4); cursor: pointer;
-      font-family: inherit;
+    .product-card:active { transform: scale(0.98); }
+    .product-card:hover { border-color: var(--sage); }
+    .product-icon { font-size: 40px; margin-bottom: 12px; }
+    .product-name { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+    .product-desc { font-size: 13px; color: rgba(253,248,243,0.6); margin-bottom: 12px; line-height: 1.5; }
+    .product-meta { display: flex; justify-content: space-between; align-items: center; }
+    .product-price { font-size: 20px; color: var(--gold); font-weight: 600; }
+    .product-questions { font-size: 12px; color: rgba(253,248,243,0.4); }
+    .product-tag {
+      display: inline-block; padding: 4px 10px; border-radius: 20px;
+      font-size: 11px; background: var(--sage); color: var(--cream);
     }
+    .product-tag.basic { background: var(--sage); }
+    .product-tag.advanced { background: var(--lavender); }
+
+    /* ============ COMING SOON CARD ============ */
+    .coming-soon-card {
+      background: linear-gradient(135deg, rgba(212,175,106,0.1), rgba(184,168,196,0.1));
+      border: 1px dashed var(--gold); border-radius: 20px;
+      padding: 24px; text-align: center; width: 100%; max-width: 380px; margin-top: 20px;
+    }
+    .coming-soon-icon { font-size: 32px; margin-bottom: 12px; animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .coming-soon-title { font-size: 16px; color: var(--gold); margin-bottom: 8px; }
+    .coming-soon-desc { font-size: 12px; color: rgba(253,248,243,0.5); }
 
     /* ============ VERIFY PAGE ============ */
-    #page-verify {
-      align-items: center;
-      padding-top: 60px;
-      text-align: center;
-      gap: 28px;
+    .verify-card {
+      background: var(--glass2); border: 1px solid var(--border); border-radius: 24px;
+      padding: 32px 24px; width: 100%; max-width: 340px; text-align: center; margin-top: 20px;
     }
-    .brand-mystic {
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      animation: fadeInDown 1s ease;
-    }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .mystic-symbol {
-      font-size: 64px; line-height: 1;
-      animation: breathe 4s ease-in-out infinite;
-      filter: drop-shadow(0 0 20px rgba(212,175,106,0.3));
-    }
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-    }
-    .brand-title {
-      font-size: 28px; font-weight: 700;
-      background: linear-gradient(135deg, var(--gold-light) 0%, var(--cream) 50%, var(--gold-light) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: 6px;
-    }
-    .brand-sub {
-      font-size: 12px; color: var(--text-muted);
-      letter-spacing: 4px; margin-top: 4px;
-      font-weight: 400;
-    }
-    .brand-tagline {
-      font-size: 13px; color: rgba(253,248,243,0.55);
-      line-height: 1.9; letter-spacing: 1px;
-      padding: 0 10px; font-style: italic;
-    }
-    .divider-ornament {
-      display: flex; align-items: center; gap: 12px;
-      color: rgba(212,175,106,0.4); font-size: 12px;
-    }
-    .divider-line {
-      width: 40px; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(212,175,106,0.4), transparent);
-    }
-    .feature-runes {
-      display: flex; flex-direction: column; gap: 10px; width: 100%;
-    }
-    .rune-item {
-      display: flex; align-items: center; gap: 14px;
-      background: var(--glass); border: 1px solid var(--border);
-      border-radius: 14px; padding: 12px 16px;
-      text-align: left;
-    }
-    .rune-icon { font-size: 24px; flex-shrink: 0; }
-    .rune-text h4 { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-    .rune-text p { font-size: 11px; color: rgba(253,248,243,0.45); line-height: 1.5; }
-
-    /* ============ VERIFY CODE ============ */
-    .verify-desc {
-      font-size: 13px; color: rgba(253,248,243,0.5);
-      line-height: 1.7; margin-top: -10px;
-    }
-    .code-input-wrap {
-      display: flex; gap: 10px; justify-content: center;
-    }
+    .product-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 12px; margin-bottom: 16px; }
+    .product-badge.basic { background: var(--sage); }
+    .product-badge.advanced { background: var(--lavender); }
+    .code-input-wrap { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
     .code-digit {
-      width: 52px; height: 60px;
-      background: var(--glass2); border: 1px solid var(--border2);
-      border-radius: 12px;
-      font-size: 26px; font-weight: 700; color: var(--cream);
-      text-align: center;
-      outline: none; transition: all 0.2s;
-      caret-color: var(--gold);
+      width: 52px; height: 60px; background: var(--glass); border: 1px solid var(--border);
+      border-radius: 12px; font-size: 24px; text-align: center; color: var(--cream);
+      font-family: inherit; outline: none; transition: border-color 0.2s;
     }
-    .code-digit:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 16px rgba(212,175,106,0.2);
-    }
-    .code-digit.error {
-      border-color: #E87070;
-      animation: shake 0.4s ease;
-    }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-6px); }
-      75% { transform: translateX(6px); }
-    }
+    .code-digit:focus { border-color: var(--sage); }
+    .code-digit.error { border-color: var(--rose); animation: shake 0.3s ease; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+    .code-error-msg { color: var(--rose); font-size: 13px; min-height: 20px; margin-bottom: 10px; }
     .btn-verify {
-      width: 100%; padding: 15px;
-      background: linear-gradient(135deg, var(--sage-dark) 0%, var(--sage) 100%);
-      border: none; border-radius: 14px;
-      font-size: 15px; font-weight: 600; color: var(--cream);
-      cursor: pointer; letter-spacing: 2px;
-      box-shadow: 0 4px 20px rgba(90,126,94,0.3);
-      transition: transform 0.15s;
-      font-family: inherit;
+      width: 100%; padding: 14px; border: none; border-radius: 14px;
+      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
+      color: var(--cream); font-size: 15px; font-weight: 600; cursor: pointer;
+      font-family: inherit; letter-spacing: 2px; transition: transform 0.15s;
     }
     .btn-verify:active { transform: scale(0.97); }
-    .btn-verify:disabled { opacity: 0.5; pointer-events: none; }
-    .verify-note {
-      font-size: 11px; color: rgba(253,248,243,0.3);
-    }
-    .code-error-msg {
-      font-size: 12px; color: #E87070; margin-top: -8px;
-      min-height: 18px;
-    }
-    .cooldown-msg {
-      font-size: 13px; color: var(--rose-light);
-      padding: 12px 16px;
-      background: rgba(196,144,138,0.1);
-      border: 1px solid rgba(196,144,138,0.3);
-      border-radius: 12px;
-      line-height: 1.6;
-    }
+    .verify-note { font-size: 12px; color: rgba(253,248,243,0.3); margin-top: 16px; }
+    .cooldown-msg { padding: 20px; text-align: center; color: rgba(253,248,243,0.6); line-height: 1.8; }
 
-    /* ============ MODE SELECT ============ */
-    #page-mode {
-      padding-top: 50px; gap: 20px;
+    /* ============ USER INFO PAGE ============ */
+    .userinfo-card {
+      background: var(--glass2); border: 1px solid var(--border); border-radius: 18px;
+      padding: 24px; width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 18px;
     }
-    .page-title {
-      font-size: 20px; font-weight: 700; text-align: center;
-      background: linear-gradient(135deg, var(--gold-light) 0%, var(--cream) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    .form-label { font-size: 13px; color: rgba(253,248,243,0.6); margin-bottom: 8px; display: block; }
+    .form-input {
+      width: 100%; padding: 12px 15px; background: var(--glass); border: 1px solid var(--border);
+      border-radius: 12px; font-size: 14px; color: var(--cream); font-family: inherit;
+      outline: none; transition: border-color 0.2s;
     }
-    .page-sub {
-      font-size: 12px; color: rgba(253,248,243,0.4);
-      text-align: center; line-height: 1.7; letter-spacing: 0.5px;
+    .form-input:focus { border-color: var(--sage); }
+    .form-input::placeholder { color: rgba(253,248,243,0.25); }
+    .option-row { display: flex; gap: 10px; }
+    .option-btn {
+      flex: 1; padding: 12px; background: var(--glass); border: 1px solid var(--border);
+      border-radius: 12px; font-size: 14px; color: var(--cream); cursor: pointer;
+      font-family: inherit; transition: all 0.2s;
     }
-    .mode-cards { display: flex; flex-direction: column; gap: 14px; }
-    .mode-card {
-      background: var(--glass2); border: 1px solid var(--border);
-      border-radius: 18px; padding: 18px;
-      cursor: pointer; transition: all 0.2s;
-      display: flex; align-items: center; gap: 16px;
+    .option-btn.selected { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--bg); border-color: transparent; }
+    .age-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .age-btn {
+      padding: 8px 12px; background: var(--glass); border: 1px solid var(--border);
+      border-radius: 8px; font-size: 12px; color: var(--cream); cursor: pointer;
+      font-family: inherit; transition: all 0.2s;
     }
-    .mode-card:hover, .mode-card:active {
-      border-color: rgba(212,175,106,0.5);
-      background: rgba(212,175,106,0.06);
-      transform: scale(0.99);
+    .age-btn.selected { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--bg); border-color: transparent; }
+    .privacy-note {
+      padding: 14px; background: rgba(122,158,126,0.08); border-radius: 12px;
+      font-size: 12px; color: rgba(253,248,243,0.4); line-height: 1.6; text-align: center;
     }
-    .mode-icon { font-size: 32px; flex-shrink: 0; }
-    .mode-info h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--cream); }
-    .mode-info p { font-size: 12px; color: rgba(253,248,243,0.4); line-height: 1.5; }
-    .mode-badge {
-      margin-left: auto; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
-      border-radius: 8px; padding: 3px 9px;
-      font-size: 10px; font-weight: 600; color: var(--cream);
+    .btn-start {
+      width: 100%; padding: 14px; border: none; border-radius: 14px;
+      background: linear-gradient(135deg, var(--gold-dark, #B8944A), var(--gold));
+      color: var(--bg); font-size: 15px; font-weight: 600; cursor: pointer;
+      font-family: inherit; letter-spacing: 2px; transition: transform 0.15s;
     }
-    .back-btn {
-      background: none; border: none; color: rgba(253,248,243,0.4);
-      font-size: 20px; cursor: pointer; padding: 4px 8px;
-      border-radius: 8px; transition: color 0.2s; align-self: flex-start;
-    }
-    .back-btn:active { color: var(--cream); }
-
-    .age-btn.selected, .gender-btn.selected {
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      color: var(--bg);
-    }
+    .btn-start:active { transform: scale(0.97); }
 
     /* ============ QUIZ PAGE ============ */
-    #page-quiz { padding-top: 30px; gap: 18px; }
-    .progress-header {
-      display: flex; align-items: center; justify-content: space-between;
+    #page-quiz { padding-top: 20px; }
+    .progress-header { width: 100%; max-width: 380px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .back-btn {
+      width: 36px; height: 36px; background: var(--glass2); border: 1px solid var(--border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 18px; color: var(--cream); transition: all 0.2s;
     }
-    .progress-text {
-      font-size: 11px; color: rgba(253,248,243,0.35);
-      letter-spacing: 1px;
-    }
-    .progress-bar-wrap {
-      height: 2px; background: rgba(253,248,243,0.08); border-radius: 1px; overflow: hidden;
-    }
-    .progress-bar {
-      height: 100%; border-radius: 1px;
-      background: linear-gradient(90deg, var(--sage), var(--gold));
-      transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
-    }
+    .back-btn:active { transform: scale(0.9); }
+    .progress-text { font-size: 14px; color: rgba(253,248,243,0.7); flex: 1; text-align: center; }
+    .progress-bar-wrap { width: 100%; max-width: 380px; height: 4px; background: var(--glass); border-radius: 2px; margin-bottom: 20px; }
+    .progress-bar { height: 100%; background: linear-gradient(90deg, var(--sage-dark), var(--sage)); border-radius: 2px; transition: width 0.3s ease; }
     .question-card {
-      background: var(--glass2); border: 1px solid var(--border);
-      border-radius: 24px; padding: 26px 22px;
-      animation: softSlideUp 0.4s cubic-bezier(0.4,0,0.2,1);
+      background: var(--glass2); border: 1px solid var(--border); border-radius: 24px;
+      padding: 28px 24px; width: 100%; max-width: 380px; animation: softSlideUp 0.4s ease;
     }
-    @keyframes softSlideUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .q-category {
-      font-size: 10px; color: var(--gold); font-weight: 600;
-      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
-    }
-    .q-text {
-      font-size: 16px; font-weight: 600; line-height: 1.7;
-      color: var(--cream); margin-bottom: 22px;
-    }
+    @keyframes softSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .q-category { font-size: 11px; color: var(--sage-light); letter-spacing: 2px; margin-bottom: 14px; text-transform: uppercase; }
+    .q-text { font-size: 17px; line-height: 1.7; margin-bottom: 24px; min-height: 60px; }
     .options { display: flex; flex-direction: column; gap: 10px; }
     .option-btn {
-      background: rgba(253,248,243,0.04); border: 1px solid var(--border);
-      border-radius: 14px; padding: 14px 16px;
-      font-size: 14px; color: rgba(253,248,243,0.75); text-align: left;
-      cursor: pointer; transition: all 0.2s;
-      display: flex; align-items: center; gap: 12px;
-      font-family: inherit;
-      -webkit-user-select: none;
-      user-select: none;
+      display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+      background: var(--glass); border: 1px solid var(--border); border-radius: 14px;
+      cursor: pointer; transition: all 0.2s; text-align: left;
     }
     .option-btn:active { transform: scale(0.98); }
-    .option-btn.selected {
-      background: rgba(122,158,126,0.15);
-      border-color: var(--sage);
-      color: var(--sage-light);
-    }
-    .option-dot {
-      width: 24px; height: 24px; border-radius: 50%;
-      border: 1px solid rgba(253,248,243,0.2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; flex-shrink: 0;
-      transition: all 0.2s;
-    }
-    .option-btn.selected .option-dot {
-      background: var(--sage); border-color: var(--sage);
-      color: var(--cream);
-    }
+    .option-btn.selected { background: rgba(122,158,126,0.2); border-color: var(--sage); }
+    .option-dot { font-size: 18px; color: rgba(253,248,243,0.4); transition: all 0.2s; }
+    .option-btn.selected .option-dot { color: var(--sage); }
+    .option-text { font-size: 14px; line-height: 1.5; flex: 1; }
     .quiz-next-btn {
-      width: 100%; padding: 14px;
+      width: 100%; max-width: 380px; padding: 14px; margin-top: 20px;
       background: linear-gradient(135deg, var(--sage-dark) 0%, var(--sage) 100%);
-      border: none; border-radius: 14px;
-      font-size: 14px; font-weight: 600; color: var(--cream);
-      cursor: pointer; opacity: 0; pointer-events: none;
-      transition: opacity 0.3s, transform 0.15s;
+      border: none; border-radius: 14px; font-size: 14px; font-weight: 600; color: var(--cream);
+      cursor: pointer; opacity: 0; pointer-events: none; transition: all 0.3s;
       font-family: inherit; letter-spacing: 1px;
     }
     .quiz-next-btn.visible { opacity: 1; pointer-events: all; }
     .quiz-next-btn:active { transform: scale(0.97); }
 
-    /* ============ CHAT ============ */
-    #page-chat {
-      padding-top: 30px; gap: 0;
-      height: 100vh; height: 100dvh;
+    /* ============ RESULT PAGE ============ */
+    #page-result { padding-bottom: 60px; }
+    .result-card {
+      background: linear-gradient(135deg, var(--bg2), var(--bg3));
+      border: 1px solid var(--border2); border-radius: 24px;
+      padding: 32px 24px; width: 100%; max-width: 400px; text-align: center;
+      animation: bloomIn 0.8s ease;
     }
-    .chat-header { padding-bottom: 14px; flex-shrink: 0; }
-    .chat-messages {
-      flex: 1; overflow-y: auto; padding: 8px 0;
-      display: flex; flex-direction: column; gap: 10px;
-      scrollbar-width: none;
+    @keyframes bloomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    .result-icon { font-size: 64px; margin-bottom: 20px; }
+    .result-title { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+    .result-subtitle { font-size: 14px; color: rgba(253,248,243,0.6); margin-bottom: 24px; }
+    .result-quote {
+      background: var(--glass); border-radius: 16px; padding: 20px; margin-bottom: 20px;
+      font-size: 15px; line-height: 1.8; font-style: italic; color: var(--cream);
     }
-    .chat-messages::-webkit-scrollbar { display: none; }
-    .msg { display: flex; gap: 10px; animation: softSlideUp 0.3s ease; }
-    .msg.user { flex-direction: row-reverse; }
-    .msg-avatar {
-      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center; font-size: 16px;
-      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
+    .result-image {
+      width: 100%; height: 200px; object-fit: cover; border-radius: 16px; margin-bottom: 20px;
     }
-    .msg.user .msg-avatar { background: rgba(253,248,243,0.08); }
-    .msg-bubble {
-      max-width: 76%; padding: 11px 13px;
-      border-radius: 16px; font-size: 14px; line-height: 1.65;
-    }
-    .msg.bot .msg-bubble {
-      background: var(--glass2); border: 1px solid var(--border);
-      border-top-left-radius: 4px; color: rgba(253,248,243,0.85);
-    }
-    .msg.user .msg-bubble {
-      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
-      color: var(--cream); border-top-right-radius: 4px;
-    }
-    .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
-    .dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--sage-light);
-      animation: bounce 1.2s ease-in-out infinite;
-    }
-    .dot:nth-child(2) { animation-delay: 0.2s; }
-    .dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes bounce {
-      0%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-5px); }
-    }
-    .chat-input-wrap {
-      flex-shrink: 0; padding-top: 10px;
-      display: flex; gap: 10px; align-items: flex-end;
-    }
-    .chat-input {
-      flex: 1; background: var(--glass2); border: 1px solid var(--border);
-      border-radius: 20px; padding: 11px 15px;
-      font-size: 14px; color: var(--cream); resize: none;
-      max-height: 96px; overflow-y: auto;
-      font-family: inherit; line-height: 1.5;
-      outline: none; transition: border-color 0.2s;
-    }
-    .chat-input:focus { border-color: var(--sage); }
-    .chat-input::placeholder { color: rgba(253,248,243,0.25); }
-    .chat-send-btn {
-      width: 42px; height: 42px; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
-      border: none; border-radius: 50%; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; transition: transform 0.15s;
-    }
-    .chat-send-btn:active { transform: scale(0.9); }
-    .chat-send-btn:disabled { opacity: 0.4; pointer-events: none; }
-    .chat-turn-count {
-      font-size: 10px; color: rgba(253,248,243,0.3);
-      text-align: center; flex-shrink: 0; padding: 3px 0;
-    }
-
-    /* ============ LOADING ============ */
-    #page-loading {
-      align-items: center; justify-content: center;
-      min-height: 100vh; gap: 28px; text-align: center;
-    }
-    .loading-moon {
-      font-size: 80px;
-      animation: breathe 3s ease-in-out infinite;
-      filter: drop-shadow(0 0 30px rgba(212,175,106,0.4));
-    }
-    .loading-title {
-      font-size: 18px; font-weight: 600; color: var(--cream);
-      letter-spacing: 2px;
-    }
-    .loading-steps { display: flex; flex-direction: column; gap: 8px; width: 100%; }
-    .loading-step {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px; border-radius: 12px;
-      background: var(--glass); border: 1px solid var(--border);
-      font-size: 12px; color: rgba(253,248,243,0.35); transition: all 0.4s;
-      font-family: inherit;
-    }
-    .loading-step.done {
-      border-color: rgba(122,158,126,0.5); color: var(--sage-light);
-      background: rgba(122,158,126,0.08);
-    }
-    .loading-step.active {
-      border-color: rgba(212,175,106,0.4); color: var(--gold-light);
-      background: rgba(212,175,106,0.06);
-    }
-    .step-icon { font-size: 14px; width: 22px; text-align: center; }
-
-    /* ============ RESULT ============ */
-    #page-result { padding-top: 30px; gap: 18px; align-items: center; }
-    .result-header { text-align: center; }
-    .result-tag {
-      display: inline-block;
-      background: rgba(212,175,106,0.12);
-      border: 1px solid rgba(212,175,106,0.3);
-      border-radius: 20px; padding: 4px 14px;
-      font-size: 11px; color: var(--gold-light); margin-bottom: 8px;
-      letter-spacing: 1px;
-    }
-    .result-title {
-      font-size: 18px; font-weight: 700;
-      background: linear-gradient(135deg, var(--gold-light), var(--cream));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
-    /* ============ POSTCARD — 新版清新治愈风格 ============ */
-    .postcard-card {
-      width: 100%;
-      border-radius: 4px;
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
-    }
-    /* 每个能量类型有独特的治愈系渐变背景 */
-    .postcard-bg-gradient {
-      position: absolute; inset: 0;
-    }
-    .postcard-inner {
-      position: relative; z-index: 1;
-      padding: 32px 28px 28px;
-      min-height: 440px;
-      display: flex; flex-direction: column;
-    }
-
-    /* 顶部装饰性波浪线条 */
-    .postcard-wave-top {
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 6px;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(255,255,255,0.4) 20%,
-        rgba(255,255,255,0.6) 50%,
-        rgba(255,255,255,0.4) 80%,
-        transparent 100%
-      );
-    }
-
-    /* 右侧邮戳区（抽象圆形艺术） */
-    .postcard-seal {
-      position: absolute; top: 20px; right: 20px;
-      width: 58px; height: 58px;
-    }
-    .seal-ring {
-      position: absolute; inset: 0; border-radius: 50%;
-      border: 1.5px solid rgba(255,255,255,0.3);
-    }
-    .seal-ring-2 {
-      position: absolute; inset: 6px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    .seal-center {
-      position: absolute; inset: 12px; border-radius: 50%;
-      background: rgba(255,255,255,0.12);
-      display: flex; align-items: center; justify-content: center;
-    }
-    /* 抽象艺术形状 - 花瓣/光晕 */
-    .seal-petal {
-      position: absolute;
-      width: 14px; height: 14px;
-      border-radius: 50% 50% 50% 0;
-      background: rgba(255,255,255,0.25);
-      transform: rotate(var(--angle, 0deg));
-      transform-origin: center bottom;
-      bottom: 50%; left: 50%;
-    }
-
-    /* 左下角水印文字 */
-    .postcard-watermark-text {
-      position: absolute; bottom: 20px; right: 24px;
-      font-size: 8px; color: rgba(255,255,255,0.25);
-      letter-spacing: 3px; text-align: right;
-      line-height: 1.8;
-    }
-
-    /* 主内容区 */
-    .postcard-main {
-      flex: 1;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 16px;
-      padding: 10px 4px;
-      text-align: center;
-    }
-
-    /* 抽象装饰线条 */
-    .postcard-abstract-line {
-      width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4), transparent);
-      margin: 0 auto;
-    }
-
-    /* 引文区 */
-    .postcard-quote-wrap {
-      position: relative;
-      padding: 0 4px;
-    }
-    /* 左侧装饰竖线 */
-    .postcard-quote-line {
-      position: absolute; left: 0; top: 8px; bottom: 8px;
-      width: 2px;
-      border-radius: 1px;
-      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.5), transparent);
-    }
-    .postcard-text {
-      font-size: 19px; font-weight: 600; line-height: 1.9;
-      color: #fff;
-      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
-      padding-left: 16px;
-    }
-
-    /* 分隔小圆点 */
-    .postcard-dots {
-      display: flex; gap: 6px; align-items: center;
-      margin: 4px 0;
-    }
-    .postcard-dot {
-      width: 3px; height: 3px; border-radius: 50%;
-      background: rgba(255,255,255,0.4);
-    }
-    .postcard-dot.mid { width: 5px; height: 5px; background: rgba(255,255,255,0.6); }
-
-    /* 底部签名区 */
-    .postcard-signature {
-      margin-top: 8px;
-      font-size: 9px; color: rgba(255,255,255,0.35);
-      letter-spacing: 3px; text-align: center;
-    }
-
-    /* ============ INSIGHT ============ */
-    .insight-section { width: 100%; }
-    .insight-title {
-      font-size: 11px; color: rgba(253,248,243,0.35);
-      margin-bottom: 10px; font-weight: 600; letter-spacing: 1px;
-    }
-    .insight-cards { display: flex; flex-direction: column; gap: 9px; }
-    .insight-card {
-      background: var(--glass2); border: 1px solid var(--border);
-      border-radius: 14px; padding: 13px 15px;
-      display: flex; align-items: flex-start; gap: 12px;
-    }
-    .insight-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-    .insight-info h4 { font-size: 13px; font-weight: 600; margin-bottom: 3px; color: var(--cream); }
-    .insight-info p { font-size: 12px; color: rgba(253,248,243,0.45); line-height: 1.5; }
-
-    /* ============ ACTION BUTTONS ============ */
-    .action-btns { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+    .result-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 24px; }
+    .result-tag { padding: 6px 12px; background: var(--glass2); border-radius: 20px; font-size: 12px; color: var(--cream); }
     .btn-save {
-      width: 100%; padding: 14px;
-      background: linear-gradient(135deg, var(--sage-dark) 0%, var(--sage) 100%);
-      border: none; border-radius: 14px;
-      font-size: 14px; font-weight: 600; color: var(--cream);
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-      box-shadow: 0 6px 20px rgba(90,126,94,0.3);
-      transition: transform 0.15s; font-family: inherit;
-      -webkit-user-select: none; user-select: none;
+      width: 100%; padding: 14px; border: none; border-radius: 14px;
+      background: linear-gradient(135deg, var(--sage-dark), var(--sage));
+      color: var(--cream); font-size: 14px; font-weight: 600; cursor: pointer;
+      font-family: inherit; margin-bottom: 10px; transition: transform 0.15s;
     }
     .btn-save:active { transform: scale(0.97); }
     .btn-retry {
-      width: 100%; padding: 12px;
-      background: transparent; border: 1px solid var(--border);
-      border-radius: 14px; font-size: 13px; color: rgba(253,248,243,0.4);
-      cursor: pointer; transition: all 0.2s; font-family: inherit;
+      width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 14px;
+      background: transparent; color: rgba(253,248,243,0.6); font-size: 13px; cursor: pointer;
+      font-family: inherit; transition: all 0.2s;
     }
-    .btn-retry:active { border-color: var(--sage); color: var(--sage-light); }
+    .btn-retry:active { background: var(--glass); }
 
-    /* ============ SAVE OVERLAY (for image generation) ============ */
-    #save-overlay {
-      display: none;
-      position: fixed; inset: 0; z-index: 9998;
-      background: rgba(10,8,8,0.85);
-      align-items: center; justify-content: center;
-      flex-direction: column; gap: 16px;
-    }
-    #save-overlay.show { display: flex; }
-    .save-hint {
-      font-size: 13px; color: rgba(253,248,243,0.6);
-      letter-spacing: 1px;
-    }
-    .save-spinner {
-      width: 40px; height: 40px;
-      border: 2px solid rgba(122,158,126,0.2);
-      border-top-color: var(--sage);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .save-cancel {
-      font-size: 12px; color: rgba(253,248,243,0.3);
-      cursor: pointer; background: none; border: none;
-      font-family: inherit; padding: 8px 16px;
-    }
+    /* ============ ADVANCED RESULT ============ */
+    .dimension-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .dimension-item { background: var(--glass); border-radius: 12px; padding: 14px; text-align: center; }
+    .dimension-label { font-size: 11px; color: rgba(253,248,243,0.5); margin-bottom: 6px; }
+    .dimension-value { font-size: 18px; font-weight: 600; color: var(--sage-light); }
+    .dimension-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+    .dimension-fill { height: 100%; background: linear-gradient(90deg, var(--sage-dark), var(--sage)); border-radius: 2px; }
+    .result-section { background: var(--glass); border-radius: 16px; padding: 16px; margin-bottom: 16px; text-align: left; }
+    .result-section-title { font-size: 13px; color: var(--gold); margin-bottom: 10px; font-weight: 600; }
+    .result-section-content { font-size: 13px; line-height: 1.7; color: rgba(253,248,243,0.8); }
 
     /* ============ ADMIN ============ */
-    #page-admin { padding-top: 50px; gap: 18px; }
+    #page-admin { padding-top: 50px; }
     .admin-login { display: flex; flex-direction: column; gap: 12px; }
     .admin-input {
-      background: var(--glass2); border: 1px solid var(--border);
-      border-radius: 12px; padding: 12px 15px;
-      font-size: 14px; color: var(--cream); font-family: inherit;
-      outline: none;
+      background: var(--glass2); border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px 15px; font-size: 14px; color: var(--cream); font-family: inherit;
+      outline: none; width: 100%; max-width: 280px;
     }
     .admin-input:focus { border-color: var(--sage); }
     .btn-admin-login {
       padding: 12px; background: linear-gradient(135deg, var(--sage-dark), var(--sage));
-      border: none; border-radius: 12px; font-size: 14px; font-weight: 600;
-      color: var(--cream); cursor: pointer; font-family: inherit;
+      border: none; border-radius: 12px; font-size: 14px; color: var(--cream);
+      cursor: pointer; font-family: inherit; width: 100%; max-width: 280px;
     }
-    .admin-dashboard { display: flex; flex-direction: column; gap: 14px; }
-    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .stat-card {
-      background: var(--glass2); border: 1px solid var(--border);
-      border-radius: 14px; padding: 14px; text-align: center;
+    .admin-dashboard { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 20px; }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stat-card { background: var(--glass2); border: 1px solid var(--border); border-radius: 16px; padding: 16px; text-align: center; }
+    .stat-value { font-size: 28px; font-weight: 600; color: var(--sage-light); }
+    .stat-label { font-size: 12px; color: rgba(253,248,243,0.5); margin-top: 4px; }
+    .sub-label { font-size: 13px; color: rgba(253,248,243,0.6); margin-bottom: 10px; }
+    .admin-section { background: var(--glass2); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+    .admin-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .admin-code-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .code-chip { padding: 6px 12px; background: var(--glass); border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .code-chip:hover { background: var(--border); }
+    .code-chip.basic { border-left: 3px solid var(--sage); }
+    .code-chip.advanced { border-left: 3px solid var(--lavender); }
+    .btn-generate { padding: 10px 16px; background: linear-gradient(135deg, var(--gold-dark, #B8944A), var(--gold)); border: none; border-radius: 10px; font-size: 13px; color: var(--bg); cursor: pointer; font-family: inherit; }
+    .record-list { max-height: 200px; overflow-y: auto; }
+    .record-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .record-time { color: rgba(253,248,243,0.4); min-width: 60px; }
+    .record-info { flex: 1; color: rgba(253,248,243,0.8); }
+    .record-product { padding: 2px 8px; border-radius: 10px; font-size: 10px; }
+    .record-product.basic { background: var(--sage); }
+    .record-product.advanced { background: var(--lavender); }
+
+    /* ============ TOP NAV ============ */
+    .top-nav { position: fixed; top: 16px; right: 16px; z-index: 100; }
+    .admin-btn {
+      background: var(--glass2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 5px 10px; font-size: 10px; color: rgba(253,248,243,0.4); cursor: pointer; font-family: inherit;
     }
-    .stat-num {
-      font-size: 26px; font-weight: 700;
-      background: linear-gradient(135deg, var(--gold-light), var(--cream));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .stat-label { font-size: 10px; color: rgba(253,248,243,0.35); margin-top: 3px; }
-    .topic-list { display: flex; flex-direction: column; gap: 8px; }
-    .topic-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 13px; background: var(--glass2); border: 1px solid var(--border);
-      border-radius: 10px;
-    }
-    .topic-bar-wrap { flex: 1; height: 4px; background: rgba(253,248,243,0.07); border-radius: 2px; overflow: hidden; }
-    .topic-bar { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--sage), var(--gold)); }
-    .topic-name { font-size: 12px; min-width: 80px; color: rgba(253,248,243,0.7); }
-    .topic-pct { font-size: 11px; color: rgba(253,248,243,0.3); min-width: 36px; text-align: right; }
-    .sub-label { font-size: 11px; color: rgba(253,248,243,0.35); margin-bottom: 10px; font-weight: 600; }
 
     /* ============ TOAST ============ */
     .toast {
-      position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
-      background: rgba(30,25,20,0.95); border: 1px solid var(--sage);
-      border-radius: 12px; padding: 11px 20px;
-      font-size: 13px; color: var(--sage-light);
-      z-index: 9999; opacity: 0; transition: opacity 0.3s;
-      pointer-events: none; white-space: nowrap;
+      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+      background: var(--bg3); border: 1px solid var(--border2); border-radius: 12px;
+      padding: 12px 20px; font-size: 13px; z-index: 1000; animation: toastIn 0.3s ease;
     }
-    .toast.show { opacity: 1; }
-
-    /* ============ RECORD ITEMS ============ */
-    .record-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 13px; background: var(--glass2); border: 1px solid var(--border);
-      border-radius: 10px;
-    }
-    .record-time { font-size: 11px; color: rgba(253,248,243,0.3); min-width: 72px; }
-    .record-energy { font-size: 12px; flex: 1; color: rgba(253,248,243,0.7); }
-    .record-mode { font-size: 10px; color: rgba(253,248,243,0.3); }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
   </style>
 </head>
 <body>
-<div class="night-sky">
-  <div class="aurora aurora-1"></div>
-  <div class="aurora aurora-2"></div>
-  <div class="aurora aurora-3"></div>
-  <div class="stars" id="stars"></div>
-  <div id="particles"></div>
-</div>
-
-<div class="top-nav">
-  <button class="admin-btn" id="admin-btn" onclick="showAdmin()">后台</button>
-</div>
-
-<div id="app">
-  <!-- ============ VERIFY PAGE ============ -->
-  <div id="page-verify" class="page active">
-    <div class="brand-mystic">
-      <div class="mystic-symbol">&#x1F338;</div>
-      <div class="brand-title">心花</div>
-      <div class="brand-sub">MIND BLOOM</div>
-    </div>
-    <div class="divider-ornament">
-      <div class="divider-line"></div>
-      <span>&#x2726;</span>
-      <div class="divider-line"></div>
-    </div>
-    <p class="verify-desc">请输入你的专属体验码<br>开启这段心灵探索之旅</p>
-    <div class="code-input-wrap" id="code-input-wrap">
-      <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d1" />
-      <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d2" />
-      <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d3" />
-      <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d4" />
-    </div>
-    <div class="code-error-msg" id="code-error-msg"></div>
-    <button class="btn-verify" id="btn-verify" onclick="verifyCode()">开启探索 &#x2726;</button>
-    <p class="verify-note">体验码由店主提供 &#183; 完全匿名</p>
+  <div class="night-sky">
+    <div class="stars" id="stars"></div>
   </div>
 
-  <!-- ============ USER INFO PAGE ============ -->
-  <div id="page-userinfo" class="page">
-    <div style="margin-top: 60px"></div>
-    <div class="page-title">欢迎来到心灵花园</div>
-    <div class="page-sub" style="margin-bottom: 30px">让我们更好地认识你</div>
-    <div style="background: var(--glass2); border: 1px solid var(--border); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 18px;">
-      <div>
-        <label style="font-size: 13px; color: rgba(253,248,243,0.6); margin-bottom: 8px; display: block;">给自己取个昵称</label>
-        <input class="admin-input" type="text" id="user-nickname" placeholder="比如：心灵旅客" maxlength="12" />
-      </div>
-      <div>
-        <label style="font-size: 13px; color: rgba(253,248,243,0.6); margin-bottom: 8px; display: block;">你的性别</label>
-        <div style="display: flex; gap: 10px;">
-          <button class="mode-badge" id="gender-m" onclick="selectGender('M')" style="flex:1; padding: 12px; cursor: pointer; border: none;">&#x2642; 男</button>
-          <button class="mode-badge" id="gender-f" onclick="selectGender('F')" style="flex:1; padding: 12px; cursor: pointer; border: none;">&#x2640; 女</button>
-        </div>
-      </div>
-      <div>
-        <label style="font-size: 13px; color: rgba(253,248,243,0.6); margin-bottom: 8px; display: block;">你的年龄范围</label>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-          <button class="mode-badge age-btn" id="age-1" onclick="selectAge('18-25')" style="padding: 8px 12px; cursor: pointer; border: none; font-size: 11px;">18-25岁</button>
-          <button class="mode-badge age-btn" id="age-2" onclick="selectAge('26-35')" style="padding: 8px 12px; cursor: pointer; border: none; font-size: 11px;">26-35岁</button>
-          <button class="mode-badge age-btn" id="age-3" onclick="selectAge('36-45')" style="padding: 8px 12px; cursor: pointer; border: none; font-size: 11px;">36-45岁</button>
-          <button class="mode-badge age-btn" id="age-4" onclick="selectAge('46+')" style="padding: 8px 12px; cursor: pointer; border: none; font-size: 11px;">46岁以上</button>
-        </div>
-      </div>
-    </div>
-    <div style="margin-top: 24px; padding: 14px; background: rgba(122,158,126,0.08); border-radius: 12px; font-size: 12px; color: rgba(253,248,243,0.4); line-height: 1.6;">
-      &#x1F512; 这些信息仅用于后台数据统计<br>你可以选择不填写任何信息
-    </div>
-    <button class="btn-verify" onclick="submitUserInfo()" style="margin-top: 24px;">
-      进入花园 &#x2726;
-    </button>
+  <div class="top-nav">
+    <button class="admin-btn" id="admin-btn" onclick="showAdmin()">后台</button>
   </div>
 
-  <!-- ============ LANDING PAGE ============ -->
-  <div id="page-landing" class="page">
-    <div class="brand-mystic">
-      <div class="mystic-symbol">&#x1F338;</div>
-      <div class="brand-title">心花</div>
-      <div class="brand-sub">MIND BLOOM</div>
-    </div>
-    <p class="brand-tagline">在喧嚣中，聆听内心的低语</p>
-    <div class="divider-ornament">
-      <div class="divider-line"></div>
-      <span>&#x2726;</span>
-      <div class="divider-line"></div>
-    </div>
-    <div class="feature-runes">
-      <div class="rune-item">
-        <div class="rune-icon">&#x1F319;</div>
-        <div class="rune-text">
-          <h4>直觉之境</h4>
-          <p>用隐喻与意象，触碰潜意识深处的真实</p>
+  <div id="app">
+    <!-- ============ HOME PAGE ============ -->
+    <div id="page-home" class="page active">
+      <div class="brand-mystic">
+        <div class="mystic-symbol">&#x1F338;</div>
+        <div class="brand-title">心花</div>
+        <div class="brand-sub">MIND BLOOM</div>
+      </div>
+      <p style="font-size: 13px; color: rgba(253,248,243,0.5); text-align: center; margin-bottom: 10px;">在喧嚣中，聆听内心的低语</p>
+      
+      <div class="product-grid">
+        <div class="product-card" onclick="selectProduct('basic')">
+          <div class="product-icon">&#x1F31F;</div>
+          <div class="product-meta">
+            <span class="product-tag basic">初级版</span>
+            <span class="product-price">&#xFFE5;2.99</span>
+          </div>
+          <div class="product-name" style="margin-top: 12px;">意识之境</div>
+          <div class="product-desc">30道趣味心理题，带你探索意想不到的自己。趣味、意象、意想不到的问题，配积极心理语录。</div>
+          <div class="product-questions">30题 · 约5分钟</div>
+        </div>
+        
+        <div class="product-card" onclick="selectProduct('advanced')">
+          <div class="product-icon">&#x1F33F;</div>
+          <div class="product-meta">
+            <span class="product-tag advanced">高级版</span>
+            <span class="product-price">&#xFFE5;29.9</span>
+          </div>
+          <div class="product-name" style="margin-top: 12px;">心灵花园</div>
+          <div class="product-desc">200道综合测评，融合大五人格、MBTI、玄学与潜意识投射。全方位性格画像，职业、亲密关系、生活指引。</div>
+          <div class="product-questions">200题 · 约30分钟</div>
         </div>
       </div>
-      <div class="rune-item">
-        <div class="rune-icon">&#x2728;</div>
-        <div class="rune-text">
-          <h4>为你而生</h4>
-          <p>每一句话都从你的故事里生长，绽放独属于你的金句</p>
-        </div>
-      </div>
-      <div class="rune-item">
-        <div class="rune-icon">&#x1F9DC;</div>
-        <div class="rune-text">
-          <h4>隐私守护</h4>
-          <p>无需注册 &#183; 完全匿名 &#183; 24小时冷却期</p>
-        </div>
-      </div>
-    </div>
-    <button class="btn-verify" onclick="showPage('page-mode')">
-      开始心灵探索 &#x2726;
-    </button>
-    <p class="verify-note">约 5 分钟 &#183; 深度自我觉察</p>
-  </div>
 
-  <!-- ============ MODE SELECT ============ -->
-  <div id="page-mode" class="page">
-    <div style="margin-top: 16px"></div>
-    <button class="back-btn" onclick="showPage('page-landing')">&#x2190;</button>
-    <div class="page-title">选择你的入口</div>
-    <div class="page-sub">两条路，都通往内心深处</div>
-    <div class="mode-cards">
-      <div class="mode-card" onclick="startQuiz()">
-        <div class="mode-icon">&#x1F30C;</div>
-        <div class="mode-info">
-          <h3>直觉之旅</h3>
-          <p>20 道意象题，跟随直觉<br>像翻阅一本私密的心灵图鉴</p>
-        </div>
-        <div class="mode-badge">推荐</div>
-      </div>
-      <div class="mode-card" onclick="startChat()">
-        <div class="mode-icon">&#x1F4AC;</div>
-        <div class="mode-info">
-          <h3>心灵对话</h3>
-          <p>和花花聊聊心事<br>10 轮温暖的倾听与回应</p>
-        </div>
+      <div class="coming-soon-card">
+        <div class="coming-soon-icon">&#x2728;</div>
+        <div class="coming-soon-title">&#x1F680; 神秘新量表 正在开发中</div>
+        <div class="coming-soon-desc">更多探索自我的奇妙旅程，即将开启...</div>
       </div>
     </div>
-  </div>
 
-  <!-- ============ QUIZ PAGE ============ -->
-  <div id="page-quiz" class="page">
-    <div class="progress-header">
-      <button class="back-btn" onclick="showPage('page-mode')">&#x2190;</button>
-      <span class="progress-text" id="quiz-progress-text">1 / 20</span>
+    <!-- ============ VERIFY PAGE ============ -->
+    <div id="page-verify" class="page">
+      <button class="back-btn" onclick="showPage('page-home')">&#x2190;</button>
+      <div class="page-title" id="verify-title">验证体验码</div>
+      <div class="verify-card">
+        <span class="product-badge" id="verify-badge">初级版</span>
+        <p style="font-size: 13px; color: rgba(253,248,243,0.5); margin-bottom: 10px;" id="verify-hint">请输入你获得的4位体验码</p>
+        <div class="code-input-wrap" id="code-input-wrap">
+          <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d1" />
+          <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d2" />
+          <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d3" />
+          <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d4" />
+        </div>
+        <div class="code-error-msg" id="code-error-msg"></div>
+        <button class="btn-verify" id="btn-verify" onclick="verifyCode()">开启探索</button>
+        <p class="verify-note">体验码由店主提供 · 完全匿名</p>
+      </div>
     </div>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar" id="quiz-progress-bar" style="width:5%"></div>
-    </div>
-    <div class="question-card" id="question-card">
-      <div class="q-category" id="q-category"></div>
-      <div class="q-text" id="q-text"></div>
-      <div class="options" id="q-options"></div>
-    </div>
-    <button class="quiz-next-btn" id="quiz-next-btn" onclick="nextQuestion()">继续旅程 &#x2726;</button>
-  </div>
 
-  <!-- ============ CHAT PAGE ============ -->
-  <div id="page-chat" class="page">
-    <div class="chat-header">
+    <!-- ============ USER INFO PAGE ============ -->
+    <div id="page-userinfo" class="page">
+      <button class="back-btn" onclick="showPage('page-verify')">&#x2190;</button>
+      <div class="page-title">欢迎来到心灵花园</div>
+      <div class="page-sub" style="margin-bottom: 24px;">让我们更好地认识你</div>
+      <div class="userinfo-card">
+        <div>
+          <label class="form-label">给自己取个昵称</label>
+          <input class="form-input" type="text" id="user-nickname" placeholder="比如：心灵旅客" maxlength="12" />
+        </div>
+        <div>
+          <label class="form-label">你的性别</label>
+          <div class="option-row">
+            <button class="option-btn" id="gender-m" onclick="selectGender('M')">&#x2642; 男</button>
+            <button class="option-btn" id="gender-f" onclick="selectGender('F')">&#x2640; 女</button>
+          </div>
+        </div>
+        <div>
+          <label class="form-label">你的年龄范围</label>
+          <div class="age-grid">
+            <button class="age-btn" id="age-1" onclick="selectAge('15-18')">15-18岁</button>
+            <button class="age-btn" id="age-2" onclick="selectAge('18-25')">18-25岁</button>
+            <button class="age-btn" id="age-3" onclick="selectAge('26-35')">26-35岁</button>
+            <button class="age-btn" id="age-4" onclick="selectAge('36-45')">36-45岁</button>
+            <button class="age-btn" id="age-5" onclick="selectAge('46+')">46岁以上</button>
+          </div>
+        </div>
+      </div>
+      <div class="privacy-note" style="max-width: 340px; margin-top: 16px;">
+        &#x1F512; 这些信息仅用于后台数据统计，你可以选择不填写
+      </div>
+      <button class="btn-start" style="max-width: 340px; margin-top: 20px;" onclick="submitUserInfo()">
+        进入花园
+      </button>
+    </div>
+
+    <!-- ============ QUIZ PAGE ============ -->
+    <div id="page-quiz" class="page">
       <div class="progress-header">
-        <button class="back-btn" onclick="showPage('page-mode')">&#x2190;</button>
-        <span class="progress-text">心灵对话 &#183; 花花在此倾听</span>
+        <button class="back-btn" onclick="confirmExit()">&#x2190;</button>
+        <span class="progress-text" id="quiz-progress-text">1 / 30</span>
+        <span style="width: 36px;"></span>
       </div>
-      <div style="margin-top:8px" class="progress-bar-wrap">
-        <div class="progress-bar" id="chat-progress-bar" style="width:0%"></div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="quiz-progress-bar" style="width: 0%"></div>
       </div>
-    </div>
-    <div class="chat-messages" id="chat-messages"></div>
-    <div class="chat-turn-count" id="chat-turn-count">还可以聊 10 轮</div>
-    <div class="chat-input-wrap">
-      <textarea class="chat-input" id="chat-input" placeholder="轻轻说出你的心情..." rows="1"
-        onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
-      <button class="chat-send-btn" id="chat-send-btn" onclick="sendChat()">&#x2191;</button>
-    </div>
-  </div>
-
-  <!-- ============ LOADING PAGE ============ -->
-  <div id="page-loading" class="page">
-    <div class="loading-moon">&#x1F338;</div>
-    <div class="loading-title">正在倾听你的内心</div>
-    <div class="loading-steps" id="loading-steps">
-      <div class="loading-step active" id="step-1">
-        <span class="step-icon">&#x1F319;</span>感知你的心灵图景...
+      <div class="question-card" id="question-card">
+        <div class="q-category" id="q-category"></div>
+        <div class="q-text" id="q-text"></div>
+        <div class="options" id="q-options"></div>
       </div>
-      <div class="loading-step" id="step-2">
-        <span class="step-icon">&#x1F9DC;</span>解读潜意识信号...
-      </div>
-      <div class="loading-step" id="step-3">
-        <span class="step-icon">&#x2728;</span>酿造专属花语...
-      </div>
-      <div class="loading-step" id="step-4">
-        <span class="step-icon">&#x1F338;</span>绽放你的专属明信片...
-      </div>
-    </div>
-  </div>
-
-  <!-- ============ RESULT PAGE ============ -->
-  <div id="page-result" class="page">
-    <div class="result-header">
-      <div class="result-tag" id="result-energy-tag">&#x2726; 花语绽放</div>
-      <div class="result-title">来自你内心深处的明信片</div>
+      <button class="quiz-next-btn" id="quiz-next-btn" onclick="nextQuestion()">继续旅程</button>
     </div>
 
-    <!-- ============ NEW POSTCARD ============ -->
-    <div class="postcard-card" id="postcard-card">
-      <div class="postcard-bg-gradient" id="postcard-bg-gradient"></div>
-      <div class="postcard-wave-top"></div>
-
-      <!-- 抽象邮戳 -->
-      <div class="postcard-seal" id="postcard-seal">
-        <div class="seal-ring"></div>
-        <div class="seal-ring-2"></div>
-        <div class="seal-center" id="seal-center">
-          <!-- 抽象花瓣形状通过 JS 生成 -->
-        </div>
-      </div>
-
-      <div class="postcard-inner">
-        <div class="postcard-main">
-          <div class="postcard-abstract-line"></div>
-          <div class="postcard-quote-wrap">
-            <div class="postcard-quote-line" id="postcard-quote-line"></div>
-            <div class="postcard-text" id="postcard-text">每一次呼吸，都是与自己重新相遇的机会</div>
-          </div>
-          <div class="postcard-dots">
-            <div class="postcard-dot"></div>
-            <div class="postcard-dot mid"></div>
-            <div class="postcard-dot"></div>
-          </div>
-          <div class="postcard-signature">&#x2014;&#x2014; 心花 MindBloom &#183; 积极心理学</div>
-        </div>
-        <div class="postcard-watermark-text" id="postcard-watermark">
-          MIND<br>BLOOM
-        </div>
+    <!-- ============ RESULT PAGE ============ -->
+    <div id="page-result" class="page">
+      <div class="result-card" id="result-card">
+        <!-- 动态填充 -->
       </div>
     </div>
 
-    <div class="insight-section">
-      <div class="insight-title">&#x2726; 你的心灵解读</div>
-      <div class="insight-cards" id="insight-cards"></div>
-    </div>
-
-    <div class="action-btns">
-      <button class="btn-save" id="btn-save" onclick="saveCardToGallery()">
-        保存明信片到相册
-      </button>
-      <button class="btn-retry" onclick="restartAll()">
-        重新探索
-      </button>
+    <!-- ============ ADMIN PAGE ============ -->
+    <div id="page-admin" class="page">
+      <button class="back-btn" id="admin-back-btn">&#x2192;</button>
+      <div class="page-title">心灵花园后台</div>
+      <div id="admin-login-section" class="admin-login">
+        <input class="admin-input" type="password" id="admin-pwd" placeholder="管理员密码" />
+        <button class="btn-admin-login" onclick="adminLogin()">进入后台</button>
+      </div>
+      <div id="admin-dashboard" class="admin-dashboard" style="display: none;">
+        <!-- 动态填充 -->
+      </div>
     </div>
   </div>
-
-  <!-- ============ ADMIN PAGE ============ -->
-  <div id="page-admin" class="page">
-    <button class="back-btn" id="admin-back-btn">&#x2192;</button>
-    <div class="page-title">心灵花园后台</div>
-    <div id="admin-login-section" class="admin-login">
-      <input class="admin-input" type="password" id="admin-pwd" placeholder="管理员密码" />
-      <button class="btn-admin-login" onclick="adminLogin()">进入后台</button>
-    </div>
-    <div id="admin-dashboard" class="admin-dashboard" style="display:none">
-      <div class="stat-grid" id="stat-grid"></div>
-      <div>
-        <div class="sub-label">&#x1F3AB; 生成体验码（可复制发给买家）</div>
-        <div style="display:flex;gap:8px;margin-bottom:10px">
-          <input class="admin-input" type="number" id="gen-count" placeholder="生成数量" value="5" min="1" max="20" style="width:90px" />
-          <button class="btn-admin-login" onclick="generateCodes()" style="flex:1;font-size:13px;padding:10px">生成码</button>
-        </div>
-        <div id="generated-codes" style="display:flex;flex-wrap:wrap;gap:6px;min-height:32px"></div>
-      </div>
-      <div>
-        <div class="sub-label">&#x1F4CA; 用户关注话题分布</div>
-        <div class="topic-list" id="topic-list"></div>
-      </div>
-      <div>
-        <div class="sub-label">&#x1F4CB; 最近心灵记录</div>
-        <div id="recent-list" class="topic-list"></div>
-      </div>
-      <button class="btn-retry" onclick="exportData()">导出数据 CSV</button>
-    </div>
-  </div>
-</div>
-
-<!-- ============ SAVE OVERLAY ============ -->
-<div id="save-overlay">
-  <div class="save-spinner"></div>
-  <div class="save-hint">正在生成图片...</div>
-  <button class="save-cancel" onclick="cancelSave()">取消</button>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script>
 // ============================================================
-//  CONFIGURATION
+//  CONFIG
 // ============================================================
 const CONFIG = {
-  DEEPSEEK_API_KEY: 'YOUR_DEEPSEEK_API_KEY',
   ADMIN_PASSWORD: 'mindbloom2026',
-  DEMO_MODE: true,
-  CODE_VALID_MS: 24 * 60 * 60 * 1000, // 体验码有效期24小时
-};
-
-// ============================================================
-//  CODE STORAGE
-// ============================================================
-const CODE_STORE_KEY = 'mindbloom_codes_v3';
-
-function getStoredCodes() {
-  try { return JSON.parse(localStorage.getItem(CODE_STORE_KEY) || '{}'); }
-  catch(e) { return {}; }
-}
-
-function saveStoredCodes(codes) {
-  localStorage.setItem(CODE_STORE_KEY, JSON.stringify(codes));
-}
-
-function generateRandCode() {
-  return String(Math.floor(1000 + Math.random() * 9000));
-}
-
-function generateCodes() {
-  const count = Math.min(20, Math.max(1, parseInt(document.getElementById('gen-count').value) || 5));
-  const codes = getStoredCodes();
-  const generated = [];
-  for (let i = 0; i < count; i++) {
-    let code;
-    do { code = generateRandCode(); } while (codes[code]);
-    codes[code] = { created: Date.now(), used: false };
-    generated.push(code);
-  }
-  saveStoredCodes(codes);
-  const container = document.getElementById('generated-codes');
-  container.innerHTML = generated.map(c =>
-    `<span style="background:var(--glass2);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:13px;font-family:monospace;color:var(--gold-light);cursor:pointer" onclick="copyCode('${c}')" title="点击复制">${c}</span>`
-  ).join('');
-  showToast(`已生成 ${count} 个体验码 &#x2726;`);
-}
-
-function copyCode(code) {
-  navigator.clipboard.writeText(code).then(() => showToast(`已复制: ${code}`));
-}
-
-// ============================================================
-//  问卷题库 — 20题，基于大五人格维度，诗意意象场景
-//  维度映射：
-//  O=开放性 C=尽责性 E=外向性 A=宜人性 N=神经质
-// ============================================================
-const QUESTIONS = [
-  // === 开放性 (O) — 3题 ===
-  {
-    category: '意象之境',
-    text: '你走进一间房间，墙上的画框里是空的。你希望那里挂着什么？',
-    options: [
-      '一幅没有完成的画，颜色模糊，像是心事正在凝结',
-      '一张手绘地图，标记着你从未去过的远方',
-      '一面镜子，但镜中映出的是记忆里某个夏天的光线',
-      '一片留白，只有几笔极细的线条，像风吹过的痕迹'
-    ],
-    tags: ['高开放_矛盾张力', '高开放_想象丰富', '高开放_怀旧深度', '高开放_极简审美'],
-  },
-  {
-    category: '感官记忆',
-    text: '如果记忆有气味，你最常想起的那段时光，闻起来像……',
-    options: [
-      '雨后旧书店的味道，带着纸张微潮的纸香',
-      '外婆家厨房的油烟，混着某种炖了很久的草药香',
-      '夏天傍晚暴雨前的空气，有泥土翻起的腥甜',
-      '清晨宿舍走廊尽头的消毒水味，混着远处早餐的葱香'
-    ],
-    tags: ['高开放_内省敏感', '高开放_情感记忆', '高开放_感官丰富', '高开放_日常敏感'],
-  },
-  {
-    category: '虚构之桥',
-    text: '你独自走在一条路上，天色渐暗，前方出现了一座桥。桥的另一端……',
-    options: [
-      '消失在雾里，但雾中有隐约的光，像另一个宇宙的入口',
-      '通向一座你从未见过的小镇，镇上的人在准备某个节日的灯火',
-      '连接着悬崖的两端，你必须走过去才能继续前进',
-      '你发现你走过的路已经不见了，只有那座桥'
-    ],
-    tags: ['高开放_未知向往', '高开放_浪漫想象', '高开放_现实焦虑', '高开放_存在追问'],
-  },
-  // === 尽责性 (C) — 3题 ===
-  {
-    category: '秩序之影',
-    text: '你的书桌此刻最接近哪种状态？',
-    options: [
-      '物品各归其位，但有一本翻开的书和一杯没喝的茶，主人刚离开',
-      '有点乱，但乱中有序，我闭着眼都能找到想要的东西',
-      '已经收拾干净了，干净到有点空旷，像一个需要被重新填满的容器',
-      '堆积着很多东西，但我心里清楚每一堆是什么'
-    ],
-    tags: ['高尽责_完美秩序', '高尽责_弹性控制', '高尽责_清空倾向', '高尽责_内在秩序'],
-  },
-  {
-    category: '承诺之重',
-    text: '如果今天是你对某个人许下的重要承诺的最后期限，而这件事你还没做完……',
-    options: [
-      '会感到强烈的不安，哪怕只有一点没完成，也会坐立难安',
-      '会想办法通宵达旦，直到做完为止',
-      '会权衡是否值得，如果意义不大了，可能会放弃',
-      '早就做好了，我习惯提前'
-    ],
-    tags: ['高尽责_强责任感', '高尽责_坚持到底', '高尽责_务实灵活', '高尽责_计划性强'],
-  },
-  {
-    category: '未竟之事',
-    text: '你心里一直有一件「应该做但还没做」的事，它在怎么召唤你？',
-    options: [
-      '它像一个行李箱放在门口，每次路过都会提醒我一下',
-      '我刻意绕着它走，不去想，因为想了会有压力',
-      '它偶尔会在凌晨3点叫醒我',
-      '它已经慢慢变成了背景音，我不确定它还重要不重要'
-    ],
-    tags: ['高尽责_任务牵引', '高尽责_回避倾向', '高尽责_深夜焦虑', '高尽责_惯性拖延'],
-  },
-  // === 外向性 (E) — 3题 ===
-  {
-    category: '能量来源',
-    text: '以下哪种场景最让你感到「真实地活着」？',
-    options: [
-      '一大桌人笑着吃饭，酒瓶碰撞的声音和突然爆发的笑声',
-      '和一个人走在深夜的街道上，路灯拉长了两个人的影子',
-      '独自坐在咖啡馆角落，观察窗外来来往往的人群',
-      '刚结束一场辩论或演讲，走出场馆时肾上腺素还没退'
-    ],
-    tags: ['高外向_社交能量', '高外向_深度连接', '高外向_观察者', '高外向_表达欲'],
-  },
-  {
-    category: '独处之海',
-    text: '连续三天独自一人，没有社交媒体，没有外出。你最可能经历什么？',
-    options: [
-      '前24小时不适应，之后慢慢安静下来，开始听见内心的声音',
-      '会感到明显的低落，开始主动找理由出门',
-      '很享受，终于可以不用表演任何角色',
-      '写了很多东西，或者开始做一些平时没时间做的事'
-    ],
-    tags: ['高外向_社交依赖', '高外向_独处困难', '高外向_享受独处', '高外向_创造独处'],
-  },
-  {
-    category: '表达之流',
-    text: '当你说「我没事」的时候，你实际上是什么状态？',
-    options: [
-      '有时候是真的没事，有时候是不想解释太多',
-      '大多数时候是真的没事，我习惯了消化情绪',
-      '嘴上说没事，但别人大概能看出来我在逞强',
-      '我会把情绪写下来或者跟特定的人说，很少用「没事」搪塞'
-    ],
-    tags: ['高外向_灵活表达', '高外向_内化消化', '高外向_隐藏情绪', '高外向_深度表达'],
-  },
-  // === 宜人性 (A) — 3题 ===
-  {
-    category: '冲突之岸',
-    text: '朋友做了一件让你感到受伤的事，但他似乎完全没意识到。你会……',
-    options: [
-      '找个合适的时机，用温和的方式告诉他你的感受',
-      '算了，我不想让他感到内疚，忍一忍就过去了',
-      '我会生闷气，但不会直接说，因为我怕影响关系',
-      '直接说，我觉得好的关系需要诚实'
-    ],
-    tags: ['高宜人_建设沟通', '高宜人_回避冲突', '高宜人_隐忍倾向', '高宜人_信任直接'],
-  },
-  {
-    category: '信任之门',
-    text: '你收到一条陌生人的短信，对方说「我迷路了，能帮我一下吗」。你的第一反应是……',
-    options: [
-      '会想要帮忙，但也会警惕，先观察一下再说',
-      '不管真假，先回复，问清楚是什么情况',
-      '算了，多一事不如少一事，假装没看到',
-      '直接打电话过去，确认对方安全，比短信更真实'
-    ],
-    tags: ['高宜人_审慎信任', '高宜人_开放信任', '高宜人_自我保护', '高宜人_主动关怀'],
-  },
-  {
-    category: '慈悲之种',
-    text: '看到一个陌生人突然在公共场合情绪崩溃，你会……',
-    options: [
-      '默默递上一包纸巾，然后假装没看见，给他留空间',
-      '走过去问他需不需要帮助',
-      '假装没看见，心里却记住了那个画面',
-      '在经过的时候，轻声说一句「没关系的」'
-    ],
-    tags: ['高宜人_温柔距离', '高宜人_主动介入', '高宜人_内心柔软', '高宜人_细腻关怀'],
-  },
-  // === 神经质 (N) — 3题 ===
-  {
-    category: '焦虑之潮',
-    text: '凌晨两点，你突然想起白天说的一句话，开始担心那句话可能被误解。你的内心……',
-    options: [
-      '立刻打开手机，反复看那句话，越看越不确定',
-      '告诉自己睡一觉再说，但翻来覆去睡不着',
-      '知道这是常态，选择用呼吸或者冥想让自己平静下来',
-      '给朋友发消息确认，对方说「你想多了」，然后才好一点'
-    ],
-    tags: ['高神经质_反刍思维', '高神经质_夜间放大', '高神经质_自我调节', '高神经质_寻求确认'],
-  },
-  {
-    category: '批评之声',
-    text: '听到别人对你的负面评价时，你更接近哪种反应？',
-    options: [
-      '会反复回想那句话，试图判断它是否准确',
-      '当时有点难受，但很快就能翻篇',
-      '会把它写下来，认真分析，看看有没有可以改进的地方',
-      '先防御，然后纠结很久，最后还是会被影响'
-    ],
-    tags: ['高神经质_敏感内化', '高神经质_快速恢复', '高神经质_理性转化', '高神经质_防御纠结'],
-  },
-  {
-    category: '情绪之海',
-    text: '如果你的情绪是一条河流，它现在的状态是……',
-    options: [
-      '上游下过雨，水有点浑浊，不知道什么时候会决堤',
-      '在枯水期，水位很低，河床露出了很多石头',
-      '结了冰，表面平静，但底下的水流在等待春天',
-      '正在涨潮，我能感觉到水量在增加，但还撑得住'
-    ],
-    tags: ['高神经质_积压不稳', '高神经质_情感干涸', '高神经质_压抑等待', '高神经质_临界状态'],
-  },
-  // === 混合/深层维度 — 5题 ===
-  {
-    category: '归属之问',
-    text: '在人群中最让你感到孤独的时刻是？',
-    options: [
-      '大家在笑，但我不知道在笑什么',
-      '在热闹中突然安静下来，发现没有人注意到我的沉默',
-      '被人问「你怎么总是一个人」，而我不知道怎么回答',
-      '发了一条朋友圈，收到很多赞，但没有人真的问一句「你还好吗」'
-    ],
-    tags: ['归属感缺失_社交困惑', '归属感缺失_隐形需求', '归属感缺失_社会期待', '归属感缺失_表面连接'],
-  },
-  {
-    category: '时间之沙',
-    text: '你觉得自己真正「活着」的时间，在一天中大概占多少？',
-    options: [
-      '很少，大部分时间像在完成任务',
-      '有几个瞬间会感受到，但很短暂',
-      '做喜欢的事情时会感觉到，比如画画、做饭、散步',
-      '越来越少了，有时候会为此感到悲伤'
-    ],
-    tags: ['存在意义感_缺失', '存在意义感_瞬时', '存在意义感_热爱驱动', '存在意义感_流失'],
-  },
-  {
-    category: '自我之镜',
-    text: '如果用一句话形容你和自己的关系，那句话最接近……',
-    options: [
-      '「我们还在彼此试探的阶段」',
-      '「我爱她，但我经常让她失望」',
-      '「大多数时候我们相处得不错，但偶尔她会背叛我」',
-      '「我正在学习认识她」'
-    ],
-    tags: ['自我关系_探索期', '自我关系_苛责型', '自我关系_起伏型', '自我关系_成长型'],
-  },
-  {
-    category: '理想之夜',
-    text: '一个完全不存在的理想夜晚，它应该是怎样的？',
-    options: [
-      '和一两个真正懂我的人，深夜在某个地方聊到天亮',
-      '一个人，带着书和酒，坐在能看到星空的地方',
-      '没有任何计划，随遇而安，自然醒来，自然睡去',
-      '参与一场有意思的活动，认识有趣的人，但不刻意社交'
-    ],
-    tags: ['理想关系_深度连接', '理想状态_独处充实', '理想状态_自然流动', '理想状态_轻松社交'],
-  },
-  {
-    category: '愈合之痕',
-    text: '如果你的伤口有形状，它最像什么？',
-    options: [
-      '一道已经结痂的疤，触碰时还有轻微的疼',
-      '一片淤青，不严重，但在慢慢消散',
-      '一个洞，风吹过的时候会疼，其他时候还好',
-      '已经被新的皮肤覆盖，但那里长出了一朵奇怪的花'
-    ],
-    tags: ['心理愈合_疤痕残留', '心理愈合_消退中', '心理愈合_空洞感', '心理愈合_转化生长'],
-  },
-];
-
-// ============================================================
-//  QUOTE LIBRARY — 治愈系明信片内容（纯CSS渐变背景）
-// ============================================================
-const QUOTE_LIBRARY = {
-  '高开放_矛盾张力': {
-    quote: '你心里的那团模糊里，藏着比清晰更真实的东西。别急着命名它，让它再飞一会儿。',
-    insights: [
-      { icon: '&#x1F4AB;', title: '矛盾的直觉', desc: '你对模糊有很高的耐受度，这让你能捕捉到别人忽略的细微感受。' },
-      { icon: '&#x1F9E9;', title: '留白即美', desc: '不是所有心事都需要一个结论。有时候，允许自己不知道，本身就是一种成熟。' },
-      { icon: '&#x2728;', title: '信手拈来', desc: '你的感受力是一扇通往创造的窗户，试着把那些说不清的模糊写下来。' },
-    ],
-    gradient: 'linear-gradient(160deg, #1a1a2e 0%, #16213e 40%, #1a3a5c 70%, #0f3460 100%)',
-    quoteLineColor: 'rgba(120,180,220,0.5)',
-  },
-  '高开放_想象丰富': {
-    quote: '你心里的地图比世界版图更大，那些没去过的地方，早就在你心里活了很多年。',
-    insights: [
-      { icon: '&#x1F30D;', title: '远方在你心', desc: '你对远方的渴望不是逃避，而是灵魂对更广阔世界的本能靠近。' },
-      { icon: '&#x1F4D6;', title: '手绘地图', desc: '你脑海中的地图不需要经纬度，它用感受和想象绘制，比任何地图都更真实。' },
-      { icon: '&#x2708;', title: '出发不必远行', desc: '有时候，读一本小说、听一张专辑，就是一次完整的远行。' },
-    ],
-    gradient: 'linear-gradient(160deg, #1e1b4b 0%, #2d1b69 40%, #3b1f6e 70%, #1e1b4b 100%)',
-    quoteLineColor: 'rgba(180,140,255,0.5)',
-  },
-  '高开放_怀旧深度': {
-    quote: '你带着过去的碎片走着，那些碎片在月光下折射出比当下更温柔的光。',
-    insights: [
-      { icon: '&#x1F39B;', title: '记忆的收藏者', desc: '你有一种能力，能从旧时光里打捞出别人遗落的温柔，然后用来滋养当下。' },
-      { icon: '&#x1F43F;', title: '碎片也是光', desc: '不要觉得怀旧是脆弱。那些让你放不下的碎片，往往是你最珍贵的部分。' },
-      { icon: '&#x2615;', title: '沏一壶旧时光', desc: '偶尔主动回到那段记忆里看看，像拜访一位老朋友，看看它现在还好吗。' },
-    ],
-    gradient: 'linear-gradient(160deg, #2d1b2e 0%, #3d2b3e 40%, #4a2a4a 70%, #2d1b2e 100%)',
-    quoteLineColor: 'rgba(220,160,200,0.5)',
-  },
-  '高开放_极简审美': {
-    quote: '你在留白里看到了别人看不见的东西。那是留白，在对你说话。',
-    insights: [
-      { icon: '&#x2B1B;', title: '少即是多', desc: '你拥有一种稀有的能力：不被过度的信息和情绪淹没，能在简单里看见丰富。' },
-      { icon: '&#x1F58D;', title: '线条的诗意', desc: '那几笔风一样的线条，普通人看不见，你看见了。这就是你。' },
-      { icon: '&#x2726;', title: '静默的深度', desc: '给自己更多这样的时刻——什么都不做，只是看着，感受着。' },
-    ],
-    gradient: 'linear-gradient(160deg, #1a2a2a 0%, #2a3a3a 40%, #1a3a3a 70%, #0a1a1a 100%)',
-    quoteLineColor: 'rgba(160,220,220,0.5)',
-  },
-  '高尽责_强责任感': {
-    quote: '你把承诺捧在掌心里的样子，值得被好好对待。别忘了，你也需要被自己温柔托住。',
-    insights: [
-      { icon: '&#x1F4CC;', title: '诺言守护者', desc: '你对承诺的忠诚是你最珍贵的品质之一，它让你在人群中值得信赖。' },
-      { icon: '&#x2764;', title: '允许自己喘息', desc: '你一直在为别人撑伞，却很少问自己有没有淋湿。今天，试着做自己的伞。' },
-      { icon: '&#x1F4A9;', title: '放下也是一种能力', desc: '有些承诺注定无法全部兑现。学会区分「重要」和「紧急」，把精力放在真正重要的事上。' },
-    ],
-    gradient: 'linear-gradient(160deg, #1a2a1a 0%, #2a4a2a 40%, #3a5a3a 70%, #1a2a1a 100%)',
-    quoteLineColor: 'rgba(140,200,140,0.5)',
-  },
-  '高尽责_坚持到底': {
-    quote: '你有一种不动声色的力量。那种「既然开始了，就要走到最后」的倔强，是很稀有的天赋。',
-    insights: [
-      { icon: '&#x1F3C3;', title: '最后一步的魔法', desc: '很多人倒在终点前一米。你的坚持，往往是在别人放弃之后，才真正开始发光的。' },
-      { icon: '&#x26A1;', title: '热情需要管理', desc: '通宵达旦很燃，但可持续的节奏更重要。试着把自己的能量当成需要充电的电池。' },
-      { icon: '&#x2728;', title: '完成本身就是奖励', desc: '不一定每次完成都要有收获。做完这件事本身，就已经是你给自己的礼物。' },
-    ],
-    gradient: 'linear-gradient(160deg, #2a2a1a 0%, #3a3a2a 40%, #4a4a3a 70%, #2a2a1a 100%)',
-    quoteLineColor: 'rgba(220,200,100,0.5)',
-  },
-  '高外向_社交能量': {
-    quote: '笑声是你的语言，餐桌是你的神殿。在人群里发光的你，本身就是别人想靠近的光。',
-    insights: [
-      { icon: '&#x1F389;', title: '氛围制造者', desc: '你有让一个空间的气氛变得不一样的能力，这种天赋不是每个人都有的。' },
-      { icon: '&#x1F9D8;', title: '滋养与消耗', desc: '社交给你能量，但别忘了留一点时间给自己独处，就像热闹之后的余温。' },
-      { icon: '&#x1F4AD;', title: '深度与宽度', desc: '你认识很多人，也许可以试着让其中几个更深入一点——那种深夜对话，值得。' },
-    ],
-    gradient: 'linear-gradient(160deg, #2a1a2a 0%, #4a2a4a 40%, #5a3a5a 70%, #3a1a3a 100%)',
-    quoteLineColor: 'rgba(255,180,220,0.5)',
-  },
-  '高外向_深度连接': {
-    quote: '两个人的影子重叠在一起的那一刻，你知道什么是真正的在场。',
-    insights: [
-      { icon: '&#x1F46C;', title: '少数人的深井', desc: '比起认识新的人，你更渴望被老朋友真正懂得。这种深度，是灵魂与灵魂之间的握手。' },
-      { icon: '&#x1F319;', title: '深夜的价值', desc: '深夜的对话之所以珍贵，是因为它剥去了白天的面具。你珍惜这种时刻。' },
-      { icon: '&#x2764;', title: '你是给予者', desc: '在关系里，你往往先付出再索取。学会接受别人的关心，也是一种能力。' },
-    ],
-    gradient: 'linear-gradient(160deg, #1a1a2e 0%, #2a2a4e 40%, #2a3a6e 70%, #1a2a4e 100%)',
-    quoteLineColor: 'rgba(160,180,255,0.5)',
-  },
-  '高宜人_建设沟通': {
-    quote: '你选择了最难的路——坦诚，但不伤害。这种温柔的力量，比沉默和爆发都要勇敢。',
-    insights: [
-      { icon: '&#x1F4AC;', title: '温柔的勇气', desc: '你能在「说出真相」和「保护关系」之间找到平衡点，这不是懦弱，是智慧。' },
-      { icon: '&#x1F90F;', title: '时机即一切', desc: '你懂得等待合适时机再开口。这说明你同时在乎事情，也在乎人。' },
-      { icon: '&#x1F4A3;', title: '说出之后', desc: '很多你以为会造成伤害的话，说出来之后往往会发现——对方比你想象的更能承受。' },
-    ],
-    gradient: 'linear-gradient(160deg, #1a2a2e 0%, #2a4a4e 40%, #3a5a5e 70%, #1a3a3e 100%)',
-    quoteLineColor: 'rgba(140,200,220,0.5)',
-  },
-  '高宜人_开放信任': {
-    quote: '你愿意相信陌生人，是一种很珍贵的天真。不要因为世界偶尔的粗糙，就收走这份柔软的信任。',
-    insights: [
-      { icon: '&#x1F64C;', title: '天真的勇气', desc: '愿意回复陌生人的勇气，说明你的内心有足够的温暖，愿意先伸出手。' },
-      { icon: '&#x1F91D;', title: '信任是选择', desc: '信任是一种主动的选择，而不是因为没有看到风险。你的选择很珍贵。' },
-      { icon: '&#x1F9E0;', title: '信任也需边界', desc: '下次伸出手之前，可以先深呼吸一下，让信任和谨慎一起存在，并不矛盾。' },
-    ],
-    gradient: 'linear-gradient(160deg, #2e1a1a 0%, #4e2a2a 40%, #5e3a3a 70%, #3e1a1a 100%)',
-    quoteLineColor: 'rgba(255,180,160,0.5)',
-  },
-  '高宜人_温柔距离': {
-    quote: '一包纸巾，一个转身。你懂得尊严比帮助更重要，这份分寸感，是最高级的善意。',
-    insights: [
-      { icon: '&#x1F9F5;', title: '无声的温柔', desc: '你给的不是纸巾，是一种「我看见你了，但不会让你难堪」的尊重。这种温柔，非常稀罕。' },
-      { icon: '&#x1F91E;', title: '边界即尊重', desc: '你懂得什么时候该在，什么时候该离开。这种对边界的感知，是一种成熟的爱。' },
-      { icon: '&#x1F64B;', title: '如果是你', desc: '如果你哪天也想哭，记得：你也值得被人这样温柔地看见，哪怕没有人递纸巾。' },
-    ],
-    gradient: 'linear-gradient(160deg, #2a2a3a 0%, #3a3a5a 40%, #4a4a6a 70%, #2a2a3a 100%)',
-    quoteLineColor: 'rgba(200,180,255,0.5)',
-  },
-  '高神经质_反刍思维': {
-    quote: '你的大脑是一条很长的走廊，而那句话只是其中一盏忽明忽暗的灯。别让它开了一整夜。',
-    insights: [
-      { icon: '&#x1F568;', title: '凌晨两点的陷阱', desc: '反刍在夜里会比白天放大三倍。这不是你判断力最准的时候。' },
-      { icon: '&#x1F4A4;', title: '呼吸的锚', desc: '下次夜里开始反刍，试着把注意力放在呼吸上：吸气4秒，屏息4秒，呼气6秒。' },
-      { icon: '&#x1F4A1;', title: '事实检查', desc: '试着问自己：我有证据证明那句话是被误解了吗？还是这只是我的猜测？' },
-    ],
-    gradient: 'linear-gradient(160deg, #1a1a2a 0%, #2a2a4a 40%, #3a3a6a 70%, #1a1a3a 100%)',
-    quoteLineColor: 'rgba(180,160,255,0.5)',
-  },
-  '高神经质_夜间放大': {
-    quote: '夜是温柔的放大器。你的感受在凌晨三点格外真实，但不代表它格外正确。',
-    insights: [
-      { icon: '&#x1F319;', title: '月亮的谎言', desc: '深夜时，情绪会在月光的掩护下把自己伪装成真相。第二天早晨，通常会发现它是化了妆的。' },
-      { icon: '&#x1F4A8;', title: '流动而非凝固', desc: '凌晨三点的感受是流动的河，它不代表凝固的事实。允许它流过去。' },
-      { icon: '&#x1F4C4;', title: '写在纸上', desc: '如果有什么在凌晨叫你，试着把它写下来。写完，你会发现它已经没有那么急着要答案了。' },
-    ],
-    gradient: 'linear-gradient(160deg, #1a1a1a 0%, #2a2a2a 40%, #1a2a3a 70%, #0a1a2a 100%)',
-    quoteLineColor: 'rgba(160,200,240,0.5)',
-  },
-  '高神经质_敏感内化': {
-    quote: '别人的一句话，你听进去了，然后花了很长时间消化。这不是脆弱，这是你感受世界的方式。',
-    insights: [
-      { icon: '&#x1F50D;', title: '敏感的雷达', desc: '你对他人的话异常敏感，这不是缺点，而是你的天赋——前提是你学会筛选信号。' },
-      { icon: '&#x1F6AB;', title: '不是所有批评都相等', desc: '有些批评来自对方的恐惧，有些来自嫉妒，有些才是真正有价值的。学会分辨来源。' },
-      { icon: '&#x1F91D;', title: '找一个翻译', desc: '找一个你信任的人，当你对一句话反复纠结时，让它帮你分析：这句话真的在说你以为的意思吗？' },
-    ],
-    gradient: 'linear-gradient(160deg, #2a1a1a 0%, #3a2a2a 40%, #4a3a3a 70%, #3a2a2a 100%)',
-    quoteLineColor: 'rgba(255,160,160,0.5)',
-  },
-  '归属感缺失_表面连接': {
-    quote: '一百个赞，不如一句「我懂你」。你在热闹中感到的那种空，是灵魂在寻找真正的居所。',
-    insights: [
-      { icon: '&#x1F4E5;', title: '表面的重量', desc: '点赞是轻盈的，但孤独是重的。一百个赞堆起来，也搭不起一座可以住的房子。' },
-      { icon: '&#x1F91D;', title: '一句顶一万句', desc: '试着在下一次互动里，把「点赞」换成一句具体的话——哪怕只是「这张照片让我想起我们那次旅行」。' },
-      { icon: '&#x1F4A2;', title: '主动创造深度', desc: '关系不会自己变深。如果你想被真正看见，你需要先真正看见别人。' },
-    ],
-    gradient: 'linear-gradient(160deg, #1a2a3a 0%, #2a3a5a 40%, #3a4a6a 70%, #1a2a4a 100%)',
-    quoteLineColor: 'rgba(140,180,220,0.5)',
-  },
-  '存在意义感_缺失': {
-    quote: '你感到活着的时间很少，这不是你的问题——是时代把「活着」和「完成任务」弄混了。',
-    insights: [
-      { icon: '&#x1F300;', title: '自动导航的代价', desc: '当我们进入自动驾驶模式时，身体在工作，但灵魂在别处。觉察到这一点，已经是改变的第一步。' },
-      { icon: '&#x1F4B8;', title: '五分钟的真实', desc: '每天给自己五分钟，完全临在地做一件事：认真喝一杯茶，感受茶的温度和香气。活着，就在这五分钟里。' },
-      { icon: '&#x1F3AE;', title: '微小的真实', desc: '「活着」不需要大事件。深夜泡一杯热牛奶，感受水蒸气升腾，这就是活着。' },
-    ],
-    gradient: 'linear-gradient(160deg, #1a1a1a 0%, #2a2a2a 40%, #1a2a2a 70%, #0a1a1a 100%)',
-    quoteLineColor: 'rgba(180,220,200,0.5)',
-  },
-  '自我关系_苛责型': {
-    quote: '你在对自己说「你已经很好了」，但你的眼神里还在说「还不够」。这两个声音，你更愿意相信哪一个？',
-    insights: [
-      { icon: '&#x1F90C;', title: '内部批评家', desc: '你内心住着一个严格的法官。他也许帮你完成了许多事，但是时候给他放个假了。' },
-      { icon: '&#x1F9D1;', title: '朋友的语气', desc: '下次你又想责怪自己时，问问自己：你会用这种语气对一个好朋友说同样的话吗？' },
-      { icon: '&#x1F4AA;', title: '内在和解', desc: '「我爱她但她经常让我失望」——这份矛盾背后，是你没有得到自己期待的那种认可。试着先认可自己。' },
-    ],
-    gradient: 'linear-gradient(160deg, #2a1a2a 0%, #3a2a3a 40%, #4a3a4a 70%, #3a2a3a 100%)',
-    quoteLineColor: 'rgba(240,180,220,0.5)',
-  },
-  '心理愈合_转化生长': {
-    quote: '那朵奇怪的花，是你用伤痛长出来的东西。它不丑，它是你独一无二的勋章。',
-    insights: [
-      { icon: '&#x1F337;', title: '伤口的礼物', desc: '不是所有伤疤都会变成花，但你这朵花是真的。你的经历没有浪费。' },
-      { icon: '&#x1F331;', title: '在裂缝里生长', desc: '花从裂缝里长出来，是因为那里有光透进去。你的裂缝里，一定也漏进去了什么光。' },
-      { icon: '&#x1F9E6;', title: '照顾那朵花', desc: '那朵花需要你偶尔的注视和浇灌。给它取个名字，允许它存在，它就会开得更好。' },
-    ],
-    gradient: 'linear-gradient(160deg, #1a2a1a 0%, #2a3a2a 40%, #3a4a3a 70%, #1a2a1a 100%)',
-    quoteLineColor: 'rgba(180,240,180,0.5)',
-  },
-  'default': {
-    quote: '你愿意向内走，本身就是一种勇气。心里的那朵花，从未停止绽放。',
-    insights: [
-      { icon: '&#x1F338;', title: '勇气可嘉', desc: '选择探索内心，本身就是对自己最温柔的善待。' },
-      { icon: '&#x1F90C;', title: '相信自己', desc: '你的内心已经告诉你答案了，信任那个声音。' },
-      { icon: '&#x2728;', title: '持续绽放', desc: '每天给自己留一点时间，让心里的花慢慢绽放。' },
-    ],
-    gradient: 'linear-gradient(160deg, #2a1a2a 0%, #4a2a4a 40%, #5a3a5a 70%, #3a1a3a 100%)',
-    quoteLineColor: 'rgba(255,200,255,0.5)',
-  },
+  CODE_VALID_MS: 24 * 60 * 60 * 1000,
 };
 
 // ============================================================
 //  STATE
 // ============================================================
 const state = {
-  mode: null,
+  product: null,          // 'basic' | 'advanced'
   quizAnswers: [],
   quizCurrentIdx: 0,
-  chatMessages: [],
-  chatTurns: 0,
   result: null,
   sessionId: Date.now().toString(36) + Math.random().toString(36).substr(2),
   verifiedCode: null,
   adminLoggedIn: false,
-  savingCard: false,
   userNickname: '',
   userGender: '',
   userAge: '',
+  pendingOption: null,
 };
 
 // ============================================================
-//  BACKGROUND — STARS & PARTICLES
+//  BASIC QUIZ - 30题趣味心理题
 // ============================================================
-(function initBackground() {
-  const starsEl = document.getElementById('stars');
-  const particlesEl = document.getElementById('particles');
-  const isMobile = window.innerWidth < 500;
-  const starCount = isMobile ? 30 : 60;
-  for (let i = 0; i < starCount; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    const size = Math.random() * 2.5 + 0.5;
-    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*70}%;--dur:${Math.random()*4+2}s;animation-delay:${Math.random()*4}s`;
-    starsEl.appendChild(s);
-  }
-  const particleCount = isMobile ? 6 : 12;
-  for (let i = 0; i < particleCount; i++) {
-    const p = document.createElement('div');
-    p.className = 'floating-particle';
-    const size = Math.random() * 3 + 1;
-    p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;--dur:${Math.random()*10+8}s;animation-delay:${Math.random()*12}s`;
-    particlesEl.appendChild(p);
-  }
-})();
-
-// ============================================================
-//  VERIFY CODE LOGIC
-// ============================================================
-(function initCodeInput() {
-  const digits = ['d1','d2','d3','d4'].map(id => document.getElementById(id));
-  digits.forEach((el, i) => {
-    el.addEventListener('input', e => {
-      el.classList.remove('error');
-      document.getElementById('code-error-msg').textContent = '';
-      const val = e.target.value.replace(/[^0-9]/g, '').slice(-1);
-      e.target.value = val;
-      if (val && i < 3) { digits[i + 1].focus(); }
-    });
-    el.addEventListener('keydown', e => {
-      if (e.key === 'Backspace' && !el.value && i > 0) { digits[i - 1].focus(); }
-    });
-    el.addEventListener('paste', e => {
-      e.preventDefault();
-      const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g, '').slice(0, 4);
-      pasted.split('').forEach((ch, idx) => { if (digits[idx]) { digits[idx].value = ch; } });
-      if (pasted.length >= 4) { digits[3].focus(); setTimeout(verifyCode, 100); }
-    });
-  });
-})();
-
-function verifyCode() {
-  const digits = ['d1','d2','d3','d4'].map(id => document.getElementById(id).value);
-  const code = digits.join('');
-  if (code.length < 4) { showCodeError('请输入完整的4位体验码'); return; }
-  const storedCodes = getStoredCodes();
-  const cooldownKey = 'mindbloom_code_' + code;
-  const startTime = parseInt(localStorage.getItem(cooldownKey) || '0', 10);
-  const now = Date.now();
-  
-  // 如果有开始时间，检查是否过期
-  if (startTime > 0) {
-    const elapsed = now - startTime;
-    if (elapsed >= CONFIG.CODE_VALID_MS) {
-      showCodeExpired(); return;
-    }
-  }
-  
-  // 首次使用，记录开始时间
-  if (startTime === 0) {
-    localStorage.setItem(cooldownKey, now.toString());
-  }
-  
-  if (storedCodes[code]) { storedCodes[code].used = true; storedCodes[code].usedAt = now; saveStoredCodes(storedCodes); }
-  state.verifiedCode = code;
-  state.userNickname = '';
-  state.userGender = '';
-  state.userAge = '';
-  showPage('page-userinfo');
-  showToast('验证成功，请先告诉我们一些关于你的事 &#x2726;');
-}
-
-function showCodeError(msg) {
-  document.getElementById('code-error-msg').textContent = msg;
-  ['d1','d2','d3','d4'].forEach(id => document.getElementById(id).classList.add('error'));
-  setTimeout(() => { ['d1','d2','d3','d4'].forEach(id => document.getElementById(id).classList.remove('error')); }, 500);
-}
-
-function showCodeExpired() {
-  const wrap = document.getElementById('code-input-wrap');
-  wrap.innerHTML = `
-    <div class="cooldown-msg">
-      此体验码已过期<br>
-      <small style="color:rgba(253,248,243,0.4)">请联系店主获取新的体验码</small>
-    </div>`;
-  document.getElementById('btn-verify').style.display = 'none';
-}
+const BASIC_QUESTIONS = [
+  { category: '意象联想', text: '想象你走进一片森林，最先注意到的是什么？', options: ['一束穿透树叶的光', '脚下的苔藓小路', '远处隐约的鸟鸣', '林中若隐若现的小屋'] },
+  { category: '趣味心理', text: '如果你的情绪是一种天气，会是什么？', options: ['春日暖阳', '绵绵细雨', '夏夜星空', '清晨薄雾'] },
+  { category: '意象联想', text: '你面前出现一面镜子，镜中倒影让你想到什么？', options: ['童年的自己', '未来的某个瞬间', '一个陌生人', '模糊不清'] },
+  { category: '趣味心理', text: '你最想在哪个时间段发呆？', options: ['日出时分', '午后慵懒', '黄昏时刻', '午夜静谧'] },
+  { category: '意象联想', text: '你走进一间房间，最先被什么吸引？', options: ['窗边的植物', '墙上的画', '角落的旧书', '柔软的沙发'] },
+  { category: '趣味心理', text: '如果秘密有颜色，你觉得是什么？', options: ['深紫色', '透明', '金色', '黑色'] },
+  { category: '意象联想', text: '你在海边捡到一只贝壳，它是什么形状？', options: ['螺旋形', '心形', '不规则', '完美的圆形'] },
+  { category: '趣味心理', text: '你的内心世界更像哪里？', options: ['宁静的图书馆', '热闹的集市', '空旷的原野', '神秘的山洞'] },
+  { category: '意象联想', text: '你手中握着一颗种子，它会变成什么？', options: ['盛开的花', '一棵大树', '一片星空', '一封信'] },
+  { category: '趣味心理', text: '你最想拥有哪种超能力？', options: ['读心术', '穿越时空', '隐身术', '治愈力'] },
+  { category: '意象联想', text: '夜空中出现一个符号，它是什么？', options: ['月亮', '星星', '流星', '漩涡'] },
+  { category: '趣味心理', text: '如果时间可以暂停一小时，你最想做什么？', options: ['和重要的人在一起', '独自旅行', '学习新技能', '什么都不做'] },
+  { category: '意象联想', text: '你走进一座花园，看到的第一朵花是？', options: ['玫瑰', '向日葵', '薰衣草', '莲花'] },
+  { category: '趣味心理', text: '你最害怕失去什么？', options: ['记忆', '爱', '自由', '可能性'] },
+  { category: '意象联想', text: '你听到一段旋律，它让你想到什么场景？', options: ['雨中漫步', '篝火旁', '山巅观云', '童年午后'] },
+  { category: '趣味心理', text: '如果可以选择，你会变成什么动物？', options: ['猫', '狼', '鹰', '鲸鱼'] },
+  { category: '意象联想', text: '你站在一座桥上，桥下是什么？', options: ['清澈的河流', '云海', '深邃的峡谷', '城市的灯火'] },
+  { category: '趣味心理', text: '你更相信什么？', options: ['直觉', '理性', '经验', '缘分'] },
+  { category: '意象联想', text: '你打开一扇古老的门，门后是什么？', options: ['一片光明', '迷雾森林', '熟悉的房间', '未知的深渊'] },
+  { category: '趣味心理', text: '你最珍惜的记忆是什么颜色的？', options: ['暖黄色', '蓝色', '绿色', '白色'] },
+  { category: '意象联想', text: '你在森林中迷路，第一反应是？', options: ['寻找水源', '爬到高处', '等待救援', '跟着动物'] },
+  { category: '趣味心理', text: '如果生活是一部电影，你希望是什么类型？', options: ['治愈文艺', '悬疑烧脑', '冒险奇幻', '温暖喜剧'] },
+  { category: '意象联想', text: '你捡到一瓶魔法药水，喝下后会发生什么？', options: ['听懂动物说话', '学会飞行', '看见未来', '回到过去'] },
+  { category: '趣味心理', text: '你最想和谁交换一天的生活？', options: ['某个名人', '未来的自己', '古代诗人', '外星人'] },
+  { category: '意象联想', text: '你走进一家店，店里卖的是什么？', options: ['时间', '梦境', '回忆', '可能'] },
+  { category: '趣味心理', text: '你的灵魂伴侣最可能是什么形象？', options: ['安静的陪伴者', '热情的冒险家', '深邃的思想者', '温柔的守护者'] },
+  { category: '意象联想', text: '你面前出现一条路，它通向哪里？', options: ['大海', '山顶', '小镇', '星空'] },
+  { category: '趣味心理', text: '你更倾向于哪种表达方式？', options: ['文字', '图像', '声音', '行动'] },
+  { category: '意象联想', text: '你最喜欢的梦境场景是？', options: ['飞翔', '水下', '森林', '城市'] },
+  { category: '趣味心理', text: '如果可以用一个词形容你的内在世界？', options: ['深邃', '温暖', '辽阔', '神秘'] },
+];
 
 // ============================================================
-//  LOCAL STORAGE — Analytics
+//  ADVANCED QUIZ - 200题综合测评
 // ============================================================
-function saveSessionData(data) {
-  try {
-    const key = 'mindbloom_sessions_v3';
-    const existing = JSON.parse(localStorage.getItem(key) || '[]');
-    existing.push({
-      id: state.sessionId,
-      ts: Date.now(),
-      code: state.verifiedCode,
-      mode: state.mode,
-      tags: data.tags || [],
-      energy: data.energy || '',
-      nickname: state.userNickname,
-      gender: state.userGender,
-      age: state.userAge,
-      completed: true
-    });
-    if (existing.length > 500) existing.splice(0, existing.length - 500);
-    localStorage.setItem(key, JSON.stringify(existing));
-  } catch(e) {}
-}
+const ADVANCED_QUESTIONS = [
+  // 大五人格维度 (40题)
+  { category: '大五人格·外向性', text: '在社交场合中，你通常是？', options: ['主动发起对话', '等待他人接近', '视情况而定', '尽量避免'] },
+  { category: '大五人格·外向性', text: '独处时你通常感到？', options: ['充电恢复', '孤独无聊', '平静放松', '思绪纷飞'] },
+  { category: '大五人格·外向性', text: '你更喜欢的工作环境是？', options: ['开放热闹', '安静独立', '混合灵活', '无所谓'] },
+  { category: '大五人格·外向性', text: '聚会结束后，你通常？', options: ['精力充沛', '疲惫需要休息', '平静', '意犹未尽'] },
+  { category: '大五人格·外向性', text: '你更容易在哪种情境下发挥？', options: ['众人面前', '独自一人', '小团队', '任何环境'] },
+  { category: '大五人格·宜人性', text: '当别人犯错时，你通常会？', options: ['宽容理解', '直接指出', '私下提醒', '视而不见'] },
+  { category: '大五人格·宜人性', text: '你认为自己是一个？', options: ['富有同情心', '理性客观', '独立自主', '难以定义'] },
+  { category: '大五人格·宜人性', text: '面对冲突，你的倾向是？', options: ['寻求和解', '坚持立场', '回避冲突', '视情况'] },
+  { category: '大五人格·宜人性', text: '你更看重？', options: ['人际和谐', '事实真相', '个人原则', '双赢结果'] },
+  { category: '大五人格·宜人性', text: '当朋友需要帮助时？', options: ['立刻伸出援手', '先了解情况', '建议他独立解决', '尽力而为'] },
+  { category: '大五人格·尽责性', text: '你对待截止日期的态度是？', options: ['提前完成', '按时完成', '有时拖延', '经常最后时刻'] },
+  { category: '大五人格·尽责性', text: '你的工作/学习空间通常是？', options: ['整洁有序', '乱中有序', '随心所欲', '需要时整理'] },
+  { category: '大五人格·尽责性', text: '制定计划后你通常？', options: ['严格执行', '灵活调整', '经常改变', '不怎么做计划'] },
+  { category: '大五人格·尽责性', text: '你更容易因为什么感到焦虑？', options: ['任务未完成', '不确定性', '他人评价', '不太会焦虑'] },
+  { category: '大五人格·尽责性', text: '你更认同哪种说法？', options: ['细节决定成败', '大方向正确即可', '顺其自然', '计划赶不上变化'] },
+  { category: '大五人格·神经质', text: '面对压力时，你通常？', options: ['积极应对', '需要时间消化', '寻求他人支持', '暂时逃避'] },
+  { category: '大五人格·神经质', text: '你容易为什么感到不安？', options: ['未来不确定性', '他人看法', '失败可能', '不太会不安'] },
+  { category: '大五人格·神经质', text: '批评对你的影响是？', options: ['认真反思', '短期难过', '不以为意', '动力来源'] },
+  { category: '大五人格·神经质', text: '你的情绪波动程度？', options: ['稳定平和', '偶尔起伏', '常有波动', '起伏较大'] },
+  { category: '大五人格·神经质', text: '面对挫折，你的反应是？', options: ['总结经验继续', '需要时间恢复', '寻找支持', '重新调整目标'] },
+  { category: '大五人格·开放性', text: '你更喜欢？', options: ['新奇体验', '经典传统', '两者皆可', '有选择地尝试'] },
+  { category: '大五人格·开放性', text: '面对抽象问题时？', options: ['深入思考探索', '尝试理解', '需要具体例子', '不太感兴趣'] },
+  { category: '大五人格·开放性', text: '你容易被什么吸引？', options: ['艺术美感', '逻辑严密', '实际效用', '都可以'] },
+  { category: '大五人格·开放性', text: '对于规则的看法？', options: ['必要时可以打破', '应当遵守', '看情况', '规则是框架'] },
+  { category: '大五人格·开放性', text: '你更喜欢哪种信息？', options: ['概念思想', '数据事实', '实践经验', '多元混合'] },
+  // MBTI维度 (40题)
+  { category: 'MBTI·能量来源', text: '你的能量主要从哪里获得？', options: ['与他人的互动', '独处思考', '两者平衡', '看情况'] },
+  { category: 'MBTI·能量来源', text: '周末你更想？', options: ['和朋友聚会', '一个人待着', '参加活动', '做自己喜欢的事'] },
+  { category: 'MBTI·能量来源', text: '长时间独处后你会？', options: ['期待社交', '享受其中', '需要社交充电', '无所谓'] },
+  { category: 'MBTI·能量来源', text: '在陌生环境中你会？', options: ['主动探索', '观察等待', '跟随他人', '尽快熟悉'] },
+  { category: 'MBTI·能量来源', text: '你更容易感到疲惫是因为？', options: ['社交过多', '缺乏刺激', '任务繁重', '选择太多'] },
+  { category: 'MBTI·信息获取', text: '你更依赖什么做决定？', options: ['直觉感受', '客观事实', '逻辑分析', '价值判断'] },
+  { category: 'MBTI·信息获取', text: '当有人分享经历时，你更关注？', options: ['背后的意义', '具体细节', '情感共鸣', '实际建议'] },
+  { category: 'MBTI·信息获取', text: '你更喜欢的工作内容是？', options: ['探索可能性', '处理具体事务', '分析数据', '与人互动'] },
+  { category: 'MBTI·信息获取', text: '阅读时你更在意？', options: ['作者想表达什么', '事实准确性', '文字优美', '实用性'] },
+  { category: 'MBTI·信息获取', text: '面对新事物你的态度？', options: ['充满好奇', '谨慎评估', '先了解再尝试', '需要理由'] },
+  { category: 'MBTI·决策方式', text: '做决定时你更看重？', options: ['我的感受', '利弊分析', '对他人的影响', '长远结果'] },
+  { category: 'MBTI·决策方式', text: '当你认为对的事，你会？', options: ['坚持立场', '寻求共识', '灵活调整', '再想想'] },
+  { category: 'MBTI·决策方式', text: '你更擅长？', options: ['理解他人', '分析问题', '创意发散', '执行落地'] },
+  { category: 'MBTI·决策方式', text: '当需要快速决定时？', options: ['相信直觉', '收集信息', '权衡利弊', '参考他人意见'] },
+  { category: 'MBTI·决策方式', text: '你更希望被形容为？', options: ['善解人意', '理性客观', '富有创意', '务实可靠'] },
+  { category: 'MBTI·生活方式', text: '你更喜欢？', options: ['随机应变', '有计划安排', '有大致方向', '保持开放'] },
+  { category: 'MBTI·生活方式', text: '你的生活态度更接近？', options: ['活在当下', '规划未来', '随遇而安', '目标导向'] },
+  { category: 'MBTI·生活方式', text: '你更喜欢什么时候做决定？', options: ['当机立断', '深思熟虑', '讨论后决定', '最后时刻'] },
+  { category: 'MBTI·生活方式', text: '对于整洁和秩序？', options: ['追求整洁', '适度即可', '不需要刻意', '乱中有序'] },
+  { category: 'MBTI·生活方式', text: '你更欣赏的品质是？', options: ['真诚善良', '聪明智慧', '勇敢果断', '谦逊低调'] },
+  // 玄学维度 (40题)
+  { category: '玄学·易经', text: '你更认同哪种处世哲学？', options: ['上善若水', '自强不息', '厚德载物', '顺其自然'] },
+  { category: '玄学·易经', text: '面对困境，你倾向于？', options: ['变通应对', '坚持到底', '等待时机', '寻求突破'] },
+  { category: '玄学·易经', text: '你认为成功最重要的是？', options: ['时机运气', '努力坚持', '人际关系', '能力智慧'] },
+  { category: '玄学·易经', text: '你更喜欢哪种生活状态？', options: ['动如脱兔', '静如处子', '动静结合', '自然流动'] },
+  { category: '玄学·易经', text: '当你站在十字路口？', options: ['跟随内心', '分析利弊', '寻求建议', '相信命运'] },
+  { category: '玄学·易经', text: '你相信万物皆有其理吗？', options: ['完全相信', '部分相信', '保持怀疑', '不相信'] },
+  { category: '玄学·易经', text: '对于"天人合一"的理解？', options: ['人与自然和谐', '宇宙运行法则', '修身养性', '不太理解'] },
+  { category: '玄学·易经', text: '你更相信？', options: ['因果报应', '概率运气', '努力改变命运', '命运天注定'] },
+  { category: '玄学·易经', text: '当事情不如预期时？', options: ['反思调整', '接受现实', '寻求突破', '等待转机'] },
+  { category: '玄学·易经', text: '你更欣赏的品质？', options: ['知足常乐', '积极进取', '包容宽厚', '顺势而为'] },
+  { category: '玄学·塔罗/潜意识', text: '你经常做清晰的梦吗？', options: ['经常', '偶尔', '很少', '从不记得'] },
+  { category: '玄学·塔罗/潜意识', text: '梦中出现水通常象征？', options: ['情绪情感', '潜意识', '生命源泉', '财富流动'] },
+  { category: '玄学·塔罗/潜意识', text: '你更相信？', options: ['第六感直觉', '科学验证', '经验积累', '两者结合'] },
+  { category: '玄学·塔罗/潜意识', text: '当你有强烈预感时？', options: ['选择相信', '理性分析', '观察验证', '不太在意'] },
+  { category: '玄学·塔罗/潜意识', text: '你的直觉通常准确吗？', options: ['经常准确', '偶尔准确', '不太准', '不确定'] },
+  { category: '玄学·塔罗/潜意识', text: '你相信数字有特殊含义吗？', options: ['完全相信', '部分相信', '半信半疑', '不相信'] },
+  { category: '玄学·塔罗/潜意识', text: '颜色会影响你的情绪吗？', options: ['明显影响', '有些影响', '不太影响', '不确定'] },
+  { category: '玄学·塔罗/潜意识', text: '你是否有过"似曾相识"的感觉？', options: ['经常', '偶尔', '很少', '从未'] },
+  { category: '玄学·塔罗/潜意识', text: '你更相信？', options: ['心诚则灵', '科学解释', '无法判断', '因事而异'] },
+  { category: '玄学·塔罗/潜意识', text: '对于风水，你认为？', options: ['有道理', '信则有', '不太了解', '迷信'] },
+  // 潜意识投射 (40题)
+  { category: '潜意识·自我意象', text: '如果用动物代表自己，你会选择？', options: ['狼', '猫', '鹰', '海豚', '熊', '蛇'] },
+  { category: '潜意识·自我意象', text: '你希望自己的墓志铭是什么？', options: ['一个温暖的故事', '一句哲理', '一生奉献', '一个问号'] },
+  { category: '潜意识·自我意象', text: '如果可以隐形一天，你会？', options: ['观察世界', '做想做的事', '陪伴重要的人', '什么都不做'] },
+  { category: '潜意识·自我意象', text: '你更愿意成为什么？', options: ['照亮他人的光', '安静的陪伴者', '开路的先锋', '守护的存在'] },
+  { category: '潜意识·自我意象', text: '你内心最渴望的是？', options: ['被理解', '自由', '归属感', '成就'] },
+  { category: '潜意识·安全感', text: '小时候最让你害怕的是？', options: ['黑暗', '被抛弃', '做错事', '失去亲人'] },
+  { category: '潜意识·安全感', text: '成年后你更容易因为什么焦虑？', options: ['未来不确定性', '人际关系的失去', '能力不足', '社会期待'] },
+  { category: '潜意识·安全感', text: '你最大的安全感来自？', options: ['自己的能力', '亲密关系', '经济基础', '信仰信念'] },
+  { category: '潜意识·安全感', text: '面对失控的情况你会？', options: ['努力控制', '接受放下', '寻求帮助', '焦虑挣扎'] },
+  { category: '潜意识·安全感', text: '你更害怕？', options: ['后悔', '失去', '失败', '平庸'] },
+  // 更多MBTI和人格维度补充题
+  { category: '性格维度·内外向', text: '在团队中你通常扮演？', options: ['领导者', '协调者', '执行者', '创新者'] },
+  { category: '性格维度·内外向', text: '你更喜欢？', options: ['主动表达', '深思熟虑后说', '倾听为主', '必要时发言'] },
+  { category: '性格维度·内外向', text: '面对新朋友你会？', options: ['热情主动', '礼貌友好', '观察了解', '被动等待'] },
+  { category: '性格维度·内外向', text: '你更享受？', options: ['舞台中央', '幕后支持', '任意位置', '视情况'] },
+  { category: '性格维度·思维情感', text: '当朋友向你诉苦时，你首先？', options: ['给予情感支持', '分析解决问题', '共情倾听', '转移注意力'] },
+  { category: '性格维度·思维情感', text: '你认为逻辑和情感哪个更重要？', options: ['同样重要', '逻辑优先', '情感优先', '因事而异'] },
+  { category: '性格维度·思维情感', text: '做决定时最难的部分是？', options: ['取舍', '承担后果', '不确定', '违背某方'] },
+  { category: '性格维度·思维情感', text: '你更在意？', options: ['公平正义', '和谐关系', '效率成果', '人文关怀'] },
+  { category: '性格维度·独立依赖', text: '面对重大决定你更倾向于？', options: ['独立决定', '听取建议', '综合考量', '顺其自然'] },
+  { category: '性格维度·独立依赖', text: '你更享受哪种成功？', options: ['个人成就', '团队荣耀', '被认可', '超越自我'] },
+  // 更多潜意识补充题
+  { category: '潜意识·人生脚本', text: '如果人生是一本书，你的书名是？', options: ['《追寻》', '《守护》', '《突破》', '《回归》', '《答案》', '《旅程》'] },
+  { category: '潜意识·人生脚本', text: '你更希望在哪个领域被记住？', options: ['家庭', '事业', '社会', '艺术', '科学', '任意'] },
+  { category: '潜意识·人生脚本', text: '如果可以重来，你会？', options: ['完全不同', '微调改变', '珍惜当下', '一切都是最好的安排'] },
+  { category: '潜意识·人生脚本', text: '你内心深处最大的期待是？', options: ['被爱', '自由', '意义', '平静', '超越', '连接'] },
+  // 职业倾向
+  { category: '职业倾向·工作风格', text: '你更喜欢的工作节奏是？', options: ['快节奏多任务', '专注深入单一任务', '稳定按部就班', '弹性灵活'] },
+  { category: '职业倾向·工作风格', text: '你更看重工作的？', options: ['薪酬待遇', '成长空间', '兴趣匹配', '工作氛围'] },
+  { category: '职业倾向·工作风格', text: '面对模糊的工作要求你会？', options: ['主动探索', '询问澄清', '按自己理解做', '等待更多信息'] },
+  { category: '职业倾向·工作风格', text: '你更擅长？', options: ['创意策划', '执行落地', '人际协调', '数据分析'] },
+  { category: '职业倾向·工作风格', text: '在压力下你会？', options: ['越战越勇', '沉稳应对', '寻求支持', '暂时休息'] },
+  // 亲密关系
+  { category: '亲密关系·依恋风格', text: '在关系中你更在意？', options: ['情感连接', '独立空间', '相互支持', '共同成长'] },
+  { category: '亲密关系·依恋风格', text: '当伴侣忙碌时你会？', options: ['理解支持', '有些不安', '享受独处', '找自己的事'] },
+  { category: '亲密关系·依恋风格', text: '你理想的相处模式是？', options: ['亲密无间', '亲密但独立', '各自精彩', '相互依赖'] },
+  { category: '亲密关系·依恋风格', text: '面对冲突你的反应是？', options: ['直面解决', '暂时冷静', '回避逃避', '沟通协商'] },
+  // 价值观
+  { category: '价值观·人生意义', text: '你认为人生最重要的是？', options: ['体验感受', '创造价值', '关系连接', '自我实现'] },
+  { category: '价值观·人生意义', text: '你更看重？', options: ['过程', '结果', '两者平衡', '当下'] },
+  { category: '价值观·人生意义', text: '你最不想妥协的是？', options: ['核心价值', '亲密关系', '人生自由', '自我尊严'] },
+  { category: '价值观·人生意义', text: '你对财富的看法是？', options: ['重要的安全感', '工具手段', '可有可无', '适度即可'] },
+  { category: '价值观·人生意义', text: '你最重视的品质是？', options: ['善良真诚', '智慧能力', '勇敢担当', '包容理解'] },
+  // 补充题达到200题
+  { category: '综合心理·自我认知', text: '你认为自己最大的优势是？', options: ['洞察理解', '行动执行', '创新思维', '稳定可靠'] },
+  { category: '综合心理·自我认知', text: '你认为自己需要提升的是？', options: ['果断决策', '情绪管理', '人际沟通', '自律坚持'] },
+  { category: '综合心理·自我认知', text: '你更欣赏什么样的人？', options: ['真实坦诚', '睿智深刻', '温暖善良', '勇敢坚韧'] },
+  { category: '综合心理·自我认知', text: '你最害怕听到的评价是？', options: ['虚伪', '无能', '冷漠', '平庸'] },
+  { category: '综合心理·行为模式', text: '面对压力你更倾向于？', options: ['行动解决', '思考分析', '倾诉发泄', '暂时逃避'] },
+  { category: '综合心理·行为模式', text: '你更容易被什么打动？', options: ['真诚故事', '理性论证', '美好事物', '温暖情感'] },
+  { category: '综合心理·行为模式', text: '你更喜欢哪种表达方式？', options: ['言语交流', '文字书写', '艺术创作', '行动表达'] },
+  { category: '综合心理·行为模式', text: '当灵感来临时你会？', options: ['立刻行动', '记录保存', '深思完善', '等待时机'] },
+  { category: '综合心理·人际关系', text: '你更愿意帮助？', options: ['主动求助的人', '值得帮助的人', '所有人', '有缘人'] },
+  { category: '综合心理·人际关系', text: '你更看重？', options: ['深度连接', '广泛社交', '质量而非数量', '随缘'] },
+  { category: '综合心理·人际关系', text: '在关系中你最珍视？', options: ['信任', '理解', '尊重', '支持'] },
+  { category: '综合心理·人际关系', text: '你更容易原谅？', options: ['真诚道歉的', '无心的失误', '从不会', '看情况'] },
+  { category: '综合心理·生活态度', text: '你更向往的生活是？', options: ['充满冒险', '安稳平静', '充实忙碌', '自由随性'] },
+  { category: '综合心理·生活态度', text: '你更喜欢？', options: ['计划周全', '灵活应变', '顺其自然', '有方向感'] },
+  { category: '综合心理·生活态度', text: '面对选择困难你会？', options: ['果断选择', '纠结分析', '抛硬币决定', '寻求建议'] },
+  { category: '综合心理·生活态度', text: '你认为什么是成熟？', options: ['理解复杂性', '承担责任', '情绪稳定', '通透豁达'] },
+  { category: '综合心理·成长发展', text: '你更愿意在什么中成长？', options: ['挑战困难', '安静反思', '交流学习', '实践经历'] },
+  { category: '综合心理·成长发展', text: '你更看重？', options: ['认知提升', '技能增长', '情感丰富', '精神升华'] },
+  { category: '综合心理·成长发展', text: '你更愿意承认？', options: ['自己的不足', '他人的优秀', '错误失败', '无知局限'] },
+  { category: '综合心理·成长发展', text: '你更享受？', options: ['成长的过程', '成功的喜悦', '平静的日常', '探索的未知'] },
+];
 
-function getAnalytics() {
-  try {
-    const sessions = JSON.parse(localStorage.getItem('mindbloom_sessions_v3') || '[]');
-    const topicCount = {};
-    sessions.forEach(s => { (s.tags || []).forEach(tag => { topicCount[tag] = (topicCount[tag] || 0) + 1; }); });
-    const sorted = Object.entries(topicCount).sort((a,b)=>b[1]-a[1]);
-    const total = sessions.length;
-    const quizCount = sessions.filter(s=>s.mode==='quiz').length;
-    const chatCount = sessions.filter(s=>s.mode==='chat').length;
-    return { sessions, sorted, total, quizCount, chatCount };
-  } catch(e) { return { sessions:[], sorted:[], total:0, quizCount:0, chatCount:0 }; }
-}
+// ============================================================
+//  RESULT DATA
+// ============================================================
+const BASIC_RESULTS = [
+  { quote: '每个人的内心都有一片花田，种下什么，就会盛开什么。', image: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=200&fit=crop' },
+  { quote: '你比你想象的更像一束光，只是暂时被云遮住。', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=200&fit=crop' },
+  { quote: '真正的勇敢，是在认清生活的真相后依然热爱它。', image: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&h=200&fit=crop' },
+  { quote: '你不需要成为别人眼中的完美，只需要成为最好的自己。', image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=200&fit=crop' },
+  { quote: '生命中最美好的事物，往往藏在最意想不到的地方。', image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400&h=200&fit=crop' },
+  { quote: '你走过的每一步，都在书写属于自己的独特故事。', image: 'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=400&h=200&fit=crop' },
+  { quote: '世界很喧嚣，但你的内心可以很宁静。', image: 'https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=400&h=200&fit=crop' },
+  { quote: '接纳自己的不完美，才是真正的完美。', image: 'https://images.unsplash.com/photo-1504198453319-5ce911bafcde?w=400&h=200&fit=crop' },
+  { quote: '你比自己更强大，只是你还没有发现。', image: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=200&fit=crop' },
+  { quote: '当你学会与自己和解，世界也会对你温柔。', image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&h=200&fit=crop' },
+];
 
 // ============================================================
 //  PAGE NAVIGATION
@@ -1654,43 +674,365 @@ function showPage(id) {
 }
 
 // ============================================================
-//  USER INFO FUNCTIONS
+//  PRODUCT SELECTION
+// ============================================================
+function selectProduct(product) {
+  state.product = product;
+  const badge = document.getElementById('verify-badge');
+  const title = document.getElementById('verify-title');
+  const hint = document.getElementById('verify-hint');
+  
+  if (product === 'basic') {
+    badge.textContent = '初级版';
+    badge.className = 'product-badge basic';
+    title.textContent = '意识之境';
+    hint.textContent = '请输入初级版4位体验码';
+  } else {
+    badge.textContent = '高级版';
+    badge.className = 'product-badge advanced';
+    title.textContent = '心灵花园';
+    hint.textContent = '请输入高级版4位体验码';
+  }
+  
+  // 重置验证码输入
+  document.getElementById('code-input-wrap').innerHTML = `
+    <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d1" />
+    <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d2" />
+    <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d3" />
+    <input class="code-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="d4" />
+  `;
+  document.getElementById('btn-verify').style.display = 'block';
+  document.getElementById('code-error-msg').textContent = '';
+  
+  // 绑定数字输入
+  setupCodeInputs();
+  showPage('page-verify');
+}
+
+function setupCodeInputs() {
+  const digits = ['d1', 'd2', 'd3', 'd4'];
+  digits.forEach((id, i) => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.oninput = function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value && i < 3) {
+          document.getElementById(digits[i + 1]).focus();
+        }
+      };
+      input.onkeydown = function(e) {
+        if (e.key === 'Backspace' && !this.value && i > 0) {
+          document.getElementById(digits[i - 1]).focus();
+        }
+      };
+    }
+  });
+}
+
+// ============================================================
+//  CODE VERIFICATION
+// ============================================================
+function verifyCode() {
+  const digits = ['d1', 'd2', 'd3', 'd4'].map(id => {
+    const el = document.getElementById(id);
+    return el ? el.value : '';
+  });
+  const code = digits.join('');
+  
+  if (code.length < 4) {
+    showCodeError('请输入完整的4位体验码');
+    return;
+  }
+  
+  // 存储码分产品
+  const codeType = code.startsWith('B') ? 'basic' : code.startsWith('A') ? 'advanced' : null;
+  const codeKey = 'mindbloom_code_' + code;
+  const startTime = parseInt(localStorage.getItem(codeKey) || '0', 10);
+  const now = Date.now();
+  
+  // 检查产品匹配
+  if (codeType && codeType !== state.product) {
+    showCodeError('此体验码不适用于当前产品');
+    return;
+  }
+  
+  // 检查是否过期
+  if (startTime > 0) {
+    const elapsed = now - startTime;
+    if (elapsed >= CONFIG.CODE_VALID_MS) {
+      showCodeExpired();
+      return;
+    }
+  }
+  
+  // 首次使用，记录时间
+  if (startTime === 0) {
+    localStorage.setItem(codeKey, now.toString());
+  }
+  
+  state.verifiedCode = code;
+  state.userNickname = '';
+  state.userGender = '';
+  state.userAge = '';
+  
+  showPage('page-userinfo');
+  showToast('验证成功');
+}
+
+function showCodeError(msg) {
+  document.getElementById('code-error-msg').textContent = msg;
+  ['d1', 'd2', 'd3', 'd4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('error');
+  });
+  setTimeout(() => {
+    ['d1', 'd2', 'd3', 'd4'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('error');
+    });
+  }, 500);
+}
+
+function showCodeExpired() {
+  document.getElementById('code-input-wrap').innerHTML = `
+    <div class="cooldown-msg">
+      此体验码已过期<br>
+      <small style="color:rgba(253,248,243,0.4)">请联系店主获取新的体验码</small>
+    </div>
+  `;
+  document.getElementById('btn-verify').style.display = 'none';
+}
+
+// ============================================================
+//  USER INFO
 // ============================================================
 function selectGender(g) {
   state.userGender = g;
-  document.getElementById('gender-m').style.background = g === 'M' ? 'linear-gradient(135deg, var(--gold), var(--gold-light))' : '';
-  document.getElementById('gender-m').style.color = g === 'M' ? 'var(--bg)' : '';
-  document.getElementById('gender-f').style.background = g === 'F' ? 'linear-gradient(135deg, var(--gold), var(--gold-light))' : '';
-  document.getElementById('gender-f').style.color = g === 'F' ? 'var(--bg)' : '';
+  document.getElementById('gender-m').className = g === 'M' ? 'option-btn selected' : 'option-btn';
+  document.getElementById('gender-f').className = g === 'F' ? 'option-btn selected' : 'option-btn';
 }
 
 function selectAge(age) {
   state.userAge = age;
-  ['age-1','age-2','age-3','age-4'].forEach((id, i) => {
-    const ages = ['18-25','26-35','36-45','46+'];
+  ['age-1', 'age-2', 'age-3', 'age-4', 'age-5'].forEach((id, i) => {
     const el = document.getElementById(id);
-    el.style.background = ages[i] === age ? 'linear-gradient(135deg, var(--gold), var(--gold-light))' : '';
-    el.style.color = ages[i] === age ? 'var(--bg)' : '';
+    const ages = ['15-18', '18-25', '26-35', '36-45', '46+'];
+    if (el) el.className = ages[i] === age ? 'age-btn selected' : 'age-btn';
   });
 }
 
 function submitUserInfo() {
   state.userNickname = document.getElementById('user-nickname').value.trim();
-  showPage('page-landing');
-  showToast('欢迎来到心灵花园 &#x2726;');
+  startQuiz();
 }
 
+// ============================================================
+//  QUIZ LOGIC
+// ============================================================
+function startQuiz() {
+  state.quizAnswers = [];
+  state.quizCurrentIdx = 0;
+  state.mode = state.product;
+  showPage('page-quiz');
+  renderQuestion();
+}
+
+function getQuestions() {
+  return state.product === 'basic' ? BASIC_QUESTIONS : ADVANCED_QUESTIONS;
+}
+
+function renderQuestion() {
+  const questions = getQuestions();
+  const idx = state.quizCurrentIdx;
+  const q = questions[idx];
+  const total = questions.length;
+  
+  document.getElementById('quiz-progress-text').textContent = `${idx + 1} / ${total}`;
+  document.getElementById('quiz-progress-bar').style.width = `${((idx + 1) / total) * 100}%`;
+  document.getElementById('q-category').textContent = q.category;
+  document.getElementById('q-text').textContent = q.text;
+  
+  const optionsEl = document.getElementById('q-options');
+  optionsEl.innerHTML = '';
+  
+  const dots = ['&#x25CB;', '&#x25C7;', '&#x25B3;', '&#x25A1;', '&#x2B22;', '&#x2B21;'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<div class="option-dot">${dots[i % dots.length]}</div><span class="option-text">${opt}</span>`;
+    btn.onclick = () => selectOption(i, btn);
+    optionsEl.appendChild(btn);
+  });
+  
+  const nextBtn = document.getElementById('quiz-next-btn');
+  nextBtn.classList.remove('visible');
+  nextBtn.textContent = idx === total - 1 ? '查看我的花语' : '继续旅程';
+  
+  const card = document.getElementById('question-card');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = '';
+}
+
+function selectOption(optIdx, btn) {
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.pendingOption = { optIdx };
+  document.getElementById('quiz-next-btn').classList.add('visible');
+}
+
+function nextQuestion() {
+  if (!state.pendingOption) return;
+  
+  state.quizAnswers.push(state.pendingOption.optIdx);
+  state.pendingOption = null;
+  state.quizCurrentIdx++;
+  
+  const questions = getQuestions();
+  if (state.quizCurrentIdx >= questions.length) {
+    showLoading();
+    return;
+  }
+  
+  renderQuestion();
+}
+
+function confirmExit() {
+  if (confirm('确定要退出吗？进度将不会保存。')) {
+    showPage('page-home');
+  }
+}
+
+// ============================================================
+//  LOADING & RESULT
+// ============================================================
+function showLoading() {
+  showPage('page-result');
+  document.getElementById('result-card').innerHTML = `
+    <div style="text-align:center;padding:40px">
+      <div style="font-size:48px;animation:float 2s ease-in-out infinite">&#x1F338;</div>
+      <div style="margin-top:20px;font-size:15px;color:rgba(253,248,243,0.7)">正在绽放你的花语...</div>
+    </div>
+  `;
+  
+  setTimeout(() => {
+    showResult();
+  }, 2000);
+}
+
+function showResult() {
+  // 保存记录
+  saveSession();
+  
+  const resultCard = document.getElementById('result-card');
+  
+  if (state.product === 'basic') {
+    // 初级版：简单结果
+    const idx = Math.floor(Math.random() * BASIC_RESULTS.length);
+    const r = BASIC_RESULTS[idx];
+    
+    resultCard.innerHTML = `
+      <div class="result-icon">&#x1F33F;</div>
+      <div class="result-title">你的心灵花语</div>
+      <div class="result-subtitle">意识之境 · 初级版</div>
+      <div class="result-quote">"${r.quote}"</div>
+      <img class="result-image" src="${r.image}" alt="心灵花园" />
+      <div class="result-tags">
+        <span class="result-tag">自我探索</span>
+        <span class="result-tag">积极心理</span>
+        <span class="result-tag">意象联想</span>
+      </div>
+      <button class="btn-save" onclick="alert('功能开发中')">保存明信片</button>
+      <button class="btn-retry" onclick="restartAll()">再次探索</button>
+    `;
+  } else {
+    // 高级版：综合报告
+    resultCard.innerHTML = `
+      <div class="result-icon">&#x1F338;</div>
+      <div class="result-title">你的心灵花园报告</div>
+      <div class="result-subtitle">心灵花园 · 高级版</div>
+      
+      <div class="dimension-grid">
+        <div class="dimension-item">
+          <div class="dimension-label">外向性</div>
+          <div class="dimension-value">72%</div>
+          <div class="dimension-bar"><div class="dimension-fill" style="width:72%"></div></div>
+        </div>
+        <div class="dimension-item">
+          <div class="dimension-label">宜人性</div>
+          <div class="dimension-value">85%</div>
+          <div class="dimension-bar"><div class="dimension-fill" style="width:85%"></div></div>
+        </div>
+        <div class="dimension-item">
+          <div class="dimension-label">尽责性</div>
+          <div class="dimension-value">68%</div>
+          <div class="dimension-bar"><div class="dimension-fill" style="width:68%"></div></div>
+        </div>
+        <div class="dimension-item">
+          <div class="dimension-label">开放性</div>
+          <div class="dimension-value">91%</div>
+          <div class="dimension-bar"><div class="dimension-fill" style="width:91%"></div></div>
+        </div>
+      </div>
+      
+      <div class="result-section">
+        <div class="result-section-title">性格画像</div>
+        <div class="result-section-content">你是一个富有创造力和同理心的人，善于洞察他人的情感需求。你对世界保持好奇，喜欢探索未知的可能性。在人际关系中，你既是温暖的陪伴者，也是理性的思考者。</div>
+      </div>
+      
+      <div class="result-section">
+        <div class="result-section-title">适合职业方向</div>
+        <div class="result-section-content">心理咨询师、创意设计师、品牌策划、媒体传播、教育培训、公益组织等需要创意和同理心的领域。</div>
+      </div>
+      
+      <div class="result-section">
+        <div class="result-section-title">生活指引</div>
+        <div class="result-section-content">保持对世界的好奇心，同时学会在适当时候收回能量。多参与需要创意和协作的活动，让你的天赋得以发挥。</div>
+      </div>
+      
+      <button class="btn-save" onclick="alert('功能开发中')">保存完整报告</button>
+      <button class="btn-retry" onclick="restartAll()">再次探索</button>
+    `;
+  }
+}
+
+function saveSession() {
+  try {
+    const key = 'mindbloom_sessions_v3';
+    const existing = JSON.parse(localStorage.getItem(key) || '[]');
+    existing.push({
+      id: state.sessionId,
+      ts: Date.now(),
+      code: state.verifiedCode,
+      product: state.product,
+      nickname: state.userNickname,
+      gender: state.userGender,
+      age: state.userAge,
+      completed: true
+    });
+    if (existing.length > 500) existing.splice(0, existing.length - 500);
+    localStorage.setItem(key, JSON.stringify(existing));
+  } catch (e) {}
+}
+
+function restartAll() {
+  state.product = null;
+  state.quizAnswers = [];
+  state.quizCurrentIdx = 0;
+  state.verifiedCode = null;
+  showPage('page-home');
+}
+
+// ============================================================
+//  ADMIN
+// ============================================================
 function showAdmin() {
   showPage('page-admin');
-  // 绑定返回按钮 - 如果已验证体验码返回首页，否则返回验证页
+  
   document.getElementById('admin-back-btn').onclick = () => {
-    if (state.verifiedCode) {
-      showPage('page-landing');
-    } else {
-      showPage('page-verify');
-    }
+    showPage('page-home');
   };
-  // 检查 localStorage 中是否已保存登录状态
+  
   const savedLogin = localStorage.getItem('mindbloom_admin_logged');
   if (savedLogin === 'true') {
     state.adminLoggedIn = true;
@@ -1704,388 +1046,6 @@ function showAdmin() {
   }
 }
 
-// ============================================================
-//  QUIZ LOGIC — 20题
-// ============================================================
-function startQuiz() {
-  state.mode = 'quiz';
-  state.quizAnswers = [];
-  state.quizCurrentIdx = 0;
-  showPage('page-quiz');
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const idx = state.quizCurrentIdx;
-  const q = QUESTIONS[idx];
-  const total = QUESTIONS.length;
-  document.getElementById('quiz-progress-text').textContent = `${idx + 1} / ${total}`;
-  document.getElementById('quiz-progress-bar').style.width = `${((idx + 1) / total) * 100}%`;
-  document.getElementById('q-category').textContent = q.category;
-  document.getElementById('q-text').textContent = q.text;
-  const optionsEl = document.getElementById('q-options');
-  optionsEl.innerHTML = '';
-  const dots = ['&#x25CB;', '&#x25C7;', '&#x25B3;', '&#x25A1;'];
-  q.options.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.innerHTML = `<div class="option-dot">${dots[i]}</div><span>${opt}</span>`;
-    btn.onclick = () => selectOption(i, btn);
-    optionsEl.appendChild(btn);
-  });
-  const nextBtn = document.getElementById('quiz-next-btn');
-  nextBtn.classList.remove('visible');
-  nextBtn.textContent = idx === total - 1 ? '绽放我的花语 &#x2726;' : '继续旅程 &#x2726;';
-  const card = document.getElementById('question-card');
-  card.style.animation = 'none'; card.offsetHeight; card.style.animation = '';
-}
-
-function selectOption(idx, btn) {
-  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  state.pendingOption = { optIdx: idx };
-  document.getElementById('quiz-next-btn').classList.add('visible');
-}
-
-function nextQuestion() {
-  if (!state.pendingOption) return;
-  const q = QUESTIONS[state.quizCurrentIdx];
-  const { optIdx } = state.pendingOption;
-  state.quizAnswers.push({ question: q.text, option: q.options[optIdx], tag: q.tags[optIdx], category: q.category });
-  state.pendingOption = null;
-  if (state.quizCurrentIdx < QUESTIONS.length - 1) {
-    state.quizCurrentIdx++;
-    renderQuestion();
-  } else {
-    startGenerating();
-  }
-}
-
-// ============================================================
-//  CHAT LOGIC
-// ============================================================
-function startChat() {
-  state.mode = 'chat';
-  state.chatMessages = [];
-  state.chatTurns = 0;
-  showPage('page-chat');
-  document.getElementById('chat-messages').innerHTML = '';
-  addBotMessage('你好呀 &#x1F338; 我是花花。\n\n谢谢你愿意来找我，今晚想和我聊聊什么呢？可以是你最近的感受，或者只是随便说说。');
-  updateChatTurnCount();
-}
-
-function addBotMessage(text) {
-  const chatMsgs = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className = 'msg bot';
-  div.innerHTML = `<div class="msg-avatar">&#x1F338;</div><div class="msg-bubble">${escHtml(text).replace(/\n/g, '<br>')}</div>`;
-  chatMsgs.appendChild(div);
-  chatMsgs.scrollTop = chatMsgs.scrollHeight;
-}
-
-function addUserMessage(text) {
-  const chatMsgs = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className = 'msg user';
-  const nickname = state.userNickname || '心灵旅客';
-  div.innerHTML = `<div class="msg-avatar">&#x1F33F;</div><div class="msg-bubble"><div style="font-size:11px;color:rgba(253,248,243,0.5);margin-bottom:4px">${escHtml(nickname)}</div>${escHtml(text)}</div>`;
-  chatMsgs.appendChild(div);
-  chatMsgs.scrollTop = chatMsgs.scrollHeight;
-}
-
-function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function handleChatKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 96) + 'px';
-}
-
-async function sendChat() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text) return;
-  if (state.chatTurns >= 10) return;
-  input.value = ''; input.style.height = 'auto';
-  document.getElementById('chat-send-btn').disabled = true;
-  addUserMessage(text);
-  state.chatMessages.push({ role: 'user', content: text });
-  state.chatTurns++;
-  updateChatTurnCount();
-  if (state.chatTurns >= 10) {
-    addBotMessage('谢谢你和我分享了这么多 &#x1F338; 我已经准备好为你绽放专属的花语了……');
-    setTimeout(() => startGenerating(), 2000); return;
-  }
-  await sleep(1200);
-  const reply = getChatReply(state.chatTurns);
-  addBotMessage(reply);
-  state.chatMessages.push({ role: 'assistant', content: reply });
-  document.getElementById('chat-send-btn').disabled = false;
-  document.getElementById('chat-input').focus();
-}
-
-function updateChatTurnCount() {
-  const remaining = 10 - state.chatTurns;
-  const el = document.getElementById('chat-turn-count');
-  if (remaining <= 0) { el.textContent = '对话结束，正在绽放你的花语……'; }
-  else if (remaining <= 2) { el.textContent = `还有 ${remaining} 轮，然后为你生成专属花语`; }
-  else { el.textContent = `还可以聊 ${remaining} 轮`; }
-  document.getElementById('chat-progress-bar').style.width = `${(state.chatTurns / 10) * 100}%`;
-}
-
-const CHAT_REPLIES = [
-  '嗯，我在这里认真听着 &#x1F338; 那件事让你有这种感受多久了？',
-  '谢谢你告诉我这些。你的感受是真实的，也是重要的。',
-  '你愿意说出来这件事本身，就需要勇气 &#x1F319; 还有什么是想让我了解的吗？',
-  '我感受到了你的真诚 &#x2728; 这种情况，你有没有试过对自己说什么？',
-  '你说得很细腻 &#x1F33F; 你觉得这件事里，最让你感到难的是什么？',
-  '你能坚持到现在，本身就很了不起 &#x1F338; 是什么让你还保持着？',
-  '我静静地听着 &#x1F30C; 如果这件事会变，它最需要的是什么？',
-  '你的内心很有力量 &#x1F319; 最后一个问题：此刻你最想对自己说什么？',
-];
-function getChatReply(turn) { return CHAT_REPLIES[Math.min(turn - 1, CHAT_REPLIES.length - 1)]; }
-
-// ============================================================
-//  GENERATING / AI LOGIC
-// ============================================================
-async function startGenerating() {
-  showPage('page-loading');
-  const steps = ['step-1','step-2','step-3','step-4'];
-  for (let i = 0; i < steps.length; i++) {
-    await sleep(900);
-    document.getElementById(steps[i]).classList.remove('active');
-    document.getElementById(steps[i]).classList.add('done');
-    if (i < steps.length - 1) { document.getElementById(steps[i + 1]).classList.add('active'); }
-  }
-  await sleep(600);
-  const result = await generateResult();
-  state.result = result;
-  renderResult(result);
-  showPage('page-result');
-}
-
-async function generateResult() {
-  let tags = [];
-  if (state.mode === 'quiz') { tags = state.quizAnswers.map(a => a.tag); }
-  else {
-    const chatText = state.chatMessages.map(m => m.content).join(' ');
-    if (/工作|职场|加班|压力/.test(chatText)) tags.push('高尽责_坚持到底');
-    if (/关系|朋友|感情|家人/.test(chatText)) tags.push('高外向_深度连接');
-    if (/未来|迷茫|方向/.test(chatText)) tags.push('高开放_想象丰富');
-    if (/难过|累|辛苦/.test(chatText)) tags.push('高神经质_夜间放大');
-    if (tags.length === 0) tags = ['高开放_极简审美'];
-  }
-  if (CONFIG.DEMO_MODE || !CONFIG.DEEPSEEK_API_KEY || CONFIG.DEEPSEEK_API_KEY === 'YOUR_DEEPSEEK_API_KEY') {
-    return getDemoResult(tags);
-  }
-  try { return await callDeepSeekForResult(tags); }
-  catch(e) { return getDemoResult(tags); }
-}
-
-function getDemoResult(tags) {
-  const topicKeys = Object.keys(QUOTE_LIBRARY);
-  let match = QUOTE_LIBRARY['default'];
-  let bestScore = 0;
-  for (const tag of tags) {
-    for (const key of topicKeys) {
-      if (key === 'default') continue;
-      const score = (tag.includes(key) ? 3 : 0) + (key.includes(tag) ? 2 : 0) + (tag.split('_')[0] === key.split('_')[0] ? 1 : 0);
-      if (score > bestScore) { bestScore = score; match = QUOTE_LIBRARY[key]; }
-    }
-  }
-  saveSessionData({ tags, energy: match.energy });
-  return { ...match, tags };
-}
-
-async function callDeepSeekForResult(tags) {
-  const context = state.mode === 'quiz'
-    ? `用户问卷结果标签：${tags.join('、')}。\n问卷详情：${state.quizAnswers.map(a => `[${a.category}] ${a.option}`).join('；')}`
-    : `对话关键词：${tags.join('、')}`;
-  const prompt = `你是一位积极心理学专家，擅长用诗意、温暖的语言解读心灵。
-用户信息：
-${context}
-请用 JSON 格式回复：
-{
-  "quote": "一句深刻、诗意、温暖的积极心理学金句（20-35字，原创，针对用户状态，富有意境）",
-  "energy": "2-4字描述用户能量类型（如：内省型能量、温暖型能量）",
-  "insights": [
-    {"icon": "emoji", "title": "5字以内", "desc": "25-30字，针对用户的温柔洞察"},
-    {"icon": "emoji", "title": "5字以内", "desc": "25-30字，自我肯定类建议"},
-    {"icon": "emoji", "title": "5字以内", "desc": "25-30字，具体温柔行动建议"}
-  ],
-  "gradient": "CSS渐变色（深色系，如 linear-gradient(160deg, #1a2a3a 0%, #2a4a5a 100%)）",
-  "quoteLineColor": "半透明竖线颜色（如 rgba(160,200,220,0.5)）"
-}
-只返回 JSON。`;
-  const resp = await fetch('https://api.deepseek.com/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${CONFIG.DEEPSEEK_API_KEY}` },
-    body: JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: prompt }], max_tokens: 500, temperature: 0.85, response_format: { type: 'json_object' } }),
-  });
-  const data = await resp.json();
-  const json = JSON.parse(data.choices[0].message.content);
-  saveSessionData({ tags, energy: json.energy });
-  return { ...json, tags };
-}
-
-// ============================================================
-//  RENDER RESULT — 新版明信片
-// ============================================================
-function renderResult(result) {
-  document.getElementById('result-energy-tag').textContent = `&#x2726; ${result.energy}`;
-
-  // 渐变背景
-  const gradient = result.gradient || QUOTE_LIBRARY['default'].gradient;
-  document.getElementById('postcard-bg-gradient').style.background = gradient;
-
-  // 竖线颜色
-  const lineColor = result.quoteLineColor || 'rgba(255,255,255,0.4)';
-  document.getElementById('postcard-quote-line').style.background =
-    `linear-gradient(to bottom, transparent, ${lineColor}, transparent)`;
-
-  // 文字
-  document.getElementById('postcard-text').textContent = result.quote;
-
-  // 生成抽象花瓣邮戳
-  renderSeal();
-
-  // Insight cards
-  const container = document.getElementById('insight-cards');
-  container.innerHTML = '';
-  result.insights.forEach(ins => {
-    const div = document.createElement('div');
-    div.className = 'insight-card';
-    div.innerHTML = `<div class="insight-icon">${ins.icon}</div><div class="insight-info"><h4>${ins.title}</h4><p>${ins.desc}</p></div>`;
-    container.appendChild(div);
-  });
-}
-
-function renderSeal() {
-  const center = document.getElementById('seal-center');
-  center.innerHTML = '';
-  // 生成6个抽象花瓣形状
-  for (let i = 0; i < 6; i++) {
-    const petal = document.createElement('div');
-    petal.className = 'seal-petal';
-    petal.style.setProperty('--angle', `${i * 60}deg`);
-    petal.style.cssText = `
-      position:absolute;
-      width:10px;height:10px;
-      border-radius:50% 50% 50% 0;
-      background:rgba(255,255,255,0.25);
-      transform:rotate(${i * 60}deg);
-      transform-origin:center bottom;
-      bottom:50%;left:50%;
-      margin-left:-5px;
-    `;
-    center.appendChild(petal);
-  }
-}
-
-// ============================================================
-//  SAVE CARD — 使用Canvas生成图片（修复手机长按问题）
-// ============================================================
-async function saveCardToGallery() {
-  if (state.savingCard) return;
-  state.savingCard = true;
-
-  const overlay = document.getElementById('save-overlay');
-  overlay.classList.add('show');
-
-  try {
-    // 动态加载html2canvas
-    if (!window.html2canvas) {
-      await loadScript('https://cdn.bootcdn.net/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
-    }
-
-    const card = document.getElementById('postcard-card');
-    const canvas = await html2canvas(card, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: null,
-      logging: false,
-    });
-
-    canvas.toBlob(function(blob) {
-      overlay.classList.remove('show');
-      state.savingCard = false;
-
-      if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
-        // 手机：用原生分享
-        const file = new File([blob], 'mindbloom.png', { type: 'image/png' });
-        navigator.share({
-          files: [file],
-          title: '心花 MindBloom',
-          text: '来自心灵花园的专属花语'
-        }).then(() => {
-          showToast('分享成功 &#x1F338;');
-        }).catch(() => {
-          downloadBlob(blob, 'mindbloom.png');
-        });
-      } else {
-        // 桌面：直接下载
-        downloadBlob(blob, 'mindbloom.png');
-        showToast('图片已保存到下载文件夹 &#x1F338;');
-      }
-    }, 'image/png');
-  } catch(e) {
-    overlay.classList.remove('show');
-    state.savingCard = false;
-    showToast('保存失败，请重试');
-    console.error('Save error:', e);
-  }
-}
-
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-function cancelSave() {
-  const overlay = document.getElementById('save-overlay');
-  overlay.classList.remove('show');
-  state.savingCard = false;
-}
-
-function saveCard() {
-  showToast('点击「保存明信片到相册」按钮即可保存图片');
-  document.getElementById('postcard-card').scrollIntoView({ behavior: 'smooth' });
-}
-
-// ============================================================
-//  RESTART
-// ============================================================
-function restartAll() {
-  state.quizAnswers = [];
-  state.quizCurrentIdx = 0;
-  state.chatMessages = [];
-  state.chatTurns = 0;
-  state.result = null;
-  state.sessionId = Date.now().toString(36) + Math.random().toString(36).substr(2);
-  showPage('page-landing');
-}
-
-// ============================================================
-//  ADMIN DASHBOARD
-// ============================================================
 function adminLogin() {
   const pwd = document.getElementById('admin-pwd').value;
   if (pwd === CONFIG.ADMIN_PASSWORD) {
@@ -2094,60 +1054,164 @@ function adminLogin() {
     document.getElementById('admin-login-section').style.display = 'none';
     document.getElementById('admin-dashboard').style.display = 'flex';
     renderDashboard();
-    showToast('欢迎进入后台 &#x2726;');
+    showToast('欢迎进入后台');
   } else {
     showToast('密码错误');
   }
 }
 
 function renderDashboard() {
-  const analytics = getAnalytics();
-  document.getElementById('stat-grid').innerHTML = `
-    <div class="stat-card"><div class="stat-num">${analytics.total}</div><div class="stat-label">总测评次数</div></div>
-    <div class="stat-card"><div class="stat-num">${analytics.quizCount}</div><div class="stat-label">直觉之旅</div></div>
-    <div class="stat-card"><div class="stat-num">${analytics.chatCount}</div><div class="stat-label">心灵对话</div></div>
-    <div class="stat-card"><div class="stat-num">${analytics.sorted.length}</div><div class="stat-label">话题类型</div></div>`;
-
-  const maxCount = analytics.sorted[0]?.[1] || 1;
-  const topicList = document.getElementById('topic-list');
-  topicList.innerHTML = '';
-  analytics.sorted.slice(0, 10).forEach(([topic, count]) => {
-    const pct = Math.round((count / maxCount) * 100);
-    const div = document.createElement('div');
-    div.className = 'topic-item';
-    div.innerHTML = `<span class="topic-name">${topic}</span><div class="topic-bar-wrap"><div class="topic-bar" style="width:${pct}%"></div></div><span class="topic-pct">${count}次</span>`;
-    topicList.appendChild(div);
+  const sessions = JSON.parse(localStorage.getItem('mindbloom_sessions_v3') || '[]');
+  const basicCount = sessions.filter(s => s.product === 'basic').length;
+  const advancedCount = sessions.filter(s => s.product === 'advanced').length;
+  const totalCount = sessions.length;
+  
+  // 合并用户分析
+  const userMap = {};
+  sessions.forEach(s => {
+    if (s.nickname || s.gender || s.age) {
+      const key = s.nickname || '匿名';
+      if (!userMap[key]) {
+        userMap[key] = { nickname: s.nickname, gender: s.gender, age: s.age, products: [], count: 0 };
+      }
+      userMap[key].products.push(s.product);
+      userMap[key].count++;
+    }
   });
-
-  const recentList = document.getElementById('recent-list');
-  recentList.innerHTML = '';
-  const recent = analytics.sessions.slice(-10).reverse();
+  
+  // 找出复购用户
+  const repeatUsers = Object.values(userMap).filter(u => u.count > 1);
+  
+  const dashboard = document.getElementById('admin-dashboard');
+  dashboard.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">${totalCount}</div>
+        <div class="stat-label">总测评次数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${basicCount}</div>
+        <div class="stat-label">初级版</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${advancedCount}</div>
+        <div class="stat-label">高级版</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${repeatUsers.length}</div>
+        <div class="stat-label">复购用户</div>
+      </div>
+    </div>
+    
+    <div class="admin-section">
+      <div class="sub-label">生成体验码（可复制发给买家）</div>
+      <div class="admin-row">
+        <button class="btn-generate" onclick="generateCode('basic')">初级版体验码</button>
+        <button class="btn-generate" onclick="generateCode('advanced')">高级版体验码</button>
+      </div>
+      <div class="sub-label" style="margin-top:16px">最近测评记录</div>
+      <div class="record-list" id="record-list"></div>
+    </div>
+    
+    <div class="admin-section">
+      <button class="btn-retry" onclick="exportData()">导出CSV数据</button>
+    </div>
+  `;
+  
+  // 渲染记录
+  const recordList = document.getElementById('record-list');
+  const recent = sessions.slice(-20).reverse();
   recent.forEach(s => {
     const d = new Date(s.ts);
-    const dateStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const dateStr = `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    const genderIcon = s.gender === 'M' ? '♂' : s.gender === 'F' ? '♀' : '';
+    const nickname = s.nickname || '匿名';
+    const age = s.age || '';
+    
     const div = document.createElement('div');
     div.className = 'record-item';
-    const genderIcon = s.gender === 'M' ? '♂' : s.gender === 'F' ? '♀' : '';
-    const nickname = s.nickname ? `「${s.nickname}」` : '';
-    div.innerHTML = `<span class="record-time">${dateStr}</span><span class="record-energy">${s.energy || '未知'}</span><span class="record-mode">${s.mode === 'quiz' ? '旅程' : '对话'}</span><span style="font-size:11px;color:rgba(253,248,243,0.5)">${nickname} ${genderIcon} ${s.age || ''}</span>`;
-    recentList.appendChild(div);
+    div.innerHTML = `
+      <span class="record-time">${dateStr}</span>
+      <span class="record-info">${nickname} ${genderIcon} ${age}</span>
+      <span class="record-product ${s.product}">${s.product === 'basic' ? '初级' : '高级'}</span>
+    `;
+    recordList.appendChild(div);
   });
+}
 
-  if (analytics.total === 0) {
-    topicList.innerHTML = '<div style="font-size:12px;color:rgba(253,248,243,0.25);text-align:center;padding:20px">暂无数据，有用户完成测评后会显示</div>';
-  }
+function generateCode(type) {
+  const prefix = type === 'basic' ? 'B' : 'A';
+  const code = prefix + Math.floor(1000 + Math.random() * 9000);
+  
+  const key = type === 'basic' ? 'mindbloom_codes_basic' : 'mindbloom_codes_advanced';
+  const codes = JSON.parse(localStorage.getItem(key) || '[]');
+  codes.push({ code, created: Date.now() });
+  localStorage.setItem(key, JSON.stringify(codes));
+  
+  // 复制到剪贴板
+  navigator.clipboard.writeText(code).then(() => {
+    showToast(`已生成：${code}（已复制）`);
+  }).catch(() => {
+    showToast(`已生成：${code}`);
+  });
 }
 
 function exportData() {
-  const analytics = getAnalytics();
-  if (analytics.sessions.length === 0) { showToast('暂无数据可导出'); return; }
-  let csv = 'ID,时间,体验码,模式,能量类型,昵称,性别,年龄,话题标签\n';
-  analytics.sessions.forEach(s => {
-    csv += `${s.id},${new Date(s.ts).toLocaleString()},${s.code || ''},${s.mode},${s.energy},${s.nickname || ''},${s.gender || ''},${s.age || ''},"${(s.tags||[]).join(',')}"\n`;
+  const sessions = JSON.parse(localStorage.getItem('mindbloom_sessions_v3') || '[]');
+  if (sessions.length === 0) {
+    showToast('暂无数据可导出');
+    return;
+  }
+  
+  let csv = 'ID,时间,产品,昵称,性别,年龄\n';
+  sessions.forEach(s => {
+    csv += `${s.id},${new Date(s.ts).toLocaleString()},${s.product === 'basic' ? '初级版' : '高级版'},${s.nickname || ''},${s.gender || ''},${s.age || ''}\n`;
   });
+  
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
-  downloadBlob(blob, 'mindbloom_data.csv');
-  showToast('已导出 CSV &#x1F338;');
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'mindbloom_data.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  showToast('已导出CSV');
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(msg) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => toast.remove(), 2500);
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+function init() {
+  // 生成星星背景
+  const stars = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.animationDelay = Math.random() * 3 + 's';
+    star.style.width = star.style.height = (Math.random() * 2 + 1) + 'px';
+    stars.appendChild(star);
+  }
+  
+  // 初始化验证码输入
+  setupCodeInputs();
 }
 
 // ============================================================
@@ -2155,12 +1219,8 @@ function exportData() {
 // ============================================================
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
