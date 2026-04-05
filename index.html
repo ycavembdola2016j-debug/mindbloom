@@ -188,8 +188,10 @@
     .option-btn {
       display: flex; align-items: center; gap: 12px; padding: 14px 16px;
       background: var(--glass); border: 1px solid var(--border); border-radius: 14px;
-      cursor: pointer; transition: all 0.2s; text-align: left;
+      cursor: pointer; transition: all 0.2s; text-align: left; user-select: none;
+      -webkit-user-select: none; touch-action: manipulation;
     }
+    .option-btn * { pointer-events: none; }
     .option-btn:active { transform: scale(0.98); }
     .option-btn.selected { background: rgba(122,158,126,0.2); border-color: var(--sage); }
     .option-dot { font-size: 18px; color: rgba(253,248,243,0.4); transition: all 0.2s; }
@@ -400,7 +402,7 @@
           </div>
         </div>
         <div class="privacy-note">
-          &#x1F512; 你的信息完全匿名，仅用于统计分析
+          &#x1F512; 你的信息完全匿名
         </div>
         <button class="btn-start" onclick="startQuiz()">开始探索</button>
       </div>
@@ -1602,17 +1604,11 @@
     // ============================================================
     function showAdmin() {
       showPage('page-admin');
-      const savedLogin = localStorage.getItem('mindbloom_admin_logged');
-      if (savedLogin === 'true') {
-        state.adminLoggedIn = true;
-        document.getElementById('admin-login-section').style.display = 'none';
-        document.getElementById('admin-dashboard').style.display = 'flex';
-        renderDashboard();
-      } else {
-        document.getElementById('admin-login-section').style.display = 'flex';
-        document.getElementById('admin-dashboard').style.display = 'none';
-        document.getElementById('admin-pwd').value = '';
-      }
+      // 每次进入后台都必须输入密码，移除自动登录
+      document.getElementById('admin-login-section').style.display = 'flex';
+      document.getElementById('admin-dashboard').style.display = 'none';
+      document.getElementById('admin-pwd').value = '';
+      state.adminLoggedIn = false;
     }
 
     function adminLogin() {
