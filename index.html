@@ -268,6 +268,11 @@
     }
     .back-btn:active { color: var(--cream); }
 
+    .age-btn.selected, .gender-btn.selected {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--bg);
+    }
+
     /* ============ QUIZ PAGE ============ */
     #page-quiz { padding-top: 30px; gap: 18px; }
     .progress-header {
@@ -750,6 +755,41 @@
     <p class="verify-note">体验码由店主提供 &#183; 完全匿名</p>
   </div>
 
+  <!-- ============ USER INFO PAGE ============ -->
+  <div id="page-userinfo" class="page">
+    <div style="margin-top: 60px"></div>
+    <div class="page-title">欢迎来到心灵花园</div>
+    <div class="page-sub" style="margin-bottom: 30px">让我们更好地认识你</div>
+    <div style="background: var(--glass2); border: 1px solid var(--border); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 18px;">
+      <div>
+        <label style="font-size: 13px; color: rgba(253,248,243,0.6); margin-bottom: 8px; display: block;">给自己取个昵称</label>
+        <input class="admin-input" type="text" id="user-nickname" placeholder="比如：心灵旅客" maxlength="12" />
+      </div>
+      <div>
+        <label style="font-size: 13px; color: rgba(253,248,243,0.6); margin-bottom: 8px; display: block;">你的性别</label>
+        <div style="display: flex; gap: 10px;">
+          <button class="mode-badge" id="gender-m" onclick="selectGender('M')" style="flex:1; padding: 12px; cursor: pointer; border: none;">&#x2642; 男</button>
+          <button class="mode-badge" id="gender-f" onclick="selectGender('F')" style="flex:1; padding: 12px; cursor: pointer; border: none;">&#x2640; 女</button>
+        </div>
+      </div>
+      <div>
+        <label style="font-size: 13px; color: rgba(253,248,243,0.6); margin-bottom: 8px; display: block;">你的年龄范围</label>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <button class="mode-badge age-btn" id="age-1" onclick="selectAge('18-25')" style="padding: 8px 12px; cursor: pointer; border: none; font-size: 11px;">18-25岁</button>
+          <button class="mode-badge age-btn" id="age-2" onclick="selectAge('26-35')" style="padding: 8px 12px; cursor: pointer; border: none; font-size: 11px;">26-35岁</button>
+          <button class="mode-badge age-btn" id="age-3" onclick="selectAge('36-45')" style="padding: 8px 12px; cursor: pointer; border: none; font-size: 11px;">36-45岁</button>
+          <button class="mode-badge age-btn" id="age-4" onclick="selectAge('46+')" style="padding: 8px 12px; cursor: pointer; border: none; font-size: 11px;">46岁以上</button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 24px; padding: 14px; background: rgba(122,158,126,0.08); border-radius: 12px; font-size: 12px; color: rgba(253,248,243,0.4); line-height: 1.6;">
+      &#x1F512; 这些信息仅用于后台数据统计<br>你可以选择不填写任何信息
+    </div>
+    <button class="btn-verify" onclick="submitUserInfo()" style="margin-top: 24px;">
+      进入花园 &#x2726;
+    </button>
+  </div>
+
   <!-- ============ LANDING PAGE ============ -->
   <div id="page-landing" class="page">
     <div class="brand-mystic">
@@ -932,7 +972,7 @@
 
   <!-- ============ ADMIN PAGE ============ -->
   <div id="page-admin" class="page">
-    <button class="back-btn" id="admin-back-btn">&#x2192;</button>
+    <button class="back-btn" id="admin-back-btn" onclick="showPage('page-landing')">&#x2192;</button>
     <div class="page-title">心灵花园后台</div>
     <div id="admin-login-section" class="admin-login">
       <input class="admin-input" type="password" id="admin-pwd" placeholder="管理员密码" />
@@ -1465,6 +1505,9 @@ const state = {
   verifiedCode: null,
   adminLoggedIn: false,
   savingCard: false,
+  userNickname: '',
+  userGender: '',
+  userAge: '',
 };
 
 // ============================================================
@@ -1536,8 +1579,11 @@ function verifyCode() {
   localStorage.setItem(cooldownKey, now.toString());
   if (storedCodes[code]) { storedCodes[code].used = true; storedCodes[code].usedAt = now; saveStoredCodes(storedCodes); }
   state.verifiedCode = code;
-  showPage('page-landing');
-  showToast('验证成功，欢迎来到心灵花园 &#x2726;');
+  state.userNickname = '';
+  state.userGender = '';
+  state.userAge = '';
+  showPage('page-userinfo');
+  showToast('验证成功，请先告诉我们一些关于你的事 &#x2726;');
 }
 
 function showCodeError(msg) {
@@ -1564,7 +1610,18 @@ function saveSessionData(data) {
   try {
     const key = 'mindbloom_sessions_v3';
     const existing = JSON.parse(localStorage.getItem(key) || '[]');
-    existing.push({ id: state.sessionId, ts: Date.now(), code: state.verifiedCode, mode: state.mode, tags: data.tags || [], energy: data.energy || '', completed: true });
+    existing.push({
+      id: state.sessionId,
+      ts: Date.now(),
+      code: state.verifiedCode,
+      mode: state.mode,
+      tags: data.tags || [],
+      energy: data.energy || '',
+      nickname: state.userNickname,
+      gender: state.userGender,
+      age: state.userAge,
+      completed: true
+    });
     if (existing.length > 500) existing.splice(0, existing.length - 500);
     localStorage.setItem(key, JSON.stringify(existing));
   } catch(e) {}
@@ -1590,6 +1647,33 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
+}
+
+// ============================================================
+//  USER INFO FUNCTIONS
+// ============================================================
+function selectGender(g) {
+  state.userGender = g;
+  document.getElementById('gender-m').style.background = g === 'M' ? 'linear-gradient(135deg, var(--gold), var(--gold-light))' : '';
+  document.getElementById('gender-m').style.color = g === 'M' ? 'var(--bg)' : '';
+  document.getElementById('gender-f').style.background = g === 'F' ? 'linear-gradient(135deg, var(--gold), var(--gold-light))' : '';
+  document.getElementById('gender-f').style.color = g === 'F' ? 'var(--bg)' : '';
+}
+
+function selectAge(age) {
+  state.userAge = age;
+  ['age-1','age-2','age-3','age-4'].forEach((id, i) => {
+    const ages = ['18-25','26-35','36-45','46+'];
+    const el = document.getElementById(id);
+    el.style.background = ages[i] === age ? 'linear-gradient(135deg, var(--gold), var(--gold-light))' : '';
+    el.style.color = ages[i] === age ? 'var(--bg)' : '';
+  });
+}
+
+function submitUserInfo() {
+  state.userNickname = document.getElementById('user-nickname').value.trim();
+  showPage('page-landing');
+  showToast('欢迎来到心灵花园 &#x2726;');
 }
 
 function showAdmin() {
@@ -2026,7 +2110,9 @@ function renderDashboard() {
     const dateStr = `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     const div = document.createElement('div');
     div.className = 'record-item';
-    div.innerHTML = `<span class="record-time">${dateStr}</span><span class="record-energy">${s.energy || '未知'}</span><span class="record-mode">${s.mode === 'quiz' ? '旅程' : '对话'}</span>`;
+    const genderIcon = s.gender === 'M' ? '♂' : s.gender === 'F' ? '♀' : '';
+    const nickname = s.nickname ? `「${s.nickname}」` : '';
+    div.innerHTML = `<span class="record-time">${dateStr}</span><span class="record-energy">${s.energy || '未知'}</span><span class="record-mode">${s.mode === 'quiz' ? '旅程' : '对话'}</span><span style="font-size:11px;color:rgba(253,248,243,0.5)">${nickname} ${genderIcon} ${s.age || ''}</span>`;
     recentList.appendChild(div);
   });
 
@@ -2038,9 +2124,9 @@ function renderDashboard() {
 function exportData() {
   const analytics = getAnalytics();
   if (analytics.sessions.length === 0) { showToast('暂无数据可导出'); return; }
-  let csv = 'ID,时间,体验码,模式,能量类型,话题标签\n';
+  let csv = 'ID,时间,体验码,模式,能量类型,昵称,性别,年龄,话题标签\n';
   analytics.sessions.forEach(s => {
-    csv += `${s.id},${new Date(s.ts).toLocaleString()},${s.code || ''},${s.mode},${s.energy},"${(s.tags||[]).join(',')}"\n`;
+    csv += `${s.id},${new Date(s.ts).toLocaleString()},${s.code || ''},${s.mode},${s.energy},${s.nickname || ''},${s.gender || ''},${s.age || ''},"${(s.tags||[]).join(',')}"\n`;
   });
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
   downloadBlob(blob, 'mindbloom_data.csv');
