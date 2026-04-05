@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="心花 MindBloom - 在喧嚣世界里，为你辟一处心灵花园">
+  <title>心花 MindBloom · 心灵花语</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Night Sky Background -->
+  <div class="night-sky">
+    <div class="aurora aurora-1"></div>
+    <div class="aurora aurora-2"></div>
+    <div class="aurora aurora-3"></div>
+    <div class="stars" id="stars"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <button class="admin-btn" onclick="Router.navigate('page-admin')">后台</button>
+  </div>
+
+  <!-- Main App -->
+  <div id="app">
+    <!-- ============ LANDING PAGE ============ -->
+    <div id="page-landing" class="page active">
+      <div class="brand-mystic">
+        <div class="mystic-symbol">🌸</div>
+        <div class="brand-title">心花</div>
+        <div class="brand-sub">MIND BLOOM</div>
+      </div>
+      
+      <div class="divider-ornament">
+        <div class="divider-line"></div>
+        <span>✦</span>
+        <div class="divider-line"></div>
+      </div>
+      
+      <p class="landing-desc">
+        在喧嚣世界里<br>
+        为你辟一处心灵花园<br>
+        读懂自己，绽放生命
+      </p>
+      
+      <div class="product-cards">
+        <div class="product-card" onclick="App.selectProduct('basic')">
+          <div class="product-icon">🌌</div>
+          <div class="product-info">
+            <h3>意识之境</h3>
+            <p>30 道趣味心理题 · 探索直觉与潜能</p>
+          </div>
+          <div class="product-badge">初级</div>
+        </div>
+        
+        <div class="product-card" onclick="App.selectProduct('advanced')">
+          <div class="product-icon">🌿</div>
+          <div class="product-info">
+            <h3>心灵花园</h3>
+            <p>200 道综合测评 · 深度自我觉察</p>
+          </div>
+          <div class="product-badge advanced">高级</div>
+        </div>
+      </div>
+      
+      <p class="landing-footer">🔒 你的信息完全匿名</p>
+    </div>
+
+    <!-- ============ VERIFY PAGE ============ -->
+    <div id="page-verify" class="page">
+      <button class="back-btn" onclick="Router.back()">←</button>
+      <div class="verify-product-name" id="verify-product-name"></div>
+      <div class="code-input-wrap" id="code-input-wrap">
+        <!-- 动态生成输入框 -->
+      </div>
+      <button class="btn-verify" onclick="App.verifyCode()">开启探索 ✦</button>
+      <p class="verify-note">体验码由店主提供 · 完全匿名</p>
+      <div class="verify-error" id="verify-error"></div>
+    </div>
+
+    <!-- ============ PROFILE PAGE ============ -->
+    <div id="page-profile" class="page">
+      <button class="back-btn" onclick="Router.back()">←</button>
+      <div class="profile-title">认识一下 ✦</div>
+      <div class="profile-sub">告诉我你是谁，让解读更贴合你</div>
+      
+      <div class="profile-fields">
+        <div>
+          <div class="field-label">你的称呼（选填）</div>
+          <input class="field-input" id="user-nickname" placeholder="给自己起个小名" maxlength="20">
+        </div>
+        
+        <div>
+          <div class="field-label">你的性别</div>
+          <div class="field-row">
+            <button class="field-btn" onclick="App.selectField('gender','male',this)">男</button>
+            <button class="field-btn" onclick="App.selectField('gender','female',this)">女</button>
+            <button class="field-btn" onclick="App.selectField('gender','other',this)">其他</button>
+          </div>
+        </div>
+        
+        <div>
+          <div class="field-label">你的年龄段</div>
+          <div class="field-row">
+            <button class="field-btn" onclick="App.selectField('age','15-18',this)">15-18</button>
+            <button class="field-btn" onclick="App.selectField('age','18-25',this)">18-25</button>
+            <button class="field-btn" onclick="App.selectField('age','26-35',this)">26-35</button>
+            <button class="field-btn" onclick="App.selectField('age','36-45',this)">36-45</button>
+            <button class="field-btn" onclick="App.selectField('age','46+',this)">46+</button>
+          </div>
+        </div>
+      </div>
+      
+      <button class="btn-start" onclick="App.startQuiz()">开始探索 ✦</button>
+    </div>
+
+    <!-- ============ QUIZ PAGE ============ -->
+    <div id="page-quiz" class="page">
+      <div class="quiz-header">
+        <button class="back-btn quiz-prev-btn disabled" id="quiz-prev-btn" onclick="Quiz.prev()">← 返回</button>
+        <span class="quiz-progress-text" id="quiz-progress-text">1/30</span>
+      </div>
+      
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="quiz-progress-bar" style="width:3.3%"></div>
+      </div>
+      
+      <div class="question-card" id="question-card">
+        <div class="q-category" id="q-category"></div>
+        <div class="q-text" id="q-text"></div>
+        <div class="options" id="q-options"></div>
+      </div>
+      
+      <div class="quiz-footer">
+        <div></div>
+      </div>
+    </div>
+
+    <!-- ============ RESULT PAGE ============ -->
+    <div id="page-result" class="page">
+      <div class="result-header">
+        <div class="result-energy" id="result-energy">🌸</div>
+        <div class="result-name" id="result-name"></div>
+        <div class="result-sub" id="result-sub"></div>
+      </div>
+      
+      <!-- AI 生成明信片区域（仅意识之境显示） -->
+      <div class="ai-postcard-section" id="ai-postcard-section" style="display:none">
+        <div class="postcard-loading" id="postcard-loading">
+          <div class="loading-spinner"></div>
+          <p>正在为你绘制专属明信片...</p>
+        </div>
+        <div class="postcard-container" id="postcard-container" style="display:none">
+          <img class="postcard-image" id="postcard-image" alt="你的专属心灵明信片">
+          <p class="postcard-hint">✦ 长按保存图片，分享给朋友</p>
+        </div>
+      </div>
+      
+      <!-- 传统结果卡片（心灵花园显示） -->
+      <div class="result-card" id="result-card-traditional">
+        <div class="result-quote" id="result-quote"></div>
+        <div class="result-author" id="result-author"></div>
+      </div>
+      
+      <div class="insight-section">
+        <div class="insight-title">✦ 你的心灵洞察</div>
+        <div class="insight-cards" id="insight-cards"></div>
+      </div>
+      
+      <div class="action-btns">
+        <button class="btn-save" id="btn-save-result" onclick="App.saveResult()">保存结果</button>
+        <button class="btn-retry" onclick="App.restart()">重新探索</button>
+      </div>
+    </div>
+
+    <!-- ============ ADMIN PAGE ============ -->
+    <div id="page-admin" class="page">
+      <button class="back-btn" onclick="Router.back()">←</button>
+      <div class="page-title">心灵花园后台</div>
+      
+      <div id="admin-login-section" class="admin-login">
+        <input class="admin-input" type="password" id="admin-pwd" placeholder="管理员密码">
+        <button class="btn-admin-login" onclick="Admin.login()">进入后台</button>
+      </div>
+      
+      <div id="admin-dashboard" class="admin-dashboard" style="display:none">
+        <div class="stat-grid" id="stat-grid"></div>
+        
+        <div class="code-gen-section">
+          <div class="sub-label">🎫 生成体验码</div>
+          <div class="product-select">
+            <button class="product-select-btn selected" id="gen-basic-btn" onclick="Admin.selectGenProduct('basic')">意识之境 (B)</button>
+            <button class="product-select-btn" id="gen-advanced-btn" onclick="Admin.selectGenProduct('advanced')">心灵花园 (A)</button>
+          </div>
+          <div class="gen-row">
+            <input class="gen-input" type="number" id="gen-count" placeholder="数量" value="5" min="1" max="20">
+            <button class="btn-admin-login" onclick="Admin.generateCodes()" style="flex:1;font-size:13px;padding:10px">生成</button>
+          </div>
+          <div class="generated-codes" id="generated-codes"></div>
+        </div>
+        
+        <div>
+          <div class="sub-label">📋 最近记录</div>
+          <div class="record-list" id="record-list"></div>
+        </div>
+        
+        <!-- 体验码管理 -->
+        <div class="code-manage-section">
+          <div class="sub-label">🎫 体验码管理 <span class="expiry-hint">（24小时有效）</span></div>
+          <div class="code-manage-btns">
+            <button class="btn-admin-action" onclick="Admin.viewCodes()">查看有效码</button>
+            <button class="btn-admin-action btn-danger" onclick="Admin.cleanupCodes()">清理过期码</button>
+          </div>
+          <div class="code-list" id="code-list"></div>
+        </div>
+        
+        <button class="btn-export" onclick="Admin.exportCSV()">导出 CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="js/storage.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/questions.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/ai-image.js"></script>
+  <script src="js/code-manager.js"></script>
+  <script src="js/result.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
