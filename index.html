@@ -1682,11 +1682,14 @@ function submitUserInfo() {
 
 function showAdmin() {
   showPage('page-admin');
-  if (state.adminLoggedIn) {
+  // 检查 localStorage 中是否已保存登录状态
+  const savedLogin = localStorage.getItem('mindbloom_admin_logged');
+  if (savedLogin === 'true') {
+    state.adminLoggedIn = true;
     document.getElementById('admin-login-section').style.display = 'none';
     document.getElementById('admin-dashboard').style.display = 'flex';
+    renderDashboard();
   } else {
-    // 未登录：显示登录表单
     document.getElementById('admin-login-section').style.display = 'flex';
     document.getElementById('admin-dashboard').style.display = 'none';
     document.getElementById('admin-pwd').value = '';
@@ -2078,6 +2081,7 @@ function adminLogin() {
   const pwd = document.getElementById('admin-pwd').value;
   if (pwd === CONFIG.ADMIN_PASSWORD) {
     state.adminLoggedIn = true;
+    localStorage.setItem('mindbloom_admin_logged', 'true');
     document.getElementById('admin-login-section').style.display = 'none';
     document.getElementById('admin-dashboard').style.display = 'flex';
     renderDashboard();
