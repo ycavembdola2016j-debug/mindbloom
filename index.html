@@ -972,7 +972,7 @@
 
   <!-- ============ ADMIN PAGE ============ -->
   <div id="page-admin" class="page">
-    <button class="back-btn" id="admin-back-btn" onclick="showPage('page-landing')">&#x2192;</button>
+    <button class="back-btn" id="admin-back-btn">&#x2192;</button>
     <div class="page-title">心灵花园后台</div>
     <div id="admin-login-section" class="admin-login">
       <input class="admin-input" type="password" id="admin-pwd" placeholder="管理员密码" />
@@ -1682,6 +1682,14 @@ function submitUserInfo() {
 
 function showAdmin() {
   showPage('page-admin');
+  // 绑定返回按钮 - 如果已验证体验码返回首页，否则返回验证页
+  document.getElementById('admin-back-btn').onclick = () => {
+    if (state.verifiedCode) {
+      showPage('page-landing');
+    } else {
+      showPage('page-verify');
+    }
+  };
   // 检查 localStorage 中是否已保存登录状态
   const savedLogin = localStorage.getItem('mindbloom_admin_logged');
   if (savedLogin === 'true') {
@@ -1779,7 +1787,8 @@ function addUserMessage(text) {
   const chatMsgs = document.getElementById('chat-messages');
   const div = document.createElement('div');
   div.className = 'msg user';
-  div.innerHTML = `<div class="msg-avatar">&#x1F33F;</div><div class="msg-bubble">${escHtml(text)}</div>`;
+  const nickname = state.userNickname || '心灵旅客';
+  div.innerHTML = `<div class="msg-avatar">&#x1F33F;</div><div class="msg-bubble"><div style="font-size:11px;color:rgba(253,248,243,0.5);margin-bottom:4px">${escHtml(nickname)}</div>${escHtml(text)}</div>`;
   chatMsgs.appendChild(div);
   chatMsgs.scrollTop = chatMsgs.scrollHeight;
 }
