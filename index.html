@@ -1018,7 +1018,7 @@ const CONFIG = {
   DEEPSEEK_API_KEY: 'YOUR_DEEPSEEK_API_KEY',
   ADMIN_PASSWORD: 'mindbloom2026',
   DEMO_MODE: true,
-  COOLDOWN_MS: 24 * 60 * 60 * 1000,
+  CODE_VALID_MS: 24 * 60 * 60 * 1000, // 体验码有效期24小时
 };
 
 // ============================================================
@@ -1565,18 +1565,23 @@ function verifyCode() {
   const code = digits.join('');
   if (code.length < 4) { showCodeError('请输入完整的4位体验码'); return; }
   const storedCodes = getStoredCodes();
-  const isValidStored = storedCodes[code] && !storedCodes[code].used;
   const cooldownKey = 'mindbloom_code_' + code;
-  const lastUsed = parseInt(localStorage.getItem(cooldownKey) || '0', 10);
+  const startTime = parseInt(localStorage.getItem(cooldownKey) || '0', 10);
   const now = Date.now();
-  if (lastUsed > 0) {
-    const elapsed = now - lastUsed;
-    if (elapsed < CONFIG.COOLDOWN_MS) {
-      const hours = Math.ceil((CONFIG.COOLDOWN_MS - elapsed) / (60 * 60 * 1000));
-      showCooldownHours(hours); return;
+  
+  // 如果有开始时间，检查是否过期
+  if (startTime > 0) {
+    const elapsed = now - startTime;
+    if (elapsed >= CONFIG.CODE_VALID_MS) {
+      showCodeExpired(); return;
     }
   }
-  localStorage.setItem(cooldownKey, now.toString());
+  
+  // 首次使用，记录开始时间
+  if (startTime === 0) {
+    localStorage.setItem(cooldownKey, now.toString());
+  }
+  
   if (storedCodes[code]) { storedCodes[code].used = true; storedCodes[code].usedAt = now; saveStoredCodes(storedCodes); }
   state.verifiedCode = code;
   state.userNickname = '';
@@ -1592,13 +1597,12 @@ function showCodeError(msg) {
   setTimeout(() => { ['d1','d2','d3','d4'].forEach(id => document.getElementById(id).classList.remove('error')); }, 500);
 }
 
-function showCooldownHours(hours) {
+function showCodeExpired() {
   const wrap = document.getElementById('code-input-wrap');
   wrap.innerHTML = `
     <div class="cooldown-msg">
-      此体验码已于近期使用<br>
-      请 <strong>${hours} 小时后</strong>再次使用<br>
-      <small style="color:rgba(253,248,243,0.4)">或联系店主获取新的体验码</small>
+      此体验码已过期<br>
+      <small style="color:rgba(253,248,243,0.4)">请联系店主获取新的体验码</small>
     </div>`;
   document.getElementById('btn-verify').style.display = 'none';
 }
